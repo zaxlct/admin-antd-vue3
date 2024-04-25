@@ -15,7 +15,7 @@ import { webUpdateNotice } from '@plugin-web-update-notification/vite';
 import { visualizer } from 'rollup-plugin-visualizer';
 import buildInfo from 'vite-plugin-build-info';
 import iconfont from 'vite-plugin-iconfont';
-import unoCSS from 'unocss/vite';
+// import unoCSS from 'unocss/vite';
 import { themeToken } from './src/config/theme';
 import { resolve } from 'node:path';
 
@@ -147,7 +147,7 @@ export default defineConfig(({ command, mode }: ConfigEnv) => {
         ]
       }),
       // https://unocss.dev/integrations/vite
-      unoCSS(),
+      // unoCSS(),
       // 兼容浏览器设置，默认读取browserslistrc配置
       legacy(),
       // 注入打包和git信息，方便做版本追踪

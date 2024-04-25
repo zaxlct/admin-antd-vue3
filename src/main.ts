@@ -4,7 +4,6 @@ import router from './router';
 
 import directives from '@/directives';
 import plugins from '@/plugins';
-import 'virtual:uno.css';
 import '@/assets/styles/common.less';
 
 import App from './App.vue';

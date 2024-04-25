@@ -1,5 +1,6 @@
 <template>
   <div class="page-wrap">
+    <DemoPage></DemoPage>
     <ACard title="首页">
       <h3>运行时配置：</h3>
       <div>可在打包后修改，位置：/public/config.js</div>
@@ -178,6 +179,9 @@ import request from '@/utils/request';
 import { message } from 'ant-design-vue';
 import TestModalForm from './TestModalForm.vue';
 import { paginationConfig } from '@/config/pagination';
+
+import DemoPage from './demo.vue'
+
 const authKeys = ['home', 'system', 'system/menu', 'other'];
 const selectAuthKeys = ref(['home', 'system']);
 const appConfig = window.__APP_CONFIG__;

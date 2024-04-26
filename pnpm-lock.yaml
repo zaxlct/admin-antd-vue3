@@ -148,9 +148,6 @@ devDependencies:
   prettier:
     specifier: ^3.2.5
     version: 3.2.5
-  release-it:
-    specifier: ^17.1.1
-    version: 17.1.1(typescript@5.4.5)
   rollup-plugin-visualizer:
     specifier: ^5.12.0
     version: 5.12.0

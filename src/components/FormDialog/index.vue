@@ -1,9 +1,12 @@
 <template>
-  <el-dialog
+  <a-modal
     v-bind="dialogProps"
-    v-model="visible"
+    v-model:open="visible"
     class="dialog_content__common"
     :title="inStateOne ? addTitle : editTitle"
+    :confirm-loading="loading"
+    :ok-text="confirmText"
+    @ok="submitForm"
   >
     <component
       :is="formComponent"
@@ -14,25 +17,11 @@
       v-bind="formProps"
       @close="resetForm"
     />
-    <div class="publish_btn">
-      <!-- <el-button @click="resetForm">
-        {{ cancelText }}
-      </el-button> -->
-      <el-button
-        class="button"
-        type="primary"
-        :loading="loading"
-        @click="submitForm"
-      >
-        {{ confirmText }}
-      </el-button>
-    </div>
-  </el-dialog>
+  </a-modal>
 </template>
 
 <script lang="ts" setup name="FormDialog">
 import { cloneDeep } from 'lodash-es'
-import type { FormInstance } from 'element-plus'
 
 const props = defineProps({
   autoResetForm: {
@@ -89,24 +78,23 @@ function open<T>(_data?: T) {
  * @desc 格式化参数，提交 post 之前，去掉空格
  * @param obj
  */
-// function formatterParams(obj: any) {
-//   if (!obj) {
-//     return {}
-//   }
-//   for (const key in obj) {
-//     if (typeof obj[key] === 'string' && obj[key]) {
-//       obj[key] = obj[key].trim()
-//     }
-//   }
-//   return obj
-// }
+function formatterParams(obj: any) {
+  // if (!obj) {
+  //   return {}
+  // }
+  // for (const key in obj) {
+  //   if (typeof obj[key] === 'string' && obj[key]) {
+  //     obj[key] = obj[key].trim()
+  //   }
+  // }
+  return obj
+}
 
 const FormRefs = ref<any>()
 const submitForm = async () => {
-  const form = FormRefs.value.formRef as FormInstance
+  const form = FormRefs.value.formRef
   await form.validate()
-  // const params = formatterParams(FormRefs.value._getData ? FormRefs.value._getData() : FormRefs.value.data)
-  const params = FormRefs.value._getData ? FormRefs.value._getData() : FormRefs.value.data
+  const params = formatterParams(FormRefs.value._getData ? FormRefs.value._getData() : FormRefs.value.data)
   loading.value = true
   try {
     let res: any = {}
@@ -140,7 +128,7 @@ const submitForm = async () => {
 
 const resetForm = (mustRest = false) => {
   if (props.autoResetForm || mustRest) {
-    const form = FormRefs.value.formRef as FormInstance
+    const form = FormRefs.value.formRef
     form.clearValidate()
     form.resetFields()
     defaultData.value = null

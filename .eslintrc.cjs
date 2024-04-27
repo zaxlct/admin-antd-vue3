@@ -17,6 +17,17 @@ module.exports = {
     __APP_CONFIG__: true
   },
   rules: {
+    'prettier/prettier': [
+      'error',
+      {
+        'space-before-function-paren': false
+      },
+      {
+        fileInfoOptions: {
+          withNodeModules: true
+        }
+      }
+    ],
     'vue/no-setup-props-destructure': 0,
     'vue/no-dupe-keys': 0,
     '@typescript-eslint/ban-ts-comment': 0,
@@ -28,6 +39,7 @@ module.exports = {
         selector: ['interface', 'typeAlias', 'class', 'enum'],
         format: ['PascalCase']
       }
-    ]
+    ],
+    semi: ['error', 'never']
   }
-}
+};

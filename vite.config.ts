@@ -1,32 +1,32 @@
-import { fileURLToPath, URL } from 'node:url';
-import { defineConfig, loadEnv } from 'vite';
-import { type ConfigEnv, type ProxyOptions } from 'vite';
-import vue from '@vitejs/plugin-vue';
-import vueJsx from '@vitejs/plugin-vue-jsx';
-import legacy from '@vitejs/plugin-legacy';
-import { viteMockServe } from 'vite-plugin-mock';
-import viteCompression from 'vite-plugin-compression';
-import { createHtmlPlugin } from 'vite-plugin-html';
-import autoImport from 'unplugin-auto-import/vite';
-import unpluginComponents from 'unplugin-vue-components/vite';
-import { AntDesignVueResolver } from 'unplugin-vue-components/resolvers';
+import { fileURLToPath, URL } from 'node:url'
+import { defineConfig, loadEnv } from 'vite'
+import { type ConfigEnv, type ProxyOptions } from 'vite'
+import vue from '@vitejs/plugin-vue'
+import vueJsx from '@vitejs/plugin-vue-jsx'
+import legacy from '@vitejs/plugin-legacy'
+import { viteMockServe } from 'vite-plugin-mock'
+import viteCompression from 'vite-plugin-compression'
+import { createHtmlPlugin } from 'vite-plugin-html'
+import autoImport from 'unplugin-auto-import/vite'
+import unpluginComponents from 'unplugin-vue-components/vite'
+import { AntDesignVueResolver } from 'unplugin-vue-components/resolvers'
 import { VueHooksPlusResolver } from '@vue-hooks-plus/resolvers'
-import { webUpdateNotice } from '@plugin-web-update-notification/vite';
-import { visualizer } from 'rollup-plugin-visualizer';
-import buildInfo from 'vite-plugin-build-info';
-import iconfont from 'vite-plugin-iconfont';
+import { webUpdateNotice } from '@plugin-web-update-notification/vite'
+import { visualizer } from 'rollup-plugin-visualizer'
+import buildInfo from 'vite-plugin-build-info'
+import iconfont from 'vite-plugin-iconfont'
 // import unoCSS from 'unocss/vite';
-import { themeToken } from './src/config/theme';
-import { resolve } from 'node:path';
+import { themeToken } from './src/config/theme'
+import { resolve } from 'node:path'
 
 // 完整配置，请查阅https://vitejs.dev/config/
 export default defineConfig(({ command, mode }: ConfigEnv) => {
-  const root = process.cwd(); // 项目根目录
-  const env = formatEnv(loadEnv(mode, root)) as ImportMetaEnv;
-  console.log('【info】 command:', command, ', mode: ', mode);
-  console.log(env);
-  const IS_PRODUCTION = command === 'build';
-  const IS_MOCK = mode === 'mock';
+  const root = process.cwd() // 项目根目录
+  const env = formatEnv(loadEnv(mode, root)) as ImportMetaEnv
+  console.log('【info】 command:', command, ', mode: ', mode)
+  console.log(env)
+  const IS_PRODUCTION = command === 'build'
+  const IS_MOCK = mode === 'mock'
   // 读取环境配置
   const {
     VITE_BASE_URL,
@@ -41,7 +41,7 @@ export default defineConfig(({ command, mode }: ConfigEnv) => {
     VITE_DROP_CONSOLE = false,
     VITE_DROP_DEBUGGER = false,
     VITE_UPDATE_NOTICE = false
-  } = env;
+  } = env
 
   /***** 接口代理配置，有多个可以自己加 ******/
   const PROXY_CONFIG: Record<string, string | ProxyOptions> = {
@@ -61,7 +61,7 @@ export default defineConfig(({ command, mode }: ConfigEnv) => {
     //  '/testApi2': {
     //   target:'://test.api2.com',
     // }
-  };
+  }
   return {
     root, // 项目根目录
     base: VITE_BASE_URL, // 基础路径
@@ -146,8 +146,6 @@ export default defineConfig(({ command, mode }: ConfigEnv) => {
           })
         ]
       }),
-      // https://unocss.dev/integrations/vite
-      // unoCSS(),
       // 兼容浏览器设置，默认读取browserslistrc配置
       legacy(),
       // 注入打包和git信息，方便做版本追踪
@@ -213,28 +211,28 @@ export default defineConfig(({ command, mode }: ConfigEnv) => {
     esbuild: {
       drop: formatDrop(VITE_DROP_DEBUGGER, VITE_DROP_CONSOLE)
     }
-  };
-});
+  }
+})
 /********** 一些辅助函数 *********/
 function createPath(url: string, metaUrl = import.meta.url) {
-  return fileURLToPath(new URL(url, metaUrl));
+  return fileURLToPath(new URL(url, metaUrl))
 }
 function formatEnv(data: Record<string, any>) {
   Object.entries(data).map(([key, item]) => {
     if (item === 'true') {
-      item = true;
+      item = true
     } else if (item === 'false') {
-      item = false;
+      item = false
     } else if (item.match(/^\d+$/g)) {
-      item = Number(item);
+      item = Number(item)
     }
-    data[key] = item;
-  });
-  return data;
+    data[key] = item
+  })
+  return data
 }
 function formatDrop(dropDebugger: boolean, dropConsole: boolean) {
-  let drop: any = [];
-  dropDebugger && drop.push('debugger');
-  dropConsole && drop.push('console');
-  return drop;
+  let drop: any = []
+  dropDebugger && drop.push('debugger')
+  dropConsole && drop.push('console')
+  return drop
 }

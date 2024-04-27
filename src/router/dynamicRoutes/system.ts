@@ -1,4 +1,4 @@
-import type { RouteRecordRaw } from 'vue-router';
+import type { RouteRecordRaw } from 'vue-router'
 // 系统管理
 export default [
   {
@@ -10,7 +10,7 @@ export default [
       {
         path: '/system/menu',
         component: () => import('@/views/system/menu/List.vue'),
-        meta: { permission: 'system/menu' }
+        meta: { permission: 'system/menu' },
       },
       {
         path: '/system/menu/edit',
@@ -18,9 +18,9 @@ export default [
         meta: {
           activeMenu: '/system/menu',
           // hideBreadcrumb: true,
-          title: '详情'
-        }
-      }
-    ]
-  }
-] as RouteRecordRaw[];
+          title: '详情',
+        },
+      },
+    ],
+  },
+] as RouteRecordRaw[]

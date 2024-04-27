@@ -7,8 +7,19 @@
       <div>{{ appConfig }}</div>
       <h3>权限测试</h3>
       <div class="my-2 block">
-        选择权限：<ASelect v-model:value="selectAuthKeys" mode="multiple" class="w-50">
-          <ASelectOption v-for="item in authKeys" :key="item" :value="item">{{ item }}</ASelectOption>
+        选择权限：
+        <ASelect
+          v-model:value="selectAuthKeys"
+          mode="multiple"
+          class="w-50"
+        >
+          <ASelectOption
+            v-for="item in authKeys"
+            :key="item"
+            :value="item"
+          >
+            {{ item }}
+          </ASelectOption>
         </ASelect>
       </div>
       <div>{{ selectAuthKeys }}</div>
@@ -24,7 +35,10 @@
         <Auth :value="selectAuthKeys">
           <a-button>组件：every模式</a-button>
         </Auth>
-        <Auth :value="selectAuthKeys" model="some">
+        <Auth
+          :value="selectAuthKeys"
+          model="some"
+        >
           <a-button>组件：some模式</a-button>
         </Auth>
       </ASpace>
@@ -42,30 +56,58 @@
         <p>已下载：{{ bytesToSize(progress.loaded) }}</p>
         <p>
           进度：
-          <AProgress style="width: 400px" :percent="progress.progress" />
+          <AProgress
+            style="width: 400px"
+            :percent="progress.progress"
+          />
         </p>
       </div>
       <h3>vueRequest</h3>
       <p>
-        <a href="https://inhiblabcore.github.io/docs/hooks/useRequest/" target="_blank" rel="noopener noreferrer"
-          >VueHooksPlus - vueRequest</a
-        >测试
+        <a
+          href="https://inhiblabcore.github.io/docs/hooks/useRequest/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          VueHooksPlus - vueRequest
+        </a>
+        测试
       </p>
-      <AButton :loading="loading" @click="handleRun">请求 </AButton>
+      <AButton
+        :loading="loading"
+        @click="handleRun"
+      >
+        请求
+      </AButton>
       <p>测试结果</p>
       <p>data:{{ data }}</p>
       <p>err:{{ error }}</p>
       <h3>表格</h3>
       <p>组件位置：/src/components/BasisTable</p>
       <a-button @click="handleTestPagination">修改当前页为2</a-button>
-      <BasisTable show-index :columns="columns" :loading="loading" :data-source="data" :pagination="pagination">
+      <BasisTable
+        show-index
+        :columns="columns"
+        :loading="loading"
+        :data-source="data"
+        :pagination="pagination"
+      >
         <template #bodyCell="{ column, record }">
-          <ASpace v-if="column.dataIndex === 'action'" class="table-action">
+          <ASpace
+            v-if="column.dataIndex === 'action'"
+            class="table-action"
+          >
             <span class="text-primary">
               <IconFont type="icon-edit-square" />
             </span>
-            <DeleteButton :title="record.title" @confirm="handleDelete">
-              <IconFont type="icon-delete" style="color: red"></IconFont>
+            <DeleteButton
+              :title="record.title"
+              @confirm="handleDelete"
+            >
+              <IconFont
+                type="icon-delete"
+                style="color: red"
+              ></IconFont>
             </DeleteButton>
           </ASpace>
           <ASpace v-if="column.dataIndex === 'icon'">
@@ -78,26 +120,60 @@
       </BasisTable>
       <h3>图标</h3>
       <p>组件位置：/src/components/IconFont</p>
-      使用<a href="https://www.iconfont.cn/" class="text-link" target="_blank">iconfont</a>图标，<strong
-        >请将<span class="text-primary">ENV</span>文件中的<span class="text-primary">VITE_ICONFONT_URL</span
-        >变量设置为自己iconfont项目对应的地址</strong
-      >。当然，如果你不喜欢这种使用方式，可以试试
-      <a href="https://unocss.dev/presets/icons" target="_blank" rel="noopener noreferrer">unocss Icons</a>或者其他方式
+      使用
+      <a
+        href="https://www.iconfont.cn/"
+        class="text-link"
+        target="_blank"
+      >
+        iconfont
+      </a>
+      图标，
+      <strong>
+        请将
+        <span class="text-primary">ENV</span>
+        文件中的
+        <span class="text-primary">VITE_ICONFONT_URL</span>
+        变量设置为自己iconfont项目对应的地址
+      </strong>
+      。当然，如果你不喜欢这种使用方式，可以试试
+      <a
+        href="https://unocss.dev/presets/icons"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        unocss Icons
+      </a>
+      或者其他方式
       <p class="text-6 text-primary">
-        <IconFont type="icon-pic-right" :style="{ color: 'blue' }" />
+        <IconFont
+          type="icon-pic-right"
+          :style="{ color: 'blue' }"
+        />
         <IconFont type="icon-CodeSandbox" />
       </p>
       <h3>图标选择器</h3>
       <p>组件位置：/src/components/IconPicker</p>
-      <a-input v-model:value="iconSelect" readonly style="width: 200px">
+      <a-input
+        v-model:value="iconSelect"
+        readonly
+        style="width: 200px"
+      >
         <template #addonAfter>
-          <a-popover placement="right" :auto-adjust-overflow="false" title="选择图标">
+          <a-popover
+            placement="right"
+            :auto-adjust-overflow="false"
+            title="选择图标"
+          >
             <template #content>
               <div class="icon-picker-wrap">
                 <IconPicker v-model:value="iconSelect" />
               </div>
             </template>
-            <icon-font v-if="iconSelect" :type="iconSelect" />
+            <icon-font
+              v-if="iconSelect"
+              :type="iconSelect"
+            />
             <span v-else>选择</span>
           </a-popover>
         </template>
@@ -109,7 +185,10 @@
       <p>组件位置：/src/components/ConfirmButton/DeleteButton</p>
       <ASpace>
         <DeleteButton @confirm="handleDelete"></DeleteButton>
-        <DeleteButton @confirm="handleDelete" action-title="删除项一"></DeleteButton>
+        <DeleteButton
+          @confirm="handleDelete"
+          action-title="删除项一"
+        ></DeleteButton>
       </ASpace>
       <h3>模态框函数式调用</h3>
       <p>组件位置：/src/composables/useDialog</p>
@@ -120,16 +199,27 @@
       </ASpace>
       <h3>UnoCss</h3>
       <p>
-        默认可以使用<a href="https://tailwindcss.com/" target="_blank" rel="noopener noreferrer">tailwindcss</a
-        >语法,建议安装对应编辑器插件<a
+        默认可以使用
+        <a
+          href="https://tailwindcss.com/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          tailwindcss
+        </a>
+        语法,建议安装对应编辑器插件
+        <a
           href="https://marketplace.visualstudio.com/items?itemName=antfu.unocss"
           target="_blank"
           rel="noopener noreferrer"
-          >unocss</a
-        >以获得更好的体验。
+        >
+          unocss
+        </a>
+        以获得更好的体验。
       </p>
       <p>
-        默认所有单位使用rem，如果需要使用px，可以安装<a href="https://unocss.dev/presets/rem-to-px">rem-to-px插件</a>
+        默认所有单位使用rem，如果需要使用px，可以安装
+        <a href="https://unocss.dev/presets/rem-to-px">rem-to-px插件</a>
       </p>
       <div
         class="m-1 inline-block h-30 max-w-lg bg-primary p-5 text-center text-white duration-1000 hover:(rounded-10 bg-green text-red)"
@@ -151,7 +241,11 @@
             @click="handleSetTheme(item)"
           ></span>
         </template>
-        <IconFont type="icon-bg-colors" font-size="20px" class="text-primary"></IconFont>
+        <IconFont
+          type="icon-bg-colors"
+          font-size="20px"
+          class="text-primary"
+        ></IconFont>
       </a-popover>
       <h3>颜色</h3>
       <p class="text-primary">主色</p>
@@ -169,79 +263,79 @@
   </div>
 </template>
 <script lang="tsx" setup>
-import { reactive } from 'vue';
-import type { ColumnProps } from 'ant-design-vue/es/table';
-import type { AxiosProgressEvent } from 'axios';
-import { downloadRequest } from '@/api/file';
-import { getMenusRequest } from '@/api/auth';
-import { bytesToSize } from '@/utils';
-import request from '@/utils/request';
-import { message } from 'ant-design-vue';
-import TestModalForm from './TestModalForm.vue';
-import { paginationConfig } from '@/config/pagination';
+import { reactive } from 'vue'
+import type { ColumnProps } from 'ant-design-vue/es/table'
+import type { AxiosProgressEvent } from 'axios'
+import { downloadRequest } from '@/api/file'
+import { getMenusRequest } from '@/api/auth'
+import { bytesToSize } from '@/utils'
+import request from '@/utils/request'
+import { message } from 'ant-design-vue'
+import TestModalForm from './TestModalForm.vue'
+import { paginationConfig } from '@/config/pagination'
 
 import DemoPage from './demo.vue'
 
-const authKeys = ['home', 'system', 'system/menu', 'other'];
-const selectAuthKeys = ref(['home', 'system']);
-const appConfig = window.__APP_CONFIG__;
+const authKeys = ['home', 'system', 'system/menu', 'other']
+const selectAuthKeys = ref(['home', 'system'])
+const appConfig = window.__APP_CONFIG__
 const columns: ColumnProps[] = [
   {
     title: '名称',
-    dataIndex: 'title'
+    dataIndex: 'title',
   },
   {
     title: '图标',
-    dataIndex: 'icon'
+    dataIndex: 'icon',
   },
   {
     title: '权限码',
-    dataIndex: 'permission'
+    dataIndex: 'permission',
   },
   {
     title: '地址',
-    dataIndex: 'url'
+    dataIndex: 'url',
   },
   {
     title: '类型',
-    dataIndex: 'type'
+    dataIndex: 'type',
   },
   {
     title: '操作',
     align: 'center',
-    dataIndex: 'action'
-  }
-];
+    dataIndex: 'action',
+  },
+]
 const { loading, data, error, run, current, pagination, params } = usePagination(getMenusRequest, {
   paginationExtConfig: paginationConfig,
   defaultParams: [
     {
-      pageSize: 1
-    }
-  ]
-});
+      pageSize: 1,
+    },
+  ],
+})
 
 function handleRun() {
-  run(params.value[0]);
+  run(params.value[0])
 }
 function handleTestPagination() {
-  current.value = 2;
+  current.value = 2
 }
 function handleCancelAllRequest() {
-  request.cancelAllRequest();
+  request.cancelAllRequest()
 }
 const progress = reactive<Partial<AxiosProgressEvent>>({
   total: 0,
   loaded: 0,
-  progress: 0
-});
+  progress: 0,
+})
 function handleDownloadFile() {
-  downloadRequest('文件下载测试', {}, progress);
+  downloadRequest('文件下载测试', {}, progress)
 }
 function handleDelete() {
-  message.success('删除成功');
+  message.success('删除成功')
 }
-const { createDialog } = useDialog();
+const { createDialog } = useDialog()
 function handleOpenModal() {
   // 这里需要手动添加一下泛型，就可推断onConfirm中参数的类型
   createDialog<typeof TestModalForm>({
@@ -251,9 +345,9 @@ function handleOpenModal() {
     // ...支持AModal的所有配置
     onConfirm(data) {
       // 可以拿到内部数据，在表单类弹窗中很有用
-      console.log('拿到组件内部数据：', data);
-    }
-  });
+      console.log('拿到组件内部数据：', data)
+    },
+  })
 }
 function handleOpenModal1() {
   // 默认不显示
@@ -263,13 +357,13 @@ function handleOpenModal1() {
     component: <TestModalForm title="测试模态窗" />,
     defaultOpen: false,
     onConfirm(data) {
-      console.log('拿到组件内部数据：', data);
-    }
-  });
-  open();
+      console.log('拿到组件内部数据：', data)
+    },
+  })
+  open()
   setTimeout(() => {
-    close();
-  }, 3000);
+    close()
+  }, 3000)
 }
 function handleOpenModal2() {
   // 带插槽
@@ -280,25 +374,25 @@ function handleOpenModal2() {
       <TestModalForm title="测试模态窗">
         {{
           default: () => <div>默认插槽</div>,
-          test: () => <div>test插槽</div>
+          test: () => <div>test插槽</div>,
         }}
       </TestModalForm>
     ),
     onConfirm(data) {
-      console.log('拿到组件内部数据：', data);
-    }
-  });
+      console.log('拿到组件内部数据：', data)
+    },
+  })
 }
-const iconSelect = ref<Iconfont | undefined>();
-const colorList = ['#1890ff', '#52c41a', '#faad14', '#ff4d4f'];
-const { setTheme, themeOptions } = useTheme();
+const iconSelect = ref<Iconfont | undefined>()
+const colorList = ['#1890ff', '#52c41a', '#faad14', '#ff4d4f']
+const { setTheme, themeOptions } = useTheme()
 function handleSetTheme(color) {
   setTheme({
     themeToken: {
       ...themeOptions.themeToken,
-      colorPrimary: color
-    }
-  });
+      colorPrimary: color,
+    },
+  })
 }
 </script>
 <style scoped>

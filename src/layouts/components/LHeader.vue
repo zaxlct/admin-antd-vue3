@@ -11,7 +11,10 @@
           </a-avatar>
           <span style="margin-left: 10px; vertical-align: middle; color: #fff">
             {{ userInfo.username }}
-            <icon-font type="icon-down" style="margin-left: 5px; font-size: 10px" />
+            <icon-font
+              type="icon-down"
+              style="margin-left: 5px; font-size: 10px"
+            />
           </span>
         </div>
         <template #overlay>
@@ -38,48 +41,48 @@
 </template>
 
 <script lang="ts" setup>
-import { Modal } from 'ant-design-vue';
-import { computed, reactive } from 'vue';
+import { Modal } from 'ant-design-vue'
+import { computed, reactive } from 'vue'
 
-import LPersonalEdit from './LPersonalEdit.vue';
-import LThemeSetting from './LThemeSetting.vue';
+import LPersonalEdit from './LPersonalEdit.vue'
+import LThemeSetting from './LThemeSetting.vue'
 
-import type { MenuClickEventHandler } from 'ant-design-vue/lib/menu/src/interface';
+import type { MenuClickEventHandler } from 'ant-design-vue/lib/menu/src/interface'
 
-import { useRootStore } from '@/store';
-import { logout } from '@/utils/auth';
+import { useRootStore } from '@/store'
+import { logout } from '@/utils/auth'
 interface IProps {
-  collapse?: boolean;
+  collapse?: boolean
 }
-withDefaults(defineProps<IProps>(), { collapse: false });
-defineEmits(['update:collapse']);
-const rootStore = useRootStore();
+withDefaults(defineProps<IProps>(), { collapse: false })
+defineEmits(['update:collapse'])
+const rootStore = useRootStore()
 const state = reactive({
   count: 12,
   openPsd: false,
-  openTheme: false
-});
+  openTheme: false,
+})
 
-const userInfo = computed(() => rootStore.userinfo);
+const userInfo = computed(() => rootStore.userinfo)
 const handleClick: MenuClickEventHandler = ({ key }) => {
   switch (key) {
     case 'person':
-      state.openPsd = true;
-      break;
+      state.openPsd = true
+      break
     case 'logout':
       Modal.confirm({
         title: () => '提示',
         content: () => '您确定要退出吗？',
         onOk: () => {
-          logout();
-        }
-      });
-      break;
+          logout()
+        },
+      })
+      break
     case 'theme':
-      state.openTheme = true;
-      break;
+      state.openTheme = true
+      break
   }
-};
+}
 </script>
 
 <style lang="less" scoped>

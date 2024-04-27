@@ -1,18 +1,30 @@
 <template>
-  <div class="logo" @click="$router.push('/')">
-    <img class="logo-pic" src="../../assets/images/logo.png" :alt="appTitle" />
-    <span v-if="!mini" class="logo-txt">{{ appTitle }}</span>
+  <div
+    class="logo"
+    @click="$router.push('/')"
+  >
+    <img
+      class="logo-pic"
+      src="../../assets/images/logo.png"
+      :alt="appTitle"
+    />
+    <span
+      v-if="!mini"
+      class="logo-txt"
+    >
+      {{ appTitle }}
+    </span>
   </div>
 </template>
 
 <script lang="ts" setup>
-import config from '@/config';
+import config from '@/config'
 
 interface IProps {
-  mini?: boolean;
+  mini?: boolean
 }
-withDefaults(defineProps<IProps>(), { mini: false });
-const appTitle = config.appTitle;
+withDefaults(defineProps<IProps>(), { mini: false })
+const appTitle = config.appTitle
 </script>
 
 <style scoped>

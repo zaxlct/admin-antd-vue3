@@ -1,32 +1,41 @@
 <template>
-  <span class="icon-font" :style="computedStyle">
-    <svg aria-hidden="true" width="1em" height="1em" focusable="false" fill="currentColor">
+  <span
+    class="icon-font"
+    :style="computedStyle"
+  >
+    <svg
+      aria-hidden="true"
+      width="1em"
+      height="1em"
+      focusable="false"
+      fill="currentColor"
+    >
       <use :xlink:href="'#' + type"></use>
     </svg>
   </span>
 </template>
 
 <script lang="ts" setup>
-import { computed } from 'vue';
+import { computed } from 'vue'
 
 interface IProps {
-  type: string;
+  type: string
   // type: Iconfont; // 如果不使用iconify，可以设置成此项，可以自动补全
-  fontSize?: string;
-  size?: string;
-  color?: string;
+  fontSize?: string
+  size?: string
+  color?: string
 }
 const props = withDefaults(defineProps<IProps>(), {
   fontSize: '',
   size: '',
-  color: ''
-});
+  color: '',
+})
 const computedStyle = computed(() => {
   return {
     color: props.color,
-    fontSize: props.fontSize || props.size
-  };
-});
+    fontSize: props.fontSize || props.size,
+  }
+})
 </script>
 
 <style scoped>

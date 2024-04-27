@@ -1,6 +1,9 @@
 <template>
   <a-layout class="layout">
-    <LHeader v-model:collapse="collapse" class="layout-header-fixed">
+    <LHeader
+      v-model:collapse="collapse"
+      class="layout-header-fixed"
+    >
       <template #logo>
         <LLogo style="margin: 0 20px 0 0"></LLogo>
       </template>
@@ -14,13 +17,22 @@
         collapsible
         breakpoint="lg"
       >
-        <LSider v-model:collapse="collapse" :menus="menus"></LSider>
+        <LSider
+          v-model:collapse="collapse"
+          :menus="menus"
+        ></LSider>
       </a-layout-sider>
       <a-layout-content class="app-scroll-wrap">
-        <LBreadCrumb v-model:collapse="collapse" :menus="menus" />
+        <LBreadCrumb
+          v-model:collapse="collapse"
+          :menus="menus"
+        />
         <div class="app-main">
           <router-view v-slot="{ Component, route }">
-            <transition mode="out-in" name="slide">
+            <transition
+              mode="out-in"
+              name="slide"
+            >
               <div :key="route.path"><component :is="Component" /></div>
             </transition>
           </router-view>
@@ -30,36 +42,36 @@
   </a-layout>
 </template>
 <script lang="ts" setup>
-import { useRouter } from 'vue-router';
+import { useRouter } from 'vue-router'
 
-import LBreadCrumb from '@/layouts/components/LBreadCrumb.vue';
-import LHeader from '@/layouts/components/LHeader.vue';
-import LLogo from '@/layouts/components/LLogo.vue';
-import LSider from '@/layouts/components/LSider.vue';
-import { useRootStore } from '@/store';
-import { convertToTree } from '@/utils';
-import { getStorage } from '@bwrong/storage';
-import type { IMenu, IUser } from '@/api/auth';
-import { getPermissionsData } from '@bwrong/auth-tool';
+import LBreadCrumb from '@/layouts/components/LBreadCrumb.vue'
+import LHeader from '@/layouts/components/LHeader.vue'
+import LLogo from '@/layouts/components/LLogo.vue'
+import LSider from '@/layouts/components/LSider.vue'
+import { useRootStore } from '@/store'
+import { convertToTree } from '@/utils'
+import { getStorage } from '@bwrong/storage'
+import type { IMenu, IUser } from '@/api/auth'
+import { getPermissionsData } from '@bwrong/auth-tool'
 
-const rootStore = useRootStore();
-const { push } = useRouter();
-const userInfo = getStorage<IUser>('userinfo');
+const rootStore = useRootStore()
+const { push } = useRouter()
+const userInfo = getStorage<IUser>('userinfo')
 if (userInfo) {
-  rootStore.setUserinfo(userInfo);
+  rootStore.setUserinfo(userInfo)
 } else {
-  push('/login');
+  push('/login')
 }
-let menus: IMenu[] = getPermissionsData() || [];
-menus = menus.filter((item) => item.type === 0);
+let menus: IMenu[] = getPermissionsData() || []
+menus = menus.filter(item => item.type === 0)
 menus = convertToTree({
   data: menus,
-  pid: 0
-});
-const collapse = ref(false);
+  pid: 0,
+})
+const collapse = ref(false)
 
-const { themeOptions } = useTheme();
-const headerHeight = computed(() => (themeOptions.isCompact ? '56px' : '64px'));
+const { themeOptions } = useTheme()
+const headerHeight = computed(() => (themeOptions.isCompact ? '56px' : '64px'))
 </script>
 <style scoped>
 .layout {

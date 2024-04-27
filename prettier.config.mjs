@@ -10,5 +10,6 @@ export default {
   semi: false,
   arrowParens: 'avoid',
   htmlWhitespaceSensitivity: 'ignore',
-  trailingComma: 'es5'
-};
+  trailingComma: 'es5',
+  vueIndentScriptAndStyle: false,
+}

@@ -1,5 +1,5 @@
-const { VITE_TITLE } = import.meta.env;
-import pkg from '../../package.json';
+const { VITE_TITLE } = import.meta.env
+import pkg from '../../package.json'
 export default {
   // 基础配置
   appTitle: VITE_TITLE, // 应用名称，用于显示在浏览器标签
@@ -13,6 +13,6 @@ export default {
   tokenPrefix: 'Bearer',
   // 路由相关配置
   homePage: '/home', // 登入应用默认的页面
-  whiteRoutes: ['/login', '/err'] // 路由白名单
+  whiteRoutes: ['/login', '/err'], // 路由白名单
   // lang: 'zh_CN'
-};
+}

@@ -3,7 +3,7 @@
     class="icon-picker"
     :style="{
       width: width,
-      height: height
+      height: height,
     }"
   >
     <div
@@ -13,25 +13,34 @@
       :class="{ active: value === item }"
       @click="handleSelect(item)"
     >
-      <IconFont :type="item" class="icon-picker-icon" font-size="22px" />
-      <span class="icon-picker-title" :title="item">{{ item }}</span>
+      <IconFont
+        :type="item"
+        class="icon-picker-icon"
+        font-size="22px"
+      />
+      <span
+        class="icon-picker-title"
+        :title="item"
+      >
+        {{ item }}
+      </span>
     </div>
   </div>
 </template>
 <script lang="ts" setup>
-import data from './data.json';
+import data from './data.json'
 
 interface IProps {
-  value?: string;
-  width?: string;
-  height?: string;
+  value?: string
+  width?: string
+  height?: string
 }
-withDefaults(defineProps<IProps>(), { value: '', width: '500px', height: '500px' });
-const prefix = data.css_prefix_text;
-const icons = data.glyphs.map((item) => `${prefix}${item.font_class}`) as Iconfont[];
-const emit = defineEmits(['update:value']);
+withDefaults(defineProps<IProps>(), { value: '', width: '500px', height: '500px' })
+const prefix = data.css_prefix_text
+const icons = data.glyphs.map(item => `${prefix}${item.font_class}`) as Iconfont[]
+const emit = defineEmits(['update:value'])
 function handleSelect(icon) {
-  emit('update:value', icon);
+  emit('update:value', icon)
 }
 </script>
 <style scoped>

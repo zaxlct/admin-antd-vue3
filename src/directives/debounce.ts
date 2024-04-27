@@ -1,20 +1,20 @@
-import type { Directive, DirectiveBinding } from 'vue';
+import type { Directive, DirectiveBinding } from 'vue'
 
 const debounce: Directive = {
   mounted(el: Element, binding: DirectiveBinding) {
-    let timer: number;
+    let timer: number
     el.addEventListener('keyup', () => {
       if (timer) {
-        clearTimeout(timer);
+        clearTimeout(timer)
       }
       timer = setTimeout(() => {
-        binding.value();
-      }, 1000);
-    });
-  }
-};
+        binding.value()
+      }, 1000)
+    })
+  },
+}
 
-export default debounce;
+export default debounce
 // 使用说明
 /* <template>
   <button v-debounce="debounceClick">防抖</button>

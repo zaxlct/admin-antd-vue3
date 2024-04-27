@@ -1,6 +1,11 @@
 <template>
   <div class="l-sider">
-    <a-menu v-model:open-keys="localOpeneds" class="menu-box" mode="inline" :selected-keys="selectedKeys">
+    <a-menu
+      v-model:open-keys="localOpeneds"
+      class="menu-box"
+      mode="inline"
+      :selected-keys="selectedKeys"
+    >
       <template v-for="item in menus">
         <template v-if="!item.hide">
           <LSubMenu
@@ -10,8 +15,17 @@
             :collapse="collapse"
             :item="item"
           ></LSubMenu>
-          <a-menu-item v-else :key="item.url" @click="handleLink(item.url)">
-            <template #icon v-if="item.icon"><icon-font :type="item.icon" /></template>
+          <a-menu-item
+            v-else
+            :key="item.url"
+            @click="handleLink(item.url)"
+          >
+            <template
+              #icon
+              v-if="item.icon"
+            >
+              <icon-font :type="item.icon" />
+            </template>
             {{ item.title }}
           </a-menu-item>
         </template>
@@ -20,30 +34,30 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { computed, ref, watchEffect } from 'vue';
-import { useRoute } from 'vue-router';
+import { computed, ref, watchEffect } from 'vue'
+import { useRoute } from 'vue-router'
 
-import LSubMenu from './LSubMenu.vue';
+import LSubMenu from './LSubMenu.vue'
 
-import type { IMenu } from '@/api/auth';
+import type { IMenu } from '@/api/auth'
 interface IProps {
-  collapse?: boolean;
-  menus: IMenu[];
+  collapse?: boolean
+  menus: IMenu[]
 }
 const props = withDefaults(defineProps<IProps>(), {
-  collapse: false
-});
-const route = useRoute();
-const localOpeneds = ref<string[]>([]);
-const { matchedParentChain, activeMenu } = useMenuState(props.menus);
-const selectedKeys = computed(() => (activeMenu.value ? [activeMenu.value, route.path] : [route.path]));
+  collapse: false,
+})
+const route = useRoute()
+const localOpeneds = ref<string[]>([])
+const { matchedParentChain, activeMenu } = useMenuState(props.menus)
+const selectedKeys = computed(() => (activeMenu.value ? [activeMenu.value, route.path] : [route.path]))
 watchEffect(() => {
-  localOpeneds.value = (props.collapse ? [] : matchedParentChain.value).map((item) => item.url);
-});
-const router = useRouter();
+  localOpeneds.value = (props.collapse ? [] : matchedParentChain.value).map(item => item.url)
+})
+const router = useRouter()
 const handleLink = (url?: string) => {
-  url && router.push(url);
-};
+  url && router.push(url)
+}
 </script>
 
 <style lang="less" scoped>

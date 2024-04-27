@@ -29,6 +29,7 @@
     "@bwrong/auth-tool": "^3.0.7",
     "@bwrong/request": "^1.0.1",
     "@bwrong/storage": "^1.1.0",
+    "@form-create/ant-design-vue": "^3.1.28",
     "ant-design-vue": "^4.1.2",
     "axios": "^1.6.8",
     "crypto-js": "^4.2.0",

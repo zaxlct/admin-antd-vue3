@@ -14,6 +14,9 @@ dependencies:
   '@bwrong/storage':
     specifier: ^1.1.0
     version: 1.1.0
+  '@form-create/ant-design-vue':
+    specifier: ^3.1.28
+    version: 3.1.28(vue@3.4.21)
   ant-design-vue:
     specifier: ^4.1.2
     version: 4.1.2(vue@3.4.21)
@@ -1757,6 +1760,55 @@ packages:
     resolution: {integrity: sha512-Ys+3g2TaW7gADOJzPt83SJtCDhMjndcDMFVQ/Tj9iA1BfJzFKD9mAUXT3OenpuPHbI6P/myECxRJrofUsDx/5g==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     dev: true
+
+  /@form-create/ant-design-vue@3.1.28(vue@3.4.21):
+    resolution: {integrity: sha512-0GcSNwbQFXeJAOl9nWdlMD7HshfAXj/nrDVEXlAyTj3mW5WIrMb4qLQVVf72iTbYU7wvdw+VyFy2BwSzVcNHnw==}
+    peerDependencies:
+      vue: ^3.1.0
+    dependencies:
+      '@form-create/component-antdv-frame': 3.1.29
+      '@form-create/component-antdv-group': 3.1.29
+      '@form-create/component-antdv-upload': 3.1.29
+      '@form-create/component-subform': 3.1.5
+      '@form-create/core': 3.1.29(vue@3.4.21)
+      '@form-create/utils': 3.1.29
+      vue: 3.4.21(typescript@5.4.5)
+    dev: false
+
+  /@form-create/component-antdv-frame@3.1.29:
+    resolution: {integrity: sha512-mOTexagOvR+0GH9GbvnsEFWv9I8W8+oy44jsEgP82AimGJ4lFK05K1PZjdhC6bWB9+Keb9F5vIZjTjB3u0M0ug==}
+    dependencies:
+      '@form-create/utils': 3.1.29
+    dev: false
+
+  /@form-create/component-antdv-group@3.1.29:
+    resolution: {integrity: sha512-zKaD4KMSVADrM+YoMmxWBLwfzGsmjjD2r0nmY0NBgt7d7ZDJQFrIFQzPStTKhNlVoHm0KRjqsKdZGcugnR8FEg==}
+    dependencies:
+      '@form-create/utils': 3.1.29
+    dev: false
+
+  /@form-create/component-antdv-upload@3.1.29:
+    resolution: {integrity: sha512-KH/AO2Hd3QbN89jdTkxx4cE6eaS4vSiZBItoEeR1YOoGN7/jmtekjoXdOjix/JHpNF30ffWAtGTNL3Y3uJ4qyQ==}
+    dependencies:
+      '@form-create/utils': 3.1.29
+    dev: false
+
+  /@form-create/component-subform@3.1.5:
+    resolution: {integrity: sha512-JHNEFGuwpnjGvCJ0I0GCqPL5al0qXoN4ymnRBpm+oL+6MMo5bz1kUyoqMX1MutuC96gHTqpeqc67hssi8g2mIw==}
+    dev: false
+
+  /@form-create/core@3.1.29(vue@3.4.21):
+    resolution: {integrity: sha512-nPFFdiEmATIKeocnP8pubKSwMSegc+tcN5PU+cSuXl5RJ1w3k0UZr80Dx2yPUmw8sv4XwSMmMUkHUojz10hqFg==}
+    peerDependencies:
+      vue: ^3.1.0
+    dependencies:
+      '@form-create/utils': 3.1.29
+      vue: 3.4.21(typescript@5.4.5)
+    dev: false
+
+  /@form-create/utils@3.1.29:
+    resolution: {integrity: sha512-CsD3htq2qyuvqc3kJipUk2OFZA5eg+Fwna9zZPoi8T8UuEKBkfgR5fp2s0AgZ87i2a5NgwCk87kfVntijnxvPw==}
+    dev: false
 
   /@humanwhocodes/config-array@0.11.14:
     resolution: {integrity: sha512-3T8LkOmg45BV5FICb15QQMsyUSWrQ8AygVfC7ZG32zOalnqrilm018ZVCw0eapXux8FtA33q8PSRSstjee3jSg==}

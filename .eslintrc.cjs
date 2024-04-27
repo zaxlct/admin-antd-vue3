@@ -3,29 +3,34 @@ require('@rushstack/eslint-patch/modern-module-resolution');
 
 module.exports = {
   root: true,
+  parserOptions: {
+    ecmaVersion: 11,
+    sourceType: 'module',
+    parser: '@typescript-eslint/parser',
+  },
   extends: [
     '@vanwei/eslint-config/vue3',
     '@vanwei/eslint-config/typescript',
     '@vue/eslint-config-typescript/recommended',
     '@vue/eslint-config-prettier',
     // '@vue/eslint-config-prettier/skip-formatting',
-    './.eslintrc-auto-import.json'
+    './.eslintrc-auto-import.json',
   ],
   globals: {
     Iconfont: true,
-    __APP_CONFIG__: true
+    __APP_CONFIG__: true,
   },
   rules: {
-    'prettier/prettier': [
+    'vue/max-attributes-per-line': [
       'error',
       {
-        'space-before-function-paren': false
+        singleline: {
+          max: 3,
+        },
+        multiline: {
+          max: 1,
+        },
       },
-      {
-        fileInfoOptions: {
-          withNodeModules: true
-        }
-      }
     ],
     'vue/no-setup-props-destructure': 0,
     'vue/no-dupe-keys': 0,
@@ -36,9 +41,9 @@ module.exports = {
       'error',
       {
         selector: ['interface', 'typeAlias', 'class', 'enum'],
-        format: ['PascalCase']
-      }
+        format: ['PascalCase'],
+      },
     ],
-    semi: ['error', 'never']
-  }
-};
+    semi: ['error', 'never'],
+  },
+}

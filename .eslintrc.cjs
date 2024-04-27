@@ -8,7 +8,6 @@ module.exports = {
     '@vanwei/eslint-config/typescript',
     '@vue/eslint-config-typescript/recommended',
     '@vue/eslint-config-prettier',
-    '@unocss',
     // '@vue/eslint-config-prettier/skip-formatting',
     './.eslintrc-auto-import.json'
   ],

@@ -1,5 +1,5 @@
 /* eslint-env node */
-require('@rushstack/eslint-patch/modern-module-resolution');
+require('@rushstack/eslint-patch/modern-module-resolution')
 
 module.exports = {
   root: true,
@@ -13,7 +13,7 @@ module.exports = {
     '@vanwei/eslint-config/typescript',
     '@vue/eslint-config-typescript/recommended',
     '@vue/eslint-config-prettier',
-    // '@vue/eslint-config-prettier/skip-formatting',
+    '@vue/eslint-config-prettier/skip-formatting',
     './.eslintrc-auto-import.json',
   ],
   globals: {

@@ -13,7 +13,13 @@ formCreate.use(install)
 
 const app = createApp(App)
 app.use(createPinia())
-app.use(formCreate)
+app.use(formCreate, {
+  wrap: {
+    labelCol: {
+      span: 4,
+    },
+  },
+})
 app.use(router)
 app.use(plugins) // 注册插件
 app.use(directives) // 注册指令

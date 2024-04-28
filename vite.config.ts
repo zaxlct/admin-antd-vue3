@@ -122,9 +122,17 @@ export default defineConfig(({ command, mode }: ConfigEnv) => {
       vueJsx(),
       // 自动导入组件 https://github.com/antfu/unplugin-auto-import
       autoImport({
-        imports: ['vue', 'vue-router', 'pinia'],
+        imports: [
+          'vue',
+          'vue-router',
+          'pinia',
+          {
+            'ant-design-vue': [
+              ['message', '$message']
+            ],
+          }
+        ],
         dts: 'types/auto-imports.d.ts',
-        // resolvers: [AntDesignVueResolver()],
         dirs: ['src/composables', 'src/store'], // 需要自动导入的文件目录
         vueTemplate: true,
         resolvers: [VueHooksPlusResolver()],

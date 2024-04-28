@@ -2,34 +2,26 @@
   <div class="page_container">
     <a-button
       type="primary"
-      @click="openFrom = true"
+      @click="formModalProps.open = true"
     >新增</a-button>
     <a-table
       :dataSource
       :columns="columns"
       :loading="tableLoading"
     />
-    <a-modal
-      v-model:open="openFrom"
-      title="编辑公司"
-      @ok="submitForm"
-    >
-      <form-create
-        :rule="form.rule"
-        v-model:api="form.fApi"
-        :option="form.options"
-        v-model="form.value"
-      >
-      </form-create>
-    </a-modal>
+
+    <ModalForm
+      v-bind="formModalProps"
+      v-model:open="formModalProps.open"
+    />
   </div>
 </template>
 
 <script setup lang="jsx">
 import request from '@/utils/request'
+import ModalForm from './modal-form/modal-form.vue'
 
 const tableLoading = ref(false)
-const openFrom = ref(false)
 const dataSource = ref([])
 function getList() {
   tableLoading.value = true
@@ -46,21 +38,7 @@ function getList() {
 onMounted(async () => {
   getList()
 })
-
-const form = reactive({
-  fApi: {},
-  value: { field1: '111', field2: '222', date: '2023-10-23' },
-  options: {
-    submitBtn: false,
-    resetBtn: false,
-  },
-  rule: [
-    { type: 'input', field: 'field1', title: 'field1', value: '' },
-    { type: 'input', field: 'field2', title: 'field2', value: '' },
-    { type: 'datePicker', field: 'date', title: 'date', value: '' },
-    { type: 'btns' },
-  ],
-})
+$message.success('This is a success message')
 
 const columns = [
   {
@@ -91,16 +69,50 @@ const columns = [
   },
 ]
 
-function submitForm() {
-  form.fApi.submit((formData, fApi) => {
-    alert(JSON.stringify(formData))
-    console.log(fApi)
-  })
-}
-
-function reset() {
-  form.fApi.resetFields()
-}
+const formModalProps = reactive({
+  open: false,
+  addTitle: '添加公司',
+  editTitle: '修改公司',
+  createRequest: async (data) => {
+    await request.post('https://dev.ruzhi.com/api/company/create', data)
+  },
+  editRequest: async (data) => {
+    await request.post('https://dev.ruzhi.com/api/company/update', data)
+  },
+  getData(data) {
+    const { company_id, company_name, company_type } = data
+    return {
+      company_id,
+      company_name,
+      company_type,
+      company_email: 'zax@qq.com'
+    }
+  },
+  setData(data) {
+    data.email = '11@qq.com'
+  },
+  rule: [
+    {
+      type: 'radio',
+      field: 'company_type',
+      title: '企业类型',
+      value: '',
+      options: [
+        { value: 'COMPANY', label: '公司' },
+        { value: 'EDU', label: '院校' },
+        { value: 'CERTIFICATE', label: '证书颁发机构' },
+      ],
+    },
+    {
+      type: 'input',
+      field: 'company_name',
+      title: '公司名称',
+      value: '',
+      validate: [{ type: 'string', required: true, message: '请输入公司名称' }]
+    },
+    { type: 'textarea', field: 'company_introduce', title: '公司简介', value: '' },
+  ],
+})
 
 function confirm() {
   console.log('confirm')

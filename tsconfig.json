@@ -11,6 +11,9 @@
       "components/*": ["src/components/*"]
     }
   },
+  "vueCompilerOptions": {
+    "plugins": ["@volar/vue-language-plugin-pug", "@vue/language-plugin-pug"]
+  },
   "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.vue", "types/**/*.d.ts"],
   "exclude": ["dist", "node_modules", "src/**/__tests__/*"],
   "references": [

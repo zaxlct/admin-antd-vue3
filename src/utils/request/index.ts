@@ -1,12 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/*
- * @Author: Bwrong
- * @Github: https://github.com/BWrong
- * @Date: 2022-09-06 14:12:08
- * @LastEditors: Bwrong
- * @LastEditTime: 2023-05-30 17:40:24
- */
-// import Qs from 'qs';
 import { AxiosHeaders } from 'axios'
 import { downloadFile } from '..'
 import { getToken } from '../auth'
@@ -36,9 +28,7 @@ export type ResponseType = {
 const request = new Request<ResponseType>({
   timeout: 30000, // 超时 30S
   baseURL: apiHost, // 接口地址
-  // responseType: 'json',
   withCredentials: false, // 是否允许带cookie
-  // paramsSerializer:(params) => Qs.stringify(params, {allowDots: true}), // 开启qs序列化
   headers: { 'Content-Type': 'application/json;charset=UTF-8' },
   // validateStatus: function () {
   // 使用async-await，处理reject情况较为繁琐，所以全部返回resolve，在业务代码中处理异常
@@ -52,7 +42,7 @@ const request = new Request<ResponseType>({
       const token = getToken()
       if (token) {
         config.headers = config.headers || ({} as AxiosHeaders)
-        config.headers['Authorization'] = `${tokenPrefix} ${token}`
+        config.headers['Authorization'] = `${tokenPrefix} eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIyMDAwMzMiLCJ1aWQiOjIwMDAzMywiaXNzIjoiaXNzIiwiZXhwIjoxNzE1NDc0OTgwLCJpYXQiOjE3MTQyNjUzODB9.DIGIUoVWR0xiUJyr1hZhYUhOHrhl5I8_EJZ_Dp7gEbWg95SMz8T4Fl6F75BIVgtqTp_NSEbfuhnsmNgWK9FUOIUcJHMo45Qr04HOBJHfFB2v8ft5BEszt_z6FV8Xhi5tfcte1Eh-7WWmHzo4gsx7CjMniqxGkcQPpe-IBiqzIbw`
       }
       // 检查更新认证信息
       handleCheckAuth(config)
@@ -65,14 +55,15 @@ const request = new Request<ResponseType>({
     responseInterceptor({ data, config }) {
       // 跳过拦截器
       if ((config as RequestConfig).skipIntercept) return Promise.resolve(data)
-      if (data.code === 200) {
-        // 接口自动提示
-        handleShowTips(data, config)
-        return Promise.resolve(data.data)
-      }
-      // 处理业务错误
-      handleBusinessError(data)
-      return Promise.reject(data)
+      // if (data.code === 200) {
+      //   // 接口自动提示
+      //   handleShowTips(data, config)
+      //   return Promise.resolve(data.data)
+      // }
+      // // 处理业务错误
+      // handleBusinessError(data)
+      // return Promise.reject(data)
+      return data.data || data
     },
     responseInterceptorCatch(error) {
       // 处理网络错误

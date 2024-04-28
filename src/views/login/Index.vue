@@ -78,7 +78,7 @@ import { useRoute, useRouter, type LocationQueryValue } from 'vue-router'
 
 import type { LocationQuery } from 'vue-router'
 
-import { loginRequest, getMenusRequest } from '@/api/auth'
+import { loginRequest } from '@/api/auth'
 import config from '@/config'
 import { cryptoPassword } from '@/utils'
 import { setStorage } from '@bwrong/storage'
@@ -149,13 +149,7 @@ function getOtherQuery(query: LocationQuery) {
     {} as Record<string, LocationQueryValue | LocationQueryValue[]>
   )
 }
-// 储存菜单及用户信息
-async function getMenuList() {
-  await getMenusRequest().then(res => {
-    // 存储返回的菜单
-    setStorage('rawMenu', res)
-  })
-}
+
 // 登录
 function handleLogin() {
   formRef.value
@@ -173,7 +167,6 @@ function handleLogin() {
           // 存储用户信息
           setStorage('userinfo', res)
           saveAuthData(res)
-          await getMenuList()
           router.replace({
             path: redirect.value,
             query: getOtherQuery(route.query),
@@ -205,15 +198,18 @@ function handleLogin() {
   position: relative;
   background: #eee;
 }
+
 @media (prefers-color-scheme: dark) {
   .login-page {
     background: #141414;
   }
 }
+
 .login-form {
   width: 360px;
   text-align: center;
 }
+
 .code {
   display: flex;
   flex-direction: row;
@@ -221,6 +217,7 @@ function handleLogin() {
   justify-content: space-between;
   align-items: center;
 }
+
 .version {
   position: absolute;
   bottom: 10px;

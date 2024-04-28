@@ -23,5 +23,37 @@
     "type": 0,
     "icon": "icon-menu",
     "parentId": 2
+  },
+  {
+    "id": 4,
+    "permission": "company",
+    "title": "公司",
+    "type": 0,
+    "icon": "icon-menu",
+    "parentId": 0
+  },
+  {
+    "id": 5,
+    "permission": "company/list",
+    "title": "公司列表",
+    "type": 0,
+    "icon": "icon-menu",
+    "parentId": 4
+  },
+  {
+    "id": 6,
+    "permission": "company/school",
+    "title": "学校管理",
+    "type": 0,
+    "icon": "icon-menu",
+    "parentId": 4
+  },
+  {
+    "id": 7,
+    "permission": "company/skill",
+    "title": "技能管理",
+    "type": 0,
+    "icon": "icon-menu",
+    "parentId": 4
   }
 ]

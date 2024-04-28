@@ -1,4 +1,5 @@
 import system from './system'
+import company from './company'
 
 import type { RouteRecordRaw } from 'vue-router'
 // 注意：为了方便和后台返回菜单合并，提取url，path需要填写完整路径
@@ -17,5 +18,6 @@ const routes: RouteRecordRaw[] = [
     ],
   },
   ...system,
+  ...company,
 ]
 export default routes

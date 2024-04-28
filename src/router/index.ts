@@ -1,12 +1,11 @@
 import { initAuth } from '@bwrong/auth-tool'
 import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
-
+import { getMenusRequest } from '@/api/auth'
 import dynamicRoutes from './dynamicRoutes'
 import routes, { noMatchRoute } from './staticRoutes'
 
 import config from '@/config'
 import NProgress from '@/plugins/nprogress'
-import { getStorage } from '@bwrong/storage'
 import { getToken } from '@/utils/auth'
 // import authApi from '@/api/auth';
 let routerLoaded = false // 动态路由是否已加载
@@ -52,11 +51,10 @@ router.afterEach(to => {
 // 获取路由
 async function _getAllowRoutes(dynamicRoutes: RouteRecordRaw[]) {
   // 如果需要刷新更新菜单数据，可以去掉登录时获取，在这获取菜单数据
-  // const menus = await authApi.getMenus().then((res: any) =>  {
-  //   setStorage('userinfo', res.detail);
-  //   return res.menus;
-  // });
-  const menus = getStorage<Record<string, unknown>[]>('rawMenu') || []
+  const menus = await getMenusRequest()
+
+  // 从本地缓存中获取菜单数据
+  // const menus = getStorage<Record<string, unknown>[]>('rawMenu') || []
   return _ganerRoutesAndMenus(dynamicRoutes, menus)
 }
 /**

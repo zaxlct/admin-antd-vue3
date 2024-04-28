@@ -2,7 +2,7 @@
   <div class="page_container">
     <a-button
       type="primary"
-      @click="formModalProps.open = true"
+      @click="addCompany"
     >新增</a-button>
     <a-table
       :dataSource
@@ -27,7 +27,6 @@ const dataSource = ref([])
 function getList() {
   tableLoading.value = true
   request.get('https://dev.ruzhi.com/api/company/list').then(res => {
-    console.log(res)
     dataSource.value = res
     tableLoading.value = false
   }).catch(err => {
@@ -47,7 +46,7 @@ const columns = [
     key: 'company_id',
   },
   {
-    title: '公司名称',
+    title: '企业名称',
     dataIndex: 'company_name',
     key: 'company_name',
   },
@@ -58,35 +57,49 @@ const columns = [
   },
   {
     title: '更新日期',
-    customRender: () => {
+    customRender: ({ record }) => {
       return <a-space>
         <a-popconfirm title="Title" onConfirm={confirm}>
           <a-button size="small" danger>删除</a-button>
         </a-popconfirm>
-        <a-button size="small" type="primary">修改</a-button>
+        <a-button size="small" type="primary" onClick={() => editCompany(record)}>修改</a-button>
       </a-space>
     },
   },
 ]
 
+
+function addCompany() {
+  formModalProps.isEdit = false
+  formModalProps.open = true
+}
+
+function editCompany(item) {
+  console.log(item)
+  formModalProps.isEdit = true
+  formModalProps.value = {
+    ...item
+  }
+  formModalProps.open = true
+}
+
 const formModalProps = reactive({
   open: false,
+  isEdit: false,
   addTitle: '添加公司',
   editTitle: '修改公司',
-  value: {
+  defaultData: {
     company_id: undefined,
     company_type: 'COMPANY',
     company_name: '',
+    company_industry: '',
     company_industry_dict_id: undefined,
     company_size_dict_id: undefined,
-    company_location: '',
     company_founded_date: '',
-    company_website: '',
     company_introduce: '',
-    company_email: '',
-    company_tags: '',
-    company_industry: '',
+    members_num: '',
   },
+  value: {},
   createRequest: async (data) => {
     await request.post('https://dev.ruzhi.com/api/company/create', data)
   },
@@ -95,16 +108,19 @@ const formModalProps = reactive({
   },
   listRequest: getList,
   getData(data) {
-    const { company_introduce, company_name, company_type } = data
+    console.log(data)
+    const { company_introduce, company_name, company_type, company_id } = data
     return {
+      company_id,
       company_introduce,
       company_name,
       company_type,
-      company_email: 'zax@qq.com'
+      members_num: 123
     }
   },
   setData(data) {
-    data.email = '11@qq.com'
+    data.members_num = 99
+    data.company_name = data.company_name + 'test'
   },
   rule: [
     {

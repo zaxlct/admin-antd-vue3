@@ -10,7 +10,7 @@
 >
   <form-create
     v-model:api="form.fApi"
-    v-model="form.value"
+    v-model="value"
     :option="formCreateOptions"
     :rule
   >
@@ -20,6 +20,7 @@
 
 <script lang="ts" setup>
 const open = defineModel('open', { default: false })
+const value = defineModel()
 const props = defineProps({
   modelProps: Object,
   rule: Array, // form-create rule
@@ -36,20 +37,6 @@ const inStateOne = ref(true) // 编辑: false；新增: true;
 const loading = ref(false)
 const form = reactive({
   fApi: {},
-  value: {
-    company_id: undefined,
-    company_type: 'COMPANY',
-    company_name: '',
-    company_industry_dict_id: undefined,
-    company_size_dict_id: undefined,
-    company_location: '',
-    company_founded_date: '',
-    company_website: '',
-    company_introduce: '',
-    company_email: '',
-    company_tags: '',
-    company_industry: '',
-  },
 })
 
 const formCreateOptions = computed(() => {
@@ -78,7 +65,8 @@ function submitForm() {
           props?.listRequest && props?.listRequest()
         })
       }
-
+      $message.success('操作成功')
+      reset()
     } finally {
       loading.value = false
     }

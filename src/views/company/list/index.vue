@@ -13,6 +13,7 @@
     <ModalForm
       v-bind="formModalProps"
       v-model:open="formModalProps.open"
+      v-model="formModalProps.value"
     />
   </div>
 </template>
@@ -38,7 +39,6 @@ function getList() {
 onMounted(async () => {
   getList()
 })
-$message.success('This is a success message')
 
 const columns = [
   {
@@ -73,16 +73,31 @@ const formModalProps = reactive({
   open: false,
   addTitle: '添加公司',
   editTitle: '修改公司',
+  value: {
+    company_id: undefined,
+    company_type: 'COMPANY',
+    company_name: '',
+    company_industry_dict_id: undefined,
+    company_size_dict_id: undefined,
+    company_location: '',
+    company_founded_date: '',
+    company_website: '',
+    company_introduce: '',
+    company_email: '',
+    company_tags: '',
+    company_industry: '',
+  },
   createRequest: async (data) => {
     await request.post('https://dev.ruzhi.com/api/company/create', data)
   },
   editRequest: async (data) => {
     await request.post('https://dev.ruzhi.com/api/company/update', data)
   },
+  listRequest: getList,
   getData(data) {
-    const { company_id, company_name, company_type } = data
+    const { company_introduce, company_name, company_type } = data
     return {
-      company_id,
+      company_introduce,
       company_name,
       company_type,
       company_email: 'zax@qq.com'

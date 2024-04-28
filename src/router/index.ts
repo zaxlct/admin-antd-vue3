@@ -7,7 +7,6 @@ import routes, { noMatchRoute } from './staticRoutes'
 import config from '@/config'
 import NProgress from '@/plugins/nprogress'
 import { getToken } from '@/utils/auth'
-// import authApi from '@/api/auth';
 let routerLoaded = false // 动态路由是否已加载
 let removeRouters: Array<() => void> = []
 const VITE_AUTH_CHECK = import.meta.env.VITE_AUTH_CHECK

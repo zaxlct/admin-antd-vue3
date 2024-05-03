@@ -21,7 +21,7 @@
 
 <script lang="ts" setup>
 const open = defineModel('open', { default: false })
-const value = defineModel()
+const value = defineModel({ default: {} })
 const props = defineProps({
   isEdit: Boolean,
   modalProps: {

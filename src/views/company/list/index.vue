@@ -108,7 +108,6 @@ const formModalProps = reactive({
   },
   listRequest: getList,
   getData(data) {
-    console.log(data)
     const { company_introduce, company_name, company_type, company_id } = data
     return {
       company_id,
@@ -141,7 +140,15 @@ const formModalProps = reactive({
       value: '',
       validate: [{ type: 'string', required: true, message: '请输入公司名称' }]
     },
-    { type: 'textarea', field: 'company_introduce', title: '公司简介', value: '' },
+    {
+      type: 'input',
+      field: 'company_introduce',
+      title: '公司简介',
+      value: '',
+      props: {
+        type: 'textarea'
+      }
+    },
   ],
 })
 

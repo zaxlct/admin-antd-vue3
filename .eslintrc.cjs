@@ -32,6 +32,7 @@ module.exports = {
         },
       },
     ],
+    'vue/require-default-prop': 1,
     'vue/no-setup-props-destructure': 0,
     'vue/no-dupe-keys': 0,
     '@typescript-eslint/ban-ts-comment': 0,

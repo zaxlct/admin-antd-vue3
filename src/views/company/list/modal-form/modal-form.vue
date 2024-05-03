@@ -1,22 +1,22 @@
 <!-- eslint-disable unused-imports/no-unused-imports -->
 <template>
-<a-modal
-  v-bind="modelProps"
-  v-model:open="open"
-  class="model_content__common"
-  :title="isEdit ? editTitle : addTitle"
-  :confirm-loading="loading"
-  @ok="submitForm"
-  @cancel="reset"
->
-  <form-create
-    v-model:api="fApi"
-    v-model="value"
-    :option="formCreateOptions"
-    :rule
+  <a-modal
+    v-bind="modalProps"
+    v-model:open="open"
+    class="model_content__common"
+    :title="isEdit ? editTitle : addTitle"
+    :confirm-loading="loading"
+    @ok="submitForm"
+    @cancel="reset"
   >
-  </form-create>
-</a-modal>
+    <form-create
+      v-model:api="fApi"
+      v-model="value"
+      :option="formCreateOptions"
+      :rule
+    >
+    </form-create>
+  </a-modal>
 </template>
 
 <script lang="ts" setup>
@@ -24,28 +24,29 @@ const open = defineModel('open', { default: false })
 const value = defineModel()
 const props = defineProps({
   isEdit: Boolean,
-  modelProps: Object,
-  rule: Array, // form-create rule
-  option: Object, // form-create option
+  modalProps: {
+    type: Object,
+    default: () => ({
+      width: 800,
+    }),
+  },
+  rule: {
+    type: Array,
+    default: () => [],
+  },
+  option: {
+    type: Object,
+    default: () => ({}),
+  },
   addTitle: String,
   editTitle: String,
-  defaultData: Object,
   getData: Function as PropType<(data: any) => Promise<void>>, // 提交时修改数据
-  setData: Function as PropType<(data: any) => Promise<void>>, // 编辑时修改数据
   createRequest: Function as PropType<(data: any) => Promise<void>>,
   editRequest: Function as PropType<(data: any) => Promise<void>>,
   listRequest: Function as PropType<() => Promise<void>>,
 })
 const loading = ref(false)
 const fApi = ref({})
-
-watch(() => open.value, val => {
-  if (val) {
-    if (props.isEdit) {
-      value.value = { ...props.defaultData }
-    }
-  }
-})
 
 const formCreateOptions = computed(() => {
   const propsFormCreateOptions = props?.option || {}
@@ -58,8 +59,6 @@ const formCreateOptions = computed(() => {
 
 function submitForm() {
   fApi.value.submit((formData) => {
-    console.log('formData', formData)
-    console.log('value', value)
     const params = props.getData ? props.getData(formData) : formData
     loading.value = true
     try {
@@ -86,8 +85,3 @@ function reset() {
   fApi.value.resetFields()
 }
 </script>
-
-<style scoped lang="sass">
-.page_container
-
-</style>

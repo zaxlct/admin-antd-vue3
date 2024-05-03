@@ -59,10 +59,10 @@ const columns = [
     title: '更新日期',
     customRender: ({ record }) => {
       return <a-space>
-        <a-popconfirm title="Title" onConfirm={confirm}>
-          <a-button size="small" danger>删除</a-button>
+        <a-popconfirm title='Title' onConfirm={confirm}>
+          <a-button size='small' danger>删除</a-button>
         </a-popconfirm>
-        <a-button size="small" type="primary" onClick={() => editCompany(record)}>修改</a-button>
+        <a-button size='small' type='primary' onClick={() => editCompany(record)}>修改</a-button>
       </a-space>
     },
   },
@@ -75,11 +75,8 @@ function addCompany() {
 }
 
 function editCompany(item) {
-  console.log(item)
   formModalProps.isEdit = true
-  formModalProps.value = {
-    ...item
-  }
+  formModalProps.value = formModalProps.formatter(item)
   formModalProps.open = true
 }
 
@@ -88,7 +85,7 @@ const formModalProps = reactive({
   isEdit: false,
   addTitle: '添加公司',
   editTitle: '修改公司',
-  defaultData: {
+  value: {
     company_id: undefined,
     company_type: 'COMPANY',
     company_name: '',
@@ -99,7 +96,6 @@ const formModalProps = reactive({
     company_introduce: '',
     members_num: '',
   },
-  value: {},
   createRequest: async (data) => {
     await request.post('https://dev.ruzhi.com/api/company/create', data)
   },
@@ -117,10 +113,14 @@ const formModalProps = reactive({
       members_num: 123
     }
   },
-  setData(data) {
-    data.members_num = 99
-    data.company_name = data.company_name + 'test'
+
+  formatter(data) {
+    return {
+      ...data,
+      company_name: data.company_name + 'test'
+    }
   },
+
   rule: [
     {
       type: 'radio',

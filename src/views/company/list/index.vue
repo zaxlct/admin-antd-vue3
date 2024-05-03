@@ -123,6 +123,11 @@ const formModalProps = reactive({
 
   rule: [
     {
+      type: 'input',
+      field: 'company_id',
+      hidden: true,
+    },
+    {
       type: 'radio',
       field: 'company_type',
       title: '企业类型',

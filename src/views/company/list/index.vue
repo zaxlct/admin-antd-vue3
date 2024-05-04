@@ -59,7 +59,7 @@ const columns = [
     title: '更新日期',
     customRender: ({ record }) => {
       return <a-space>
-        <a-popconfirm title='Title' onConfirm={confirm}>
+        <a-popconfirm title='确定删除吗？' onConfirm={() => confirm(record.company_id)}>
           <a-button size='small' danger>删除</a-button>
         </a-popconfirm>
         <a-button size='small' type='primary' onClick={() => editCompany(record)}>修改</a-button>
@@ -157,7 +157,10 @@ const formModalProps = reactive({
   ],
 })
 
-function confirm() {
-  console.log('confirm')
+function confirm(company_id) {
+  request.post('https://dev.ruzhi.com/api/company/delete', { company_id }).then(() => {
+    getList()
+    $message.success('删除成功')
+  })
 }
 </script>

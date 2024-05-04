@@ -74,9 +74,12 @@ function addCompany() {
   formModalProps.open = true
 }
 
-function editCompany(item) {
+async function editCompany(item) {
   formModalProps.isEdit = true
-  formModalProps.value = formModalProps.formatter(item)
+  tableLoading.value = true
+  const data = await request.get('https://dev.ruzhi.com/api/company/get?company_id=' + item.company_id)
+  tableLoading.value = false
+  formModalProps.value = formModalProps.formatter(data)
   formModalProps.open = true
 }
 

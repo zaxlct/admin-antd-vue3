@@ -95,6 +95,10 @@ async function editCompany(item) {
   formModalProps.open = true
 }
 
+function getDictsByTypeReq() {
+  return request.get('https://dev.ruzhi.com/api/common/getDictsByType?dict_type=COMPANY_SIZE_DATA')
+}
+
 const formValue = ref({
   company_id: undefined,
   company_type: 'COMPANY',
@@ -173,6 +177,28 @@ const formModalProps = reactive({
           formValue.value.company_industry = val
         }
       },
+    },
+    {
+      type: 'select',
+      field: 'company_size_dict_id',
+      title: '员工规模',
+      value: '',
+      options: [],
+      effect: {
+        fetch: {
+          action: 'https://dev.ruzhi.com/api/common/getDictsByType?dict_type=COMPANY_SIZE_DATA',
+          to: 'options',
+          method: 'get',
+          parse(res) {
+            return res.map(row => {
+              return {
+                label: row.dict_label,
+                value: row.dict_id
+              }
+            })
+          }
+        }
+      }
     },
     {
       type: 'datePicker',

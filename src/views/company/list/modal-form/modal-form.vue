@@ -85,4 +85,8 @@ function submitForm() {
 function reset() {
   fApi.value.resetFields()
 }
+
+defineExpose({
+  fApi
+})
 </script>

@@ -1,5 +1,6 @@
 <template lang="pug">
 a-cascader.select(
+  v-bind="$attrs"
   v-model:value="value"
   :fieldNames
   :options="options"

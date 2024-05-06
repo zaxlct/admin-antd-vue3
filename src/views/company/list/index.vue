@@ -11,6 +11,7 @@
     />
 
     <ModalForm
+      ref="modalFormRef"
       v-bind="formModalProps"
       v-model:open="formModalProps.open"
       v-model="formModalProps.value"
@@ -21,7 +22,7 @@
 <script setup lang="jsx">
 import request from '@/utils/request'
 import ModalForm from './modal-form/modal-form.vue'
-// import IndustrySelect from '@/components/Form/IndustrySelect/index.vue'
+import IndustrySelect from '@/components/Form/IndustrySelect/index.vue'
 
 const tableLoading = ref(false)
 const dataSource = ref([])
@@ -38,10 +39,6 @@ function getList() {
 
 onMounted(async () => {
   getList()
-})
-
-onBeforeMount(() => {
-  // formCreate.component('IndustrySelect', IndustrySelect)
 })
 
 const columns = [
@@ -164,15 +161,20 @@ const formModalProps = reactive({
       value: '',
       validate: [{ type: 'string', required: true, message: '请输入公司名称' }]
     },
-    // {
-    //   type: 'IndustrySelect',
-    //   field: 'company_industry_dict_id',
-    //   title: '所属行业',
-    //   value: '',
-    //   props: {
-    //     // picker: 'month'
-    //   }
-    // },
+    {
+      type: 'IndustrySelect',
+      field: 'company_industry_dict_id',
+      title: '所属行业',
+      value: '',
+      props: {
+        // label: formModalProps.company_industry,
+      },
+      on: {
+        'update:label': (val) => {
+          formModalProps.value.company_industry = val
+        }
+      },
+    },
     {
       type: 'datePicker',
       field: 'company_founded_date',
@@ -200,4 +202,8 @@ function confirm(company_id) {
     $message.success('删除成功')
   })
 }
+
+onBeforeMount(() => {
+  formCreate.component('IndustrySelect', IndustrySelect)
+})
 </script>

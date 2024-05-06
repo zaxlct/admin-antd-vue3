@@ -21,6 +21,7 @@
 <script setup lang="jsx">
 import request from '@/utils/request'
 import ModalForm from './modal-form/modal-form.vue'
+// import IndustrySelect from '@/components/Form/IndustrySelect/index.vue'
 
 const tableLoading = ref(false)
 const dataSource = ref([])
@@ -37,6 +38,10 @@ function getList() {
 
 onMounted(async () => {
   getList()
+})
+
+onBeforeMount(() => {
+  // formCreate.component('IndustrySelect', IndustrySelect)
 })
 
 const columns = [
@@ -72,6 +77,17 @@ const columns = [
 function addCompany() {
   formModalProps.isEdit = false
   formModalProps.open = true
+  formModalProps.value = {
+    company_id: undefined,
+    company_type: 'COMPANY',
+    company_name: '',
+    company_industry: '',
+    company_industry_dict_id: undefined,
+    company_size_dict_id: undefined,
+    company_founded_date: '',
+    company_introduce: '',
+    members_num: '',
+  }
 }
 
 async function editCompany(item) {
@@ -147,6 +163,24 @@ const formModalProps = reactive({
       title: '公司名称',
       value: '',
       validate: [{ type: 'string', required: true, message: '请输入公司名称' }]
+    },
+    // {
+    //   type: 'IndustrySelect',
+    //   field: 'company_industry_dict_id',
+    //   title: '所属行业',
+    //   value: '',
+    //   props: {
+    //     // picker: 'month'
+    //   }
+    // },
+    {
+      type: 'datePicker',
+      field: 'company_founded_date',
+      title: '成立时间',
+      value: '',
+      props: {
+        picker: 'month'
+      }
     },
     {
       type: 'input',

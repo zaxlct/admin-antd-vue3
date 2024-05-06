@@ -9,6 +9,7 @@
     @ok="submitForm"
     @cancel="reset"
   >
+    {{ value }}
     <form-create
       v-model:api="fApi"
       v-model="value"
@@ -21,7 +22,7 @@
 
 <script lang="ts" setup>
 const open = defineModel('open', { default: false })
-const value = defineModel({ default: {} })
+const value = defineModel()
 const props = defineProps({
   isEdit: Boolean,
   modalProps: {

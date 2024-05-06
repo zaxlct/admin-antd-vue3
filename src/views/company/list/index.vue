@@ -95,10 +95,6 @@ async function editCompany(item) {
   formModalProps.open = true
 }
 
-function getDictsByTypeReq() {
-  return request.get('https://dev.ruzhi.com/api/common/getDictsByType?dict_type=COMPANY_SIZE_DATA')
-}
-
 const formValue = ref({
   company_id: undefined,
   company_type: 'COMPANY',

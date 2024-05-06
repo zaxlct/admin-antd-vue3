@@ -14,7 +14,7 @@
       ref="modalFormRef"
       v-bind="formModalProps"
       v-model:open="formModalProps.open"
-      v-model="formModalProps.value"
+      v-model="formValue"
     />
   </div>
 </template>
@@ -70,11 +70,10 @@ const columns = [
   },
 ]
 
-
 function addCompany() {
   formModalProps.isEdit = false
   formModalProps.open = true
-  formModalProps.value = {
+  formValue.value = {
     company_id: undefined,
     company_type: 'COMPANY',
     company_name: '',
@@ -92,26 +91,26 @@ async function editCompany(item) {
   tableLoading.value = true
   const data = await request.get('https://dev.ruzhi.com/api/company/get?company_id=' + item.company_id)
   tableLoading.value = false
-  formModalProps.value = formModalProps.formatter(data)
+  formValue.value = formModalProps.formatter(data)
   formModalProps.open = true
 }
 
+const formValue = ref({
+  company_id: undefined,
+  company_type: 'COMPANY',
+  company_name: '',
+  company_industry: '',
+  company_industry_dict_id: undefined,
+  company_size_dict_id: undefined,
+  company_founded_date: '',
+  company_introduce: '',
+  members_num: '',
+})
 const formModalProps = reactive({
   open: false,
   isEdit: false,
   addTitle: '添加公司',
   editTitle: '修改公司',
-  value: {
-    company_id: undefined,
-    company_type: 'COMPANY',
-    company_name: '',
-    company_industry: '',
-    company_industry_dict_id: undefined,
-    company_size_dict_id: undefined,
-    company_founded_date: '',
-    company_introduce: '',
-    members_num: '',
-  },
   createRequest: async (data) => {
     await request.post('https://dev.ruzhi.com/api/company/create', data)
   },
@@ -167,11 +166,11 @@ const formModalProps = reactive({
       title: '所属行业',
       value: '',
       props: {
-        // label: formModalProps.company_industry,
+        label: formValue.value.company_industry,
       },
       on: {
         'update:label': (val) => {
-          formModalProps.value.company_industry = val
+          formValue.value.company_industry = val
         }
       },
     },

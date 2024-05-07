@@ -1,6 +1,6 @@
 {
   "extends": "@tsconfig/node-lts/tsconfig.json",
-  "include": ["vite.config.*","package.json","types/**/*.d.ts", "mock/**/*",  "types/mockServer.d.ts","src/config/theme.ts"],
+  "include": ["vite.config.*","package.json","types/**/*.d.ts", "types/mockServer.d.ts","src/config/theme.ts"],
   "compilerOptions": {
     "composite": true,
     "resolveJsonModule":true,

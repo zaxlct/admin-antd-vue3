@@ -10,10 +10,9 @@
   "keywords": [],
   "private": true,
   "scripts": {
-    "start": "vite --mode mock --host",
+    "start": "npm run dev",
     "dev": "vite --host",
     "serve": "vite --host",
-    "serve:mock": "vite --mode mock --host",
     "build": "vite build",
     "build:check": "npm run type-check && npm run build",
     "preview": "vite preview",
@@ -82,7 +81,6 @@
     "vite-plugin-compression": "^0.5.1",
     "vite-plugin-html": "^3.2.2",
     "vite-plugin-iconfont": "^1.4.0",
-    "vite-plugin-mock": "^3.0.1",
     "vue-tsc": "^2.0.12"
   },
   "pnpm": {

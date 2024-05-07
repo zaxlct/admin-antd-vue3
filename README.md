@@ -13,7 +13,6 @@
 ```js
 |- docs // 文档
 |- dist // 构建成果
-|- mock // 数据mock
 |- public
 |- src
   |- api // api接口管理
@@ -36,7 +35,6 @@
 ```
 
 
-
 ## 开发工具
 - 编辑器：VSCode
 - 推荐插件：`Vue.volar`, `antfu.unocss`,`antfu.iconify`,`dbaeumer.vscode-eslint`,`esbenp.prettier-vscode`,`stylelint.vscode-stylelint`
@@ -47,9 +45,6 @@
 ``` bash
 # 安装依赖
 pnpm install
-
-# mock环境启动，第一次请使用该方式
-pnpm run serve:mock
 
 # 开发环境启动
 pnpm run serve

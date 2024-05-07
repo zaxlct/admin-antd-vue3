@@ -4,7 +4,6 @@ import { type ConfigEnv, type ProxyOptions } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 import legacy from '@vitejs/plugin-legacy'
-import { viteMockServe } from 'vite-plugin-mock'
 import viteCompression from 'vite-plugin-compression'
 import { createHtmlPlugin } from 'vite-plugin-html'
 import autoImport from 'unplugin-auto-import/vite'
@@ -25,8 +24,6 @@ export default defineConfig(({ command, mode }: ConfigEnv) => {
   const env = formatEnv(loadEnv(mode, root)) as ImportMetaEnv
   console.log('【info】 command:', command, ', mode: ', mode)
   console.log(env)
-  const IS_PRODUCTION = command === 'build'
-  const IS_MOCK = mode === 'mock'
   // 读取环境配置
   const {
     VITE_BASE_URL,
@@ -72,7 +69,7 @@ export default defineConfig(({ command, mode }: ConfigEnv) => {
       port: VITE_PORT || 8080,
       open: true,
       // cors: false, // 跨域
-      proxy: IS_MOCK ? {} : PROXY_CONFIG
+      proxy: PROXY_CONFIG
     },
 
     plugins: [
@@ -91,12 +88,6 @@ export default defineConfig(({ command, mode }: ConfigEnv) => {
         checkInterval: 0,
         logVersion: true,
         injectFileBase: VITE_BASE_URL
-      }),
-      viteMockServe({
-        ignore: /^_/, // 忽略的文件
-        mockPath: 'mock', // 设置mock文件目录
-        watchFiles: true, // 修改更新
-        enable: IS_MOCK
       }),
       vue({
         script: {

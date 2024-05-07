@@ -48,7 +48,6 @@ export default defineConfig(({ command, mode }: ConfigEnv) => {
       port: VITE_PORT || 8080,
       open: true,
       // cors: false, // 跨域
-      proxy: PROXY_CONFIG
     },
 
     plugins: [

@@ -46,7 +46,6 @@
               </template>
             </a-input>
             <img
-              :src="state.codeSrc"
               @click="changeCode()"
               alt="验证码"
             />
@@ -84,7 +83,6 @@ import { cryptoPassword } from '@/utils'
 import { setStorage } from '@bwrong/storage'
 import { saveAuthData } from '@/utils/auth'
 import type { FormProps } from 'ant-design-vue/es'
-import { apiHost } from '@/utils/request'
 
 const rules: FormProps['rules'] = {
   username: [
@@ -125,7 +123,6 @@ const state = reactive({
     code: '1234',
   },
   loading: false,
-  codeSrc: '',
   isShowModal: false,
 })
 const redirect = computed(() => {
@@ -136,7 +133,6 @@ const redirect = computed(() => {
 // 验证码
 function changeCode() {
   const str = new Date().getTime()
-  state.codeSrc = `${apiHost}/code/` + str
 }
 function getOtherQuery(query: LocationQuery) {
   return Object.keys(query).reduce(

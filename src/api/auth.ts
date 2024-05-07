@@ -35,7 +35,7 @@ export interface IMenu extends IRecordBase {
 }
 
 export const loginRequest = (params: LoginParams) =>
-  post<LoginRes, LoginParams>('/auth/login', params, {
+  post<LoginRes, LoginParams>('/api/v1/auth/login', params, {
     skipCheckAuth: true,
     skipShowTips: true,
   })
@@ -44,4 +44,4 @@ export const refreshTokenRequest = (params: object) =>
     skipCheckAuth: true,
     skipShowTips: true,
   })
-export const getMenusRequest = (params?) => get<IMenu[]>('/auth/menus', params)
+export const getMenusRequest = (params?) => get<IMenu[]>('/api/v1/auth/menus', params)

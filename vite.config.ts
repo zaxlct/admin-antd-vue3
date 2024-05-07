@@ -30,9 +30,7 @@ export default defineConfig(({ command, mode }: ConfigEnv) => {
   // 读取环境配置
   const {
     VITE_BASE_URL,
-    VITE_API_HOST,
     VITE_TITLE,
-    VITE_API_PREFIX,
     VITE_BUILD_REPORT,
     VITE_BUILD_COMPRESS,
     VITE_PORT,
@@ -43,25 +41,6 @@ export default defineConfig(({ command, mode }: ConfigEnv) => {
     VITE_UPDATE_NOTICE = false
   } = env
 
-  /***** 接口代理配置，有多个可以自己加 ******/
-  const PROXY_CONFIG: Record<string, string | ProxyOptions> = {
-    [VITE_API_PREFIX]: {
-      target: VITE_API_HOST,
-      // secure: false,
-      // ws: true,
-      changeOrigin: true, // 将Origin的来源更改为目标URL
-      rewrite: (path) => path.replace(new RegExp(`^${VITE_API_PREFIX}`), '/api')
-    }
-    // 可以自行添加更多，多个代理的时候需要同步修改request：
-    // 方式1：创建多个request实例；
-    // 方式2：request的baseURL设置成/，然后在接口url前面拼接上代理的prefix
-    // '/testApi': {
-    //   target:'://test.api.com',
-    // },
-    //  '/testApi2': {
-    //   target:'://test.api2.com',
-    // }
-  }
   return {
     root, // 项目根目录
     base: VITE_BASE_URL, // 基础路径
@@ -72,7 +51,6 @@ export default defineConfig(({ command, mode }: ConfigEnv) => {
       port: VITE_PORT || 8080,
       open: true,
       // cors: false, // 跨域
-      proxy: IS_MOCK ? {} : PROXY_CONFIG
     },
 
     plugins: [
@@ -180,10 +158,6 @@ export default defineConfig(({ command, mode }: ConfigEnv) => {
         // 别名
         '@': createPath('./src')
       }
-    },
-    preview: {
-      open: true,
-      proxy: PROXY_CONFIG
     },
     build: {
       // 生产配置

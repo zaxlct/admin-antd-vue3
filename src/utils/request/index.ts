@@ -4,14 +4,12 @@ import { downloadFile } from '..'
 import { getToken } from '../auth'
 
 import Request, { type RequestConfig } from '@bwrong/request'
-import { handleBusinessError, handleCheckAuth, handleNetworkError, handleShowTips } from './helper'
+import { handleCheckAuth, handleNetworkError } from './helper'
 
 import appConfig from '@/config'
-const { PROD, VITE_API_HOST, VITE_API_PREFIX } = import.meta.env
+const { VITE_API_HOST } = import.meta.env
 const { tokenPrefix } = appConfig
 //接口服务器地址
-export const apiHost = PROD ? VITE_API_HOST : VITE_API_PREFIX
-console.log(apiHost)
 
 // 统一配置请求返回数据类型
 export type ResponseType = {
@@ -25,9 +23,10 @@ export type ResponseType = {
   }
   [key: string]: any
 }
+console.log('VITE_API_HOST', VITE_API_HOST)
 const request = new Request<ResponseType>({
   timeout: 30000, // 超时 30S
-  baseURL: apiHost, // 接口地址
+  baseURL: VITE_API_HOST, // 接口地址
   withCredentials: false, // 是否允许带cookie
   headers: { 'Content-Type': 'application/json;charset=UTF-8' },
   // validateStatus: function () {

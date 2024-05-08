@@ -21,7 +21,6 @@
 
 <script setup lang="jsx">
 import request from '@/utils/request'
-import ModalForm from './modal-form/modal-form.vue'
 import IndustrySelect from '@/components/Form/IndustrySelect/index.vue'
 
 const tableLoading = ref(false)

@@ -1,10 +1,3 @@
-/*
- * @Author: Bwrong
- * @Github: https://github.com/BWrong
- * @Date: 2020-04-07 10:30:49
- * @LastEditors: Bwrong
- * @LastEditTime: 2024-03-15 14:51:06
- */
 import Base64 from 'crypto-js/enc-base64'
 import Utf8 from 'crypto-js/enc-utf8'
 

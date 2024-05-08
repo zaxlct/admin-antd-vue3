@@ -1,6 +1,4 @@
-# antd-vue3
-
-如果有任何问题请在仓库提交issues。
+# web-admin
 
 ## 技术体系
 - 核心：TypeScript + Vue + VueRouter + Pinia

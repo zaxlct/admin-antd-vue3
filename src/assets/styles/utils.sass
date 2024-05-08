@@ -1,0 +1,112 @@
+.arrow
+  transition: transform 0.3s ease
+
+.arrow-up
+  transform: rotate(0deg)
+
+.arrow-down
+  transform: rotate(180deg)
+
+.footer_button
+  position: fixed
+  bottom: 0
+  left: 0
+  z-index: 10
+  width: 100%
+  padding: 16px
+  margin-bottom: constant(safe-area-inset-bottom)
+  margin-bottom: env(safe-area-inset-bottom)
+  background: var(--background-color)
+
+.form_label
+  margin-top: 20px
+  margin-bottom: 12px
+  font-size: 14px
+  color: var(--primary-text)
+
+// --- float ----
+.fr
+  float: right !important
+.fl
+  float: left !important
+
+.bold
+  font-weight: 700 !important
+// ------ display -----
+.block
+  display: block
+
+.in-block
+  display: inline-block
+
+.hide
+  visibility: hidden !important
+
+// ----- text------
+.underline
+  text-decoration: underline
+.tc
+  text-align: center !important
+.tl
+  text-align: left !important
+.tr
+  text-align: right !important
+
+.c999
+  color: #999 !important
+
+.pointer
+  cursor: pointer
+
+.safe_area_inset_bottom
+  padding-bottom: constant(safe-area-inset-bottom)
+  padding-bottom: env(safe-area-inset-bottom)
+
+.over_hide
+  overflow: hidden
+  height: 100px
+  word-break: break-all
+  text-align: left
+
+.textarea_text
+  white-space: pre-wrap
+
+.no_padding
+  padding: 0 !important
+
+@for $i from 0 through 40
+  .lh#{10 + $i}
+    line-height: 10px + $i !important
+
+  .fz#{10 + $i}
+    font-size: 10px + $i !important
+
+  .ml#{$i}
+    margin-left: $i + px !important
+
+  .mt#{$i}
+    margin-top: $i + px !important
+
+  .mr#{$i}
+    margin-right: $i + px !important
+
+  .mb#{$i}
+    margin-bottom: $i + px !important
+
+  .pl#{$i}
+    padding-left: $i + px !important
+
+  .pt#{$i}
+    padding-top: $i + px !important
+
+  .pr#{$i}
+    padding-right: $i + px !important
+
+  .pb#{$i}
+    padding-bottom: $i + px !important
+
+  .w#{$i}
+    width: $i + px !important
+
+  .h#{$i}
+    height: $i + px !important

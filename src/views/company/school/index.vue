@@ -5,6 +5,7 @@
       @click="addItem"
     >新增</a-button>
     <a-table
+      :scroll="{ x: 1500, y: 300 }"
       :dataSource
       :columns="columns"
       :loading="loading"
@@ -131,6 +132,8 @@ const columns = [
   },
   {
     title: '操作',
+    fixed: 'right',
+    width: 120,
     dataIndex: 'action',
     customRender: ({ record }) =>
       <a-dropdown-button size="small" onClick={handleButtonClick}>

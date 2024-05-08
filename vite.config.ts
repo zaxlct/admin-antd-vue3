@@ -2,6 +2,7 @@ import { fileURLToPath, URL } from 'node:url'
 import { defineConfig, loadEnv } from 'vite'
 import { type ConfigEnv, type ProxyOptions } from 'vite'
 import vue from '@vitejs/plugin-vue'
+import VueMacros from 'unplugin-vue-macros/vite'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 import legacy from '@vitejs/plugin-legacy'
 import viteCompression from 'vite-plugin-compression'
@@ -67,10 +68,11 @@ export default defineConfig(({ command, mode }: ConfigEnv) => {
         logVersion: true,
         injectFileBase: VITE_BASE_URL
       }),
-      vue({
-        script: {
-          propsDestructure: true // 开启props语法糖
-        }
+      VueMacros({
+        plugins: {
+          vue: vue(),
+          vueJsx: vueJsx(),
+        },
       }),
       createHtmlPlugin({
         minify: true,
@@ -87,8 +89,6 @@ export default defineConfig(({ command, mode }: ConfigEnv) => {
           }
         }
       }),
-      // 支持jsx
-      vueJsx(),
       // 自动导入组件 https://github.com/antfu/unplugin-auto-import
       autoImport({
         imports: [

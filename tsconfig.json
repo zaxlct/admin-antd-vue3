@@ -5,6 +5,7 @@
     "noImplicitAny": false, // 无隐含的any
     "resolveJsonModule": true, // 解析json模块
     "baseUrl": ".",
+    "types": ["unplugin-vue-macros/macros-global" /* ... */],
     "paths": {
       "types/*": ["types/*"],
       "@/*": ["./src/*"],
@@ -12,7 +13,25 @@
     }
   },
   "vueCompilerOptions": {
-    "plugins": ["@volar/vue-language-plugin-pug", "@vue/language-plugin-pug"]
+    "plugins": [
+      "@volar/vue-language-plugin-pug",
+      "@vue/language-plugin-pug",
+      "@vue-macros/volar/jsx-directive",
+      "@vue-macros/volar/export-render",
+      "@vue-macros/volar/export-expose",
+      "@vue-macros/volar/export-props",
+    ],
+    "vueMacros": {
+      "exportExpose": {
+        "include": ["**/export-expose/**"],
+      },
+      "exportProps": {
+        "include": ["**/export-props/**"],
+      },
+      "exportRender": {
+        "include": ["**/export-render/**"],
+      },
+    },
   },
   "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.vue", "types/**/*.d.ts"],
   "exclude": ["dist", "node_modules", "src/**/__tests__/*"],

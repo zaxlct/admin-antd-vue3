@@ -57,11 +57,8 @@ const columns = [
         </p>
         <p>
           等级：{record.user_lv}
-          {
-            record.online_status === 1
-              ? <a-tag color="green">在线</a-tag>
-              : <a-tag color="red">离线</a-tag>
-          }
+          <a-tag color="green" v-if={record.online_status === 1}>在线</a-tag>
+          <a-tag color="red" v-else>离线</a-tag>
         </p>
       </div>
   },
@@ -70,9 +67,7 @@ const columns = [
     dataIndex: 'hierarchy',
     customRender: ({ record }) =>
       <>
-        {record.hierarchy.map((item, index) => (
-          <p key={index}>{item.label}</p>
-        ))}
+        <p v-for={(item, index) in record.hierarchy} key={index}>{item.label}</p>
       </>
   },
   {
@@ -138,7 +133,28 @@ const columns = [
     title: '操作',
     dataIndex: 'action',
     customRender: ({ record }) =>
-
+    <a-dropdown-button onClick={handleButtonClick}>
+      Dropdown
+      <a-menu onClick={handleMenuClick}>
+        <a-menu-item key="1">
+          1st menu item
+        </a-menu-item>
+        <a-menu-item key="2">
+          2nd menu item
+        </a-menu-item>
+        <a-menu-item key="3">
+          3rd item
+        </a-menu-item>
+      </a-menu>
+    </a-dropdown-button>
   },
 ]
+
+function handleButtonClick() {
+  console.log('click dropdown button')
+}
+
+function handleMenuClick() {
+  console.log('click dropdown menu')
+}
 </script>

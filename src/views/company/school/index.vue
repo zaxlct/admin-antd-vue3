@@ -133,19 +133,24 @@ const columns = [
     title: '操作',
     dataIndex: 'action',
     customRender: ({ record }) =>
-    <a-dropdown-button onClick={handleButtonClick}>
-      Dropdown
-      <a-menu onClick={handleMenuClick}>
-        <a-menu-item key="1">
-          1st menu item
-        </a-menu-item>
-        <a-menu-item key="2">
-          2nd menu item
-        </a-menu-item>
-        <a-menu-item key="3">
-          3rd item
-        </a-menu-item>
-      </a-menu>
+      <a-dropdown-button size="small" onClick={handleButtonClick}>
+      编辑
+      <template v-slot:overlay>
+        <a-menu onClick={handleMenuClick}>
+          <a-menu-item key="1">
+            禁言
+          </a-menu-item>
+          <a-menu-item key="2">
+            拉黑
+          </a-menu-item>
+          <a-menu-item key="3">
+            标签
+          </a-menu-item>
+          <a-menu-item key="4">
+            备注
+          </a-menu-item>
+        </a-menu>
+      </template>
     </a-dropdown-button>
   },
 ]
@@ -154,7 +159,7 @@ function handleButtonClick() {
   console.log('click dropdown button')
 }
 
-function handleMenuClick() {
-  console.log('click dropdown menu')
+function handleMenuClick(e) {
+  console.log('click dropdown menu', e)
 }
 </script>

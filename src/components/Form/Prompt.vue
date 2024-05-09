@@ -26,12 +26,11 @@
 import type { DialogExpose } from '@/composables/useDialog'
 import type { FormInstance, FormProps } from 'ant-design-vue'
 
-const { title = '', label, request, defaultValue } = defineProps<{
-  title?: string
+const { label, request, defaultValue } = defineProps<{
   label?: string
   defaultValue?: string
   textarea?: boolean
-  request?: () => Promise<any>
+  request?: (val: string) => Promise<any>
 }>()
 const formData = reactive({
   name: defaultValue || '',

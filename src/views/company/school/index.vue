@@ -108,13 +108,21 @@ const columns = [
   },
   {
     title: '权益信息',
-    dataIndex: 'wallet',
+    dataIndex: 'noble_title',
     customRender: ({ record }) =>
       <div>
-        <p>余额：{record.wallet.balance}</p>
-        <p>钻石：{record.wallet.diamond}</p>
-        <p>充值：{record.wallet.recharge}</p>
-        <p>提现：{record.wallet.withdrawal}</p>
+        <p v-if={record.is_noble}>
+          { record.noble_title }：
+        </p>
+        <p>
+          粉丝团：
+          <span v-if={record.fanclub?.length === 1}>
+            {record.fanclub[0].label}
+          </span>
+          <a-button v-else type="link" size="small">
+            {record.fanclub?.length}个粉丝团
+          </a-button>
+        </p>
       </div>
   },
   {

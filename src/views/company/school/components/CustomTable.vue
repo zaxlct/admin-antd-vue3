@@ -147,8 +147,8 @@ const columns = [
           <a-menu-item key="1">
             禁言
           </a-menu-item>
-          <a-menu-item key="拉黑">
-            拉黑
+          <a-menu-item key="拉黑" disabled={record.in_blacklist}>
+            { record.in_blacklist ? '已拉黑' : '拉黑' }
           </a-menu-item>
           <a-menu-item key="3">
             标签
@@ -266,7 +266,10 @@ async function blockUser(userItem) {
       />,
     onConfirm(status) {
       if (status) {
-        userItem.in_blacklist = true
+        const current = dataSource.value.find(item => item.user_id === userItem.user_id)
+        if (current) {
+          current.in_blacklist = true
+        }
       }
     },
   })
@@ -281,7 +284,10 @@ async function editRemark(userItem) {
     component: <Prompt defaultValue={userItem.remark} label="备注" textarea request={request} />,
     onConfirm(value) {
       if (value) {
-        userItem.remark = value
+        const current = dataSource.value.find(item => item.user_id === userItem.user_id)
+        if (current) {
+          current.remark = value
+        }
       }
     },
   })

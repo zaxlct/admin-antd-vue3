@@ -51,11 +51,12 @@ defineExpose<DialogExpose>({
     return formRef.value?.validate().then(async () => {
       emits('loading', true)
       try {
+        const value = formData.name
         if (request) {
-          await request(formData.name)
+          await request(value)
         }
         formRef.value?.resetFields()
-        return Promise.resolve(formData.name)
+        return Promise.resolve(value)
       } catch (error) {
         return Promise.resolve(false)
       } finally {

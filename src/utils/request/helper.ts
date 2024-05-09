@@ -1,42 +1,11 @@
 import { message } from 'ant-design-vue'
-import Cookie from 'js-cookie'
-
 import type { ResponseType } from '.'
 import type { RequestConfig } from '@bwrong/request'
 import type { AxiosError } from 'axios'
 
-import { refreshTokenRequest } from '@/api/auth'
-import appConfig from '@/config'
-import { logout, saveAuthData } from '@/utils/auth'
+import { logout } from '@/utils/auth'
 
-const { tokenExpiresKey, refreshTokenKey } = appConfig
 
-/**
- * 刷新token
- * @param {string} refreshToken
- */
-export const handleRefreshToken: {
-  (token: string | undefined): void
-  refreshDoing?: boolean
-} = refreshToken => {
-  if (handleRefreshToken.refreshDoing) return
-  handleRefreshToken.refreshDoing = true // 加锁，防止重复刷新
-  refreshTokenRequest({ refresh_token: refreshToken })
-    .then(res => saveAuthData(res))
-    .finally(() => {
-      handleRefreshToken.refreshDoing = false
-    })
-}
-/**
- * 检查更新token
- * @param config
- */
-export function handleCheckAuth(config: RequestConfig) {
-  const tokenExpires = Cookie.get(tokenExpiresKey)
-  if (Number(tokenExpires) <= Date.now() && !config.skipCheckAuth) {
-    handleRefreshToken(Cookie.get(refreshTokenKey))
-  }
-}
 // 信息提示适配器，使用不同的UI组件库，配置有差异
 export const messageAdaptor = {
   destroy: message.destroy,

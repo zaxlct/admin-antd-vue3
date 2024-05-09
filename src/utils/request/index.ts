@@ -4,7 +4,7 @@ import { downloadFile } from '..'
 import { getToken } from '../auth'
 
 import Request, { type RequestConfig } from '@bwrong/request'
-import { handleCheckAuth, handleNetworkError } from './helper'
+import { handleNetworkError } from './helper'
 
 import appConfig from '@/config'
 const { VITE_API_HOST } = import.meta.env
@@ -43,8 +43,6 @@ const request = new Request<ResponseType>({
         config.headers = config.headers || ({} as AxiosHeaders)
         config.headers['Authorization'] = `${tokenPrefix} eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIyMDAwMzMiLCJ1aWQiOjIwMDAzMywiaXNzIjoiaXNzIiwiZXhwIjoxNzE1NDc0OTgwLCJpYXQiOjE3MTQyNjUzODB9.DIGIUoVWR0xiUJyr1hZhYUhOHrhl5I8_EJZ_Dp7gEbWg95SMz8T4Fl6F75BIVgtqTp_NSEbfuhnsmNgWK9FUOIUcJHMo45Qr04HOBJHfFB2v8ft5BEszt_z6FV8Xhi5tfcte1Eh-7WWmHzo4gsx7CjMniqxGkcQPpe-IBiqzIbw`
       }
-      // 检查更新认证信息
-      handleCheckAuth(config)
       // 如果是 formData 的数据请求，则不限制请求时间
       if (config.data instanceof FormData) {
         config.timeout = 0

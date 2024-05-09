@@ -39,9 +39,5 @@ export const loginRequest = (params: LoginParams) =>
     skipCheckAuth: true,
     skipShowTips: true,
   })
-export const refreshTokenRequest = (params: object) =>
-  post<LoginRes>('/auth/refresh_token', params, {
-    skipCheckAuth: true,
-    skipShowTips: true,
-  })
+
 export const getMenusRequest = (params?) => get<IMenu[]>('/api/v1/auth/menus', params)

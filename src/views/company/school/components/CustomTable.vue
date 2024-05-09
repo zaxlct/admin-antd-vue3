@@ -9,7 +9,7 @@
 
 <script setup lang="jsx">
 import dayjs from 'dayjs'
-import { getUserListReq, getUserLogListReq, getUserFunclubListReq, setUserRemarkReq, setBlackReq } from '@/api/users'
+import { getUserListReq, getUserLogListReq, getUserFunclubListReq, setUserRemarkReq, setBlackReq, setMuteReq } from '@/api/users'
 
 const { loading } = useRequest(getItemList)
 const { createDialog } = useDialog()
@@ -144,8 +144,8 @@ const columns = [
       编辑
       <template v-slot:overlay>
         <a-menu onClick={e => handleMenuClick(record, e)}>
-          <a-menu-item key="1">
-            禁言
+          <a-menu-item key="禁言" disabled={record.is_mute}>
+            {record.is_mute ? '已禁言' : '禁言'}
           </a-menu-item>
           <a-menu-item key="拉黑" disabled={record.in_blacklist}>
             { record.in_blacklist ? '已拉黑' : '拉黑' }
@@ -172,13 +172,103 @@ function handleMenuClick(userItem, { key }) {
   } else if (key === '拉黑') {
     blockUser(userItem)
   } else if (key === '禁言') {
-    console.log('禁言')
+    muteUser(userItem)
   } else if (key === '标签') {
     console.log('标签')
   }
 }
 
-async function blockUser(userItem) {
+// 禁言
+function muteUser(userItem) {
+  const formValue = ref({
+    user_id: userItem.user_id,
+    mute_type: '',
+    mute_end_time: '',
+    reason: '',
+  })
+
+  const formModalProps = {
+    request: setMuteReq,
+    getData(data) {
+      const { user_id, ...params } = data
+      return {
+        ...params,
+        user_ids: [user_id],
+      }
+    },
+
+    rule: [
+      {
+        type: 'input',
+        field: 'user_id',
+        value: userItem.user_id,
+        hidden: true,
+      },
+      {
+        type: 'radio',
+        field: 'mute_type',
+        title: '禁言时效',
+        value: '',
+        options: Object.keys(ENUM.mute_type).map(key => ({ label: ENUM.mute_type[key], value: parseInt(key) })),
+        validate: [{ type: 'number', required: true, message: '请选择禁言时效' }],
+        control: [
+          {
+            handle: val => val === 3,
+            append: 'mute_type',
+            rule: [
+              {
+                type: 'datePicker',
+                field: 'mute_end_time',
+                title: '禁言时间',
+                value: '',
+                validate: [{ type: 'date', required: true, message: '请选择自定义禁言时间' }],
+                props: {
+                  placeholder: '请选择时间',
+                  showTime: { defaultValue: dayjs('00:00:00', 'HH:mm:ss') },
+                  disabledDate: (current) => {
+                    return current && current < dayjs().endOf('day')
+                  },
+                  format: 'YYYY-MM-DD HH:mm:ss',
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        type: 'input',
+        field: 'reason',
+        title: '理由',
+        value: '',
+        props: {
+          type: 'textarea'
+        },
+        validate: [{ type: 'string', required: true, message: '请输入禁言理由' }]
+      },
+    ],
+  }
+
+  createDialog({
+    title: '禁言',
+    width: 500,
+    component:
+      <ModalForm
+        v-model={formValue.value}
+        {...formModalProps}
+      />,
+    onConfirm(status) {
+      if (status) {
+        const current = dataSource.value.find(item => item.user_id === userItem.user_id)
+        if (current) {
+          current.is_mute = true
+        }
+      }
+    },
+  })
+}
+
+// 拉黑
+function blockUser(userItem) {
   const formValue = ref({
     user_id: userItem.user_id,
     block_type: '',

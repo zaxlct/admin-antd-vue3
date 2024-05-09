@@ -65,15 +65,6 @@ defineExpose<DialogExpose>({
     })
   },
 })
-
-// 测试获取应用的上下文
-// const router = useRouter()
-// const routes = useRoute()
-// const store = useRootStore()
-// console.log('childInstance:', getCurrentInstance())
-// console.log(router)
-// console.log(routes)
-// console.log(store)
 </script>
 
 <style lang="sass" scoped>

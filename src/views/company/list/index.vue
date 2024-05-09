@@ -9,20 +9,13 @@
       :columns="columns"
       :loading="tableLoading"
     />
-
-    <ModalForm
-      ref="modalFormRef"
-      v-bind="formModalProps"
-      v-model:open="formModalProps.open"
-      v-model="formValue"
-    />
   </div>
 </template>
 
 <script setup lang="jsx">
 import request from '@/utils/request'
 import IndustrySelect from '@/components/Form/IndustrySelect/index.vue'
-
+const { createDialog } = useDialog()
 const tableLoading = ref(false)
 const dataSource = ref([])
 function getList() {
@@ -69,31 +62,6 @@ const columns = [
   },
 ]
 
-function addCompany() {
-  formModalProps.isEdit = false
-  formModalProps.open = true
-  formValue.value = {
-    company_id: undefined,
-    company_type: 'COMPANY',
-    company_name: '',
-    company_industry: '',
-    company_industry_dict_id: undefined,
-    company_size_dict_id: undefined,
-    company_founded_date: '',
-    company_introduce: '',
-    members_num: '',
-  }
-}
-
-async function editCompany(item) {
-  formModalProps.isEdit = true
-  tableLoading.value = true
-  const data = await request.get('https://dev.ruzhi.com/api/company/get?company_id=' + item.company_id)
-  tableLoading.value = false
-  formValue.value = formModalProps.formatter(data)
-  formModalProps.open = true
-}
-
 const formValue = ref({
   company_id: undefined,
   company_type: 'COMPANY',
@@ -106,7 +74,6 @@ const formValue = ref({
   members_num: '',
 })
 const formModalProps = reactive({
-  open: false,
   isEdit: false,
   addTitle: '添加公司',
   editTitle: '修改公司',
@@ -215,6 +182,59 @@ const formModalProps = reactive({
     },
   ],
 })
+
+function addCompany() {
+  formModalProps.isEdit = false
+  formValue.value = {
+    company_id: undefined,
+    company_type: 'COMPANY',
+    company_name: '',
+    company_industry: '',
+    company_industry_dict_id: undefined,
+    company_size_dict_id: undefined,
+    company_founded_date: '',
+    company_introduce: '',
+    members_num: '',
+  }
+  createDialog({
+    title: '添加公司',
+    width: '800px',
+    component:
+      <ModalForm
+        title="测试模态窗"
+        v-model={formValue.value}
+        {...formModalProps}
+      />,
+    // ...支持AModal的所有配置
+    onConfirm(data) {
+      // 可以拿到内部数据，在表单类弹窗中很有用
+      console.log('拿到组件内部数据：', data)
+    },
+  })
+}
+
+async function editCompany(item) {
+  formModalProps.isEdit = true
+  tableLoading.value = true
+  const data = await request.get('https://dev.ruzhi.com/api/company/get?company_id=' + item.company_id)
+  tableLoading.value = false
+  formValue.value = formModalProps.formatter(data)
+  createDialog({
+    title: '修改公司',
+    width: '800px',
+    component:
+      <ModalForm
+        title="测试模态窗"
+        v-model={formValue.value}
+        {...formModalProps}
+      />,
+    // ...支持AModal的所有配置
+    onConfirm(data) {
+      // 可以拿到内部数据，在表单类弹窗中很有用
+      console.log('拿到组件内部数据：', data)
+    },
+  })
+}
 
 function confirm(company_id) {
   request.post('https://dev.ruzhi.com/api/company/delete', { company_id }).then(() => {

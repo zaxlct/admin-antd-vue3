@@ -1,27 +1,19 @@
 <!-- eslint-disable unused-imports/no-unused-imports -->
 <template>
-  <a-modal
-    v-bind="modalProps"
-    v-model:open="open"
-    class="model_content__common"
-    :title="isEdit ? editTitle : addTitle"
-    :confirm-loading="loading"
-    @ok="submitForm"
-    @cancel="reset"
+  <slot></slot>
+  <slot name="test"></slot>
+  <form-create
+    v-model:api="fApi"
+    v-model="value"
+    :option="formCreateOptions"
+    :rule
   >
-    {{ value }}
-    <form-create
-      v-model:api="fApi"
-      v-model="value"
-      :option="formCreateOptions"
-      :rule
-    >
-    </form-create>
-  </a-modal>
+  </form-create>
 </template>
 
 <script lang="ts" setup>
-const open = defineModel('open', { default: false })
+import type { DialogExpose } from '@/composables/useDialog'
+
 const value = defineModel()
 const props = defineProps({
   isEdit: Boolean,
@@ -39,14 +31,13 @@ const props = defineProps({
     type: Object,
     default: () => ({}),
   },
-  addTitle: String,
-  editTitle: String,
   getData: Function as PropType<(data: any) => Promise<void>>, // 提交时修改数据
   createRequest: Function as PropType<(data: any) => Promise<void>>,
   editRequest: Function as PropType<(data: any) => Promise<void>>,
   listRequest: Function as PropType<() => Promise<void>>,
 })
-const loading = ref(false)
+const emits = defineEmits(['cancel', 'confirm', 'loading'])
+
 const fApi = ref({})
 
 const formCreateOptions = computed(() => {
@@ -58,35 +49,30 @@ const formCreateOptions = computed(() => {
   }
 })
 
-function submitForm() {
-  fApi.value.submit((formData) => {
-    const params = props.getData ? props.getData(formData) : formData
-    loading.value = true
-    try {
-      if (!props.isEdit) {
-        props?.createRequest && props?.createRequest(params).then(() => {
-          open.value = false
-          props?.listRequest && props?.listRequest()
-        })
-      } else {
-        props?.editRequest && props?.editRequest(params).then(() => {
-          open.value = false
-          props?.listRequest && props?.listRequest()
-        })
-      }
-      $message.success('操作成功')
-      reset()
-    } finally {
-      loading.value = false
-    }
-  })
-}
-
-function reset() {
-  fApi.value.resetFields()
-}
-
-defineExpose({
-  fApi
+defineExpose<DialogExpose>({
+  submit() {
+    return new Promise((resolve, reject) => {
+      fApi.value.submit(async formData => {
+        const params = props.getData ? props.getData(formData) : formData
+        emits('loading', true)
+        try {
+          if (!props.isEdit) {
+            props.createRequest && await props.createRequest(params)
+            props.listRequest && props.listRequest()
+          } else {
+            props.editRequest && await props.editRequest(params)
+            props.listRequest && props.listRequest()
+          }
+          fApi.value.resetFields()
+          resolve(true)
+        } catch (error) {
+          console.error('error', error)
+          reject(error)
+        } finally {
+          emits('loading', false)
+        }
+      })
+    })
+  },
 })
 </script>

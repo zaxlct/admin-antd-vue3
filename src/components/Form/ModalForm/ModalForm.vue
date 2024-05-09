@@ -16,7 +16,6 @@ import type { DialogExpose } from '@/composables/useDialog'
 
 const value = defineModel()
 const props = defineProps({
-  isEdit: Boolean,
   modalProps: {
     type: Object,
     default: () => ({
@@ -32,9 +31,7 @@ const props = defineProps({
     default: () => ({}),
   },
   getData: Function as PropType<(data: any) => Promise<void>>, // 提交时修改数据
-  createRequest: Function as PropType<(data: any) => Promise<void>>,
-  editRequest: Function as PropType<(data: any) => Promise<void>>,
-  listRequest: Function as PropType<() => Promise<void>>,
+  request: Function as PropType<(data: any) => Promise<void>>,
 })
 const emits = defineEmits(['cancel', 'confirm', 'loading'])
 
@@ -53,16 +50,11 @@ defineExpose<DialogExpose>({
   submit() {
     return new Promise((resolve, reject) => {
       fApi.value.submit(async formData => {
+        console.log('formData', formData)
         const params = props.getData ? props.getData(formData) : formData
         emits('loading', true)
         try {
-          if (!props.isEdit) {
-            props.createRequest && await props.createRequest(params)
-            props.listRequest && props.listRequest()
-          } else {
-            props.editRequest && await props.editRequest(params)
-            props.listRequest && props.listRequest()
-          }
+          props.request && await props.request(params)
           fApi.value.resetFields()
           resolve(true)
         } catch (error) {

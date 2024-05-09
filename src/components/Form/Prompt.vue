@@ -1,5 +1,4 @@
 <template>
-  <div class="title">{{ title }}</div>
   <slot></slot>
   <slot name="test"></slot>
   <AForm
@@ -56,7 +55,7 @@ defineExpose<DialogExpose>({
           await request(formData.name)
         }
         formRef.value?.resetFields()
-        return Promise.resolve(true)
+        return Promise.resolve(formData.name)
       } catch (error) {
         return Promise.resolve(false)
       } finally {
@@ -66,13 +65,3 @@ defineExpose<DialogExpose>({
   },
 })
 </script>
-
-<style lang="sass" scoped>
-.title
-  margin-bottom: 20px
-  color: rgba(0, 0, 0, 0.88)
-  font-weight: 600
-  font-size: 16px
-  line-height: 1.5
-  word-wrap: break-word
-</style>

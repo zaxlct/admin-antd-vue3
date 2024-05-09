@@ -73,17 +73,7 @@ const formValue = ref({
   company_introduce: '',
   members_num: '',
 })
-const formModalProps = reactive({
-  isEdit: false,
-  addTitle: '添加公司',
-  editTitle: '修改公司',
-  createRequest: async (data) => {
-    await request.post('https://dev.ruzhi.com/api/company/create', data)
-  },
-  editRequest: async (data) => {
-    await request.post('https://dev.ruzhi.com/api/company/update', data)
-  },
-  listRequest: getList,
+const formModalProps = {
   getData(data) {
     const { company_introduce, company_name, company_type, company_id } = data
     return {
@@ -181,10 +171,9 @@ const formModalProps = reactive({
       }
     },
   ],
-})
+}
 
 function addCompany() {
-  formModalProps.isEdit = false
   formValue.value = {
     company_id: undefined,
     company_type: 'COMPANY',
@@ -196,6 +185,9 @@ function addCompany() {
     company_introduce: '',
     members_num: '',
   }
+  formModalProps.request = async (data) => {
+    await request.post('https://dev.ruzhi.com/api/company/create', data)
+  }
   createDialog({
     title: '添加公司',
     width: '800px',
@@ -206,18 +198,21 @@ function addCompany() {
         {...formModalProps}
       />,
     // ...支持AModal的所有配置
-    onConfirm(data) {
-      // 可以拿到内部数据，在表单类弹窗中很有用
-      console.log('拿到组件内部数据：', data)
+    onConfirm(status) {
+      if (status) {
+        getList()
+      }
     },
   })
 }
 
 async function editCompany(item) {
-  formModalProps.isEdit = true
   tableLoading.value = true
   const data = await request.get('https://dev.ruzhi.com/api/company/get?company_id=' + item.company_id)
   tableLoading.value = false
+  formModalProps.request = async (data) => {
+    await request.post('https://dev.ruzhi.com/api/company/update', data)
+  }
   formValue.value = formModalProps.formatter(data)
   createDialog({
     title: '修改公司',

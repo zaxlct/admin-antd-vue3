@@ -8,7 +8,8 @@
 </template>
 
 <script setup lang="jsx">
-import { getUserListReq, getUserLogListReq, getUserFunclubListReq, setUserRemarkReq } from '@/api/users'
+import dayjs from 'dayjs'
+import { getUserListReq, getUserLogListReq, getUserFunclubListReq, setUserRemarkReq, setBlackReq } from '@/api/users'
 
 const { loading } = useRequest(getItemList)
 const { createDialog } = useDialog()
@@ -146,7 +147,7 @@ const columns = [
           <a-menu-item key="1">
             禁言
           </a-menu-item>
-          <a-menu-item key="2">
+          <a-menu-item key="拉黑">
             拉黑
           </a-menu-item>
           <a-menu-item key="3">
@@ -168,18 +169,126 @@ function handleButtonClick() {
 function handleMenuClick(userItem, { key }) {
   if (key === '备注') {
     editRemark(userItem)
+  } else if (key === '拉黑') {
+    blockUser(userItem)
+  } else if (key === '禁言') {
+    console.log('禁言')
+  } else if (key === '标签') {
+    console.log('标签')
   }
 }
 
+async function blockUser(userItem) {
+  const formValue = ref({
+    user_id: userItem.user_id,
+    block_type: '',
+    ageing_type: '',
+    end_time: '',
+    reason: '',
+  })
+
+  const formModalProps = {
+    request: setBlackReq,
+    getData(data) {
+      const { user_id, ...params } = data
+      return {
+        ...params,
+        user_ids: [user_id],
+      }
+    },
+
+    rule: [
+      {
+        type: 'input',
+        field: 'user_id',
+        value: userItem.user_id,
+        hidden: true,
+      },
+      {
+        type: 'radio',
+        field: 'block_type',
+        title: '拉黑类型',
+        value: '',
+        options: Object.keys(ENUM.block_type).map(key => ({ label: ENUM.block_type[key], value: parseInt(key) })),
+        validate: [{ type: 'number', required: true, message: '请选择拉黑类型' }]
+      },
+      {
+        type: 'radio',
+        field: 'ageing_type',
+        title: '拉黑时效',
+        value: '',
+        options: Object.keys(ENUM.ageing_type).map(key => ({ label: ENUM.ageing_type[key], value: parseInt(key) })),
+        validate: [{ type: 'number', required: true, message: '请选择拉黑时效' }],
+        control: [
+          {
+            handle: val => val === 3,
+            append: 'ageing_type',
+            rule: [
+              {
+                type: 'datePicker',
+                field: 'end_time',
+                title: '自定义拉黑时间',
+                value: '',
+                validate: [{ type: 'date', required: true, message: '请选择自定义拉黑时间' }],
+                props: {
+                  placeholder: '请选择时间',
+                  showTime: { defaultValue: dayjs('00:00:00', 'HH:mm:ss') },
+                  disabledDate: (current) => {
+                    return current && current < dayjs().endOf('day')
+                  },
+                  format: 'YYYY-MM-DD HH:mm:ss',
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        type: 'input',
+        field: 'reason',
+        title: '理由',
+        value: '',
+        props: {
+          type: 'textarea'
+        },
+        validate: [{ type: 'string', required: true, message: '请输入拉黑理由' }]
+      },
+    ],
+  }
+
+  createDialog({
+    title: '拉黑',
+    width: 500,
+    component:
+      <ModalForm
+        v-model={formValue.value}
+        {...formModalProps}
+      />,
+    onConfirm(status) {
+      if (status) {
+        userItem.in_blacklist = true
+      }
+    },
+  })
+}
+
+// 修改备注
 async function editRemark(userItem) {
   const request = remark => setUserRemarkReq(userItem.user_id, { remark })
   createDialog({
     width: 500,
-    component: <Prompt defaultValue={userItem.remark} title="备注" label="备注" textarea request={request} />,
+    title: '备注',
+    component: <Prompt defaultValue={userItem.remark} label="备注" textarea request={request} />,
+    onConfirm(value) {
+      if (value) {
+        userItem.remark = value
+      }
+    },
   })
 }
 
 /**
+ * 查看设备日志
  * type: device | ip
  */
 async function openDeviceLogModal(type, user_id) {
@@ -192,7 +301,7 @@ async function openDeviceLogModal(type, user_id) {
   }
   loading.value = false
   createDialog({
-    width: 400,
+    width: 500,
     footer: null,
     component: () =>
       <div>
@@ -209,6 +318,7 @@ async function openDeviceLogModal(type, user_id) {
   })
 }
 
+// 查看粉丝团
 async function openFunclubModal(user_id) {
   loading.value = true
   const [err, data] = await to(getUserFunclubListReq(user_id, { limit: 100, page: 1 }))
@@ -219,7 +329,7 @@ async function openFunclubModal(user_id) {
   }
   loading.value = false
   createDialog({
-    width: 300,
+    width: 500,
     footer: null,
     component: () =>
       <div>

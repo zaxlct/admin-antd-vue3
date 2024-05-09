@@ -8,7 +8,7 @@
 </template>
 
 <script setup lang="jsx">
-import { getUserListReq, getUserLogListReq, getUserFunclubListReq } from '@/api/users'
+import { getUserListReq, getUserLogListReq, getUserFunclubListReq, setUserRemarkReq } from '@/api/users'
 
 const { loading } = useRequest(getItemList)
 const { createDialog } = useDialog()
@@ -142,7 +142,7 @@ const columns = [
       <a-dropdown-button size="small" onClick={handleButtonClick}>
       编辑
       <template v-slot:overlay>
-        <a-menu onClick={handleMenuClick}>
+        <a-menu onClick={e => handleMenuClick(record, e)}>
           <a-menu-item key="1">
             禁言
           </a-menu-item>
@@ -152,7 +152,7 @@ const columns = [
           <a-menu-item key="3">
             标签
           </a-menu-item>
-          <a-menu-item key="4">
+          <a-menu-item key="备注">
             备注
           </a-menu-item>
         </a-menu>
@@ -165,10 +165,19 @@ function handleButtonClick() {
   console.log('click dropdown button')
 }
 
-function handleMenuClick(e) {
-  console.log('click dropdown menu', e)
+function handleMenuClick(userItem, { key }) {
+  if (key === '备注') {
+    editRemark(userItem)
+  }
 }
 
+async function editRemark(userItem) {
+  const request = remark => setUserRemarkReq(userItem.user_id, { remark })
+  createDialog({
+    width: 500,
+    component: <Prompt defaultValue={userItem.remark} title="备注" label="备注" textarea request={request} />,
+  })
+}
 
 /**
  * type: device | ip

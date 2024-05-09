@@ -96,9 +96,14 @@ export default defineConfig(({ command, mode }: ConfigEnv) => {
           'vue-router',
           'pinia',
           {
+            'await-to-js': [
+              // default imports
+              ['default', 'to'], // import { default as axios } from 'axios',
+            ],
             'ant-design-vue': [
               ['message', '$message']
             ],
+            '@/enums/common': [['default', 'ENUM']],
           }
         ],
         dts: 'types/auto-imports.d.ts',

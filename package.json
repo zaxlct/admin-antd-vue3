@@ -24,6 +24,7 @@
     "@vueuse/components": "^10.9.0",
     "@vueuse/core": "^10.9.0",
     "ant-design-vue": "^4.1.2",
+    "await-to-js": "^3.0.0",
     "axios": "^1.6.8",
     "crypto-js": "^4.2.0",
     "css-vars-ponyfill": "^2.4.9",

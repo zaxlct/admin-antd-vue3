@@ -23,7 +23,6 @@ export type ResponseType = {
   }
   [key: string]: any
 }
-console.log('VITE_API_HOST', VITE_API_HOST)
 const request = new Request<ResponseType>({
   timeout: 30000, // 超时 30S
   baseURL: VITE_API_HOST, // 接口地址

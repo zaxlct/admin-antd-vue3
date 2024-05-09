@@ -170,7 +170,7 @@ function handleMenuClick(e) {
  */
 async function openDeviceLogModal(type, user_id) {
   loading.value = true
-  const [err, data] = await to(getUserLogListReq(user_id))
+  const [err, data] = await to(getUserLogListReq(user_id, { limit: 100, page: 1 }))
   if (err) {
     console.log(err)
     loading.value = false

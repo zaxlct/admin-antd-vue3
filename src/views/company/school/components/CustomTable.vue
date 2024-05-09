@@ -8,7 +8,7 @@
 </template>
 
 <script setup lang="jsx">
-import { getUserListReq, getUserLogListReq } from '@/api/users'
+import { getUserListReq, getUserLogListReq, getUserFunclubListReq } from '@/api/users'
 
 const { loading } = useRequest(getItemList)
 const { createDialog } = useDialog()
@@ -109,7 +109,12 @@ const columns = [
           <span v-if={record.fanclub?.length === 1}>
             {record.fanclub[0].label}
           </span>
-          <a-button v-else type="link" size="small">
+          <a-button
+            v-else
+            type="link"
+            size="small"
+            onClick={() => openFunclubModal(record.user_id)}
+          >
             {record.fanclub?.length}个粉丝团
           </a-button>
         </p>
@@ -178,7 +183,7 @@ async function openDeviceLogModal(type, user_id) {
   }
   loading.value = false
   createDialog({
-    width: '500px',
+    width: 400,
     footer: null,
     component: () =>
       <div>
@@ -192,11 +197,28 @@ async function openDeviceLogModal(type, user_id) {
         </div>
       </div>
     ,
-    // ...支持AModal的所有配置
-    onConfirm(data) {
-      // 可以拿到内部数据，在表单类弹窗中很有用
-      console.log('拿到组件内部数据：', data)
-    },
+  })
+}
+
+async function openFunclubModal(user_id) {
+  loading.value = true
+  const [err, data] = await to(getUserFunclubListReq(user_id, { limit: 100, page: 1 }))
+  if (err) {
+    console.log(err)
+    loading.value = false
+    return
+  }
+  loading.value = false
+  createDialog({
+    width: 300,
+    footer: null,
+    component: () =>
+      <div>
+        <div v-for={(item, index) in data} key={index}>
+          {item.label} | {item.lv_name}
+        </div>
+      </div>
+    ,
   })
 }
 </script>

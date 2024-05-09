@@ -227,7 +227,7 @@ async function blockUser(userItem) {
               {
                 type: 'datePicker',
                 field: 'end_time',
-                title: '自定义拉黑时间',
+                title: '拉黑时间',
                 value: '',
                 validate: [{ type: 'date', required: true, message: '请选择自定义拉黑时间' }],
                 props: {

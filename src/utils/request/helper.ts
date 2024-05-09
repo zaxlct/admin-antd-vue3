@@ -2,11 +2,8 @@ import { message } from 'ant-design-vue'
 import type { ResponseType } from '.'
 import type { RequestConfig } from '@bwrong/request'
 import type { AxiosError } from 'axios'
-
 import { logout } from '@/utils/auth'
 
-
-// 信息提示适配器，使用不同的UI组件库，配置有差异
 export const messageAdaptor = {
   destroy: message.destroy,
   error: message.error,
@@ -21,7 +18,7 @@ export const messageAdaptor = {
 export function handleShowTips(data: ResponseType, config: RequestConfig) {
   if (config?.method?.match(/(post|delete|put)/i) && !config.skipShowTips) {
     messageAdaptor.destroy()
-    data.message && messageAdaptor.success(data.message || '操作成功')
+    messageAdaptor.success(data.successMessage || '操作成功')
   }
 }
 // HTTP状态码及对应提示

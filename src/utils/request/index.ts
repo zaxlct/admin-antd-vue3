@@ -4,7 +4,7 @@ import { downloadFile } from '..'
 import { getToken } from '../auth'
 
 import Request, { type RequestConfig } from '@bwrong/request'
-import { handleNetworkError } from './helper'
+import { handleNetworkError, handleShowTips } from './helper'
 
 import appConfig from '@/config'
 const { VITE_API_HOST } = import.meta.env
@@ -51,15 +51,14 @@ const request = new Request<ResponseType>({
     responseInterceptor({ data, config }) {
       // 跳过拦截器
       if ((config as RequestConfig).skipIntercept) return Promise.resolve(data)
-      // if (data.code === 200) {
-      //   // 接口自动提示
-      //   handleShowTips(data, config)
-      //   return Promise.resolve(data.data)
-      // }
+      if (data.code === 200) {
+        // 接口自动提示
+        handleShowTips(data, config)
+        return Promise.resolve(data.data)
+      }
       // // 处理业务错误
       // handleBusinessError(data)
-      // return Promise.reject(data)
-      return data.data || data
+      return Promise.reject(data)
     },
     responseInterceptorCatch(error) {
       // 处理网络错误

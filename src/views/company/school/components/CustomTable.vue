@@ -9,7 +9,7 @@
 
 <script setup lang="jsx">
 import dayjs from 'dayjs'
-import { getUserListReq, getUserLogListReq, getUserFunclubListReq, setUserRemarkReq, setBlackReq, setMuteReq } from '@/api/users'
+import { getUserListReq, getUserLogListReq, getUserFunclubListReq, setUserRemarkReq, setBlackReq, setMuteReq, setUserTagsReq } from '@/api/users'
 
 const { loading } = useRequest(getItemList)
 const { createDialog } = useDialog()
@@ -150,7 +150,7 @@ const columns = [
           <a-menu-item key="拉黑" disabled={record.in_blacklist}>
             { record.in_blacklist ? '已拉黑' : '拉黑' }
           </a-menu-item>
-          <a-menu-item key="3">
+          <a-menu-item key="标签">
             标签
           </a-menu-item>
           <a-menu-item key="备注">
@@ -174,8 +174,78 @@ function handleMenuClick(userItem, { key }) {
   } else if (key === '禁言') {
     muteUser(userItem)
   } else if (key === '标签') {
-    console.log('标签')
+    setTags(userItem)
   }
+}
+
+// 设置用户标签
+function setTags(userItem) {
+  const formValue = ref({
+    user_id: userItem.user_id,
+    tags: userItem.tags,
+  })
+
+  const formModalProps = {
+    request: setUserTagsReq,
+    getData(data) {
+      const { user_id, ...params } = data
+      return {
+        ...params,
+        user_ids: [user_id],
+      }
+    },
+
+    rule: [
+      {
+        type: 'input',
+        field: 'user_id',
+        value: userItem.user_id,
+        hidden: true,
+      },
+      {
+        type: 'checkbox',
+        field: 'tags',
+        title: '',
+        value: [],
+        options: [],
+        validate: [{ type: 'array', required: true, message: '请选择标签' }],
+        effect: {
+          fetch: {
+            action: '/api/v1/users/tags/' + userItem.user_id,
+            to: 'options',
+            method: 'get',
+            parse(res) {
+              return res.map(row => {
+                return {
+                  label: row.label,
+                  value: row.id
+                }
+              })
+            }
+          }
+        }
+      },
+    ],
+  }
+
+
+  createDialog({
+    title: '用户标签',
+    width: 500,
+    component:
+      <ModalForm
+        v-model={formValue.value}
+        {...formModalProps}
+      />,
+    onConfirm(status) {
+      if (status) {
+        const current = dataSource.value.find(item => item.user_id === userItem.user_id)
+        if (current) {
+          current.tags = formValue.value.tags
+        }
+      }
+    },
+  })
 }
 
 // 禁言

@@ -24,8 +24,7 @@ function addItem() {
 function hieraEdit() {
   customTableRef.value.hieraEdit()
 }
-function search(e) {
-  console.log(e)
-  customTableRef.value.search()
+function search(data) {
+  customTableRef.value.search(data)
 }
 </script>

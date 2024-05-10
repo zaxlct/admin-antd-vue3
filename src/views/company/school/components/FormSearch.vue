@@ -52,7 +52,7 @@ const data = reactive({
   reg_time: '',
 })
 
-const emit = defineEmits(['addItem', 'hieraEdit'])
+const emit = defineEmits(['addItem', 'hieraEdit', 'search'])
 const fApi = ref({})
 const option = {
   resetBtn: false,
@@ -200,7 +200,10 @@ function resetForm() {
 
 function submitForm() {
   fApi.value.submit(formData => {
-    console.log('formData', formData)
+    emit('search', {
+      ...formData,
+      reg_time: formData.reg_time?.join(','),
+    })
   })
 }
 </script>

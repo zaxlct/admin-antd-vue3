@@ -111,8 +111,8 @@ const columns = [
         </p>
         <p>
           粉丝团：
-          <span v-if={record.fanclub?.length === 1}>
-            {record.fanclub[0].label}
+          <span v-if={record.fanclub?.total === 1}>
+            {record.fanclub?.sample_data?.label}
           </span>
           <a-button
             v-else
@@ -120,7 +120,7 @@ const columns = [
             size="small"
             onClick={() => openFunclubModal(record.user_id)}
           >
-            {record.fanclub?.length}个粉丝团
+            {record.fanclub?.total || 0}个粉丝团
           </a-button>
         </p>
       </div>
@@ -630,4 +630,19 @@ async function openFunclubModal(user_id) {
     ,
   })
 }
+
+// TODO: 层级设置
+function hieraEdit() {
+  console.log('hieraEdit')
+}
+
+function search(params) {
+  console.log(params)
+}
+
+defineExpose({
+  editUser,
+  hieraEdit,
+  search,
+})
 </script>

@@ -4,7 +4,7 @@ export default {
     2: '登录',
   },
   os_type: {
-    0: '未知',
+    0: '未知', // TODO 全部？
     1: 'iOS',
     2: 'Android',
     3: 'PC',

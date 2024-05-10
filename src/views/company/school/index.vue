@@ -4,6 +4,7 @@
       type="primary"
       @click="addItem"
     >新增</a-button>
+    <FormSearch />
     <CustomTable />
   </div>
 
@@ -11,6 +12,7 @@
 
 <script setup lang="jsx">
 import CustomTable from './components/CustomTable.vue'
+import FormSearch from './components/FormSearch.vue'
 
 function addItem() {
   console.log('add item')

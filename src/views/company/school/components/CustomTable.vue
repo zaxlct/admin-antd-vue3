@@ -41,7 +41,6 @@ const columns = [
   {
     title: '用户信息',
     dataIndex: 'user_id',
-    // TODO: is_vanity_num 靓号标志展示
     customRender: ({ record }) =>
       <div>
         <p>
@@ -49,6 +48,9 @@ const columns = [
           <Clipboard text={record.nickname} />
         </p>
 
+        {/* <p>
+          靓号：{record.is_vanity_num ? '是' : '否'}
+        </p> */}
         <p>ID：{record.user_id}
           <Clipboard text={record.user_id} />
         </p>
@@ -181,7 +183,7 @@ function handleMenuClick(userItem, { key }) {
 
 
 // 添加/编辑用户
-function editUser(userItem = {}) {
+async function editUser(userItem = {}) {
   const formValue = ref({
     user_id: userItem.user_id,
     avatar_url: userItem.avatar_url,
@@ -191,13 +193,27 @@ function editUser(userItem = {}) {
     password: userItem.password,
   })
 
+  const isCreateUser = !userItem.user_id
+  if (!userItem.user_id) {
+    // user_id 需要生成
+    loading.value = true
+    const [err, user_id] = await to(createUserIdReq())
+    if (err) {
+      console.log(err)
+      loading.value = false
+      return
+    }
+    loading.value = false
+    formValue.value.user_id = user_id
+  }
+
   const formModalProps = {
-    request: data => userAddOrEditReq(userItem.user_id, data),
+    request: data => userAddOrEditReq(isCreateUser ? null : userItem.user_id, data),
     getData(data) {
-      // TODO
       return {
         ...data,
-        user_id: userItem.user_id,
+        // 如果是修改用户，body 里 user_id 传 null，user_id 放到 url path中。反之，创建用户，user_id 放到 body 中
+        user_id: isCreateUser ? userItem.user_id : null,
       }
     },
     rule: [

@@ -218,7 +218,9 @@ function editUser(userItem = {}) {
         field: 'nickname',
         title: '用户昵称',
         value: '',
-        validate: [{ type: 'string', required: true, message: '请输入用户名称' }]
+        effect: {
+          required: true
+        },
       },
       {
         type: 'input',
@@ -244,7 +246,7 @@ function editUser(userItem = {}) {
         field: 'email',
         title: '邮箱',
         value: '',
-        validate: [{ type: 'string', required: true, message: '请输入邮箱' }],
+        validate: [{ type: 'email', required: true, message: '请输入邮箱' }],
         props: {
           type: 'email'
         },
@@ -315,8 +317,8 @@ function setTags(userItem) {
         title: '',
         value: [],
         options: [],
-        validate: [{ type: 'array', required: true, message: '请选择标签' }],
         effect: {
+          required: true,
           fetch: {
             action: '/api/v1/users/tags/' + userItem.user_id,
             to: 'options',
@@ -386,7 +388,9 @@ function muteUser(userItem) {
         title: '禁言时效',
         value: '',
         options: Object.keys(ENUM.mute_type).map(key => ({ label: ENUM.mute_type[key], value: parseInt(key) })),
-        validate: [{ type: 'number', required: true, message: '请选择禁言时效' }],
+        effect: {
+          required: true,
+        },
         control: [
           {
             handle: val => val === 3,
@@ -397,7 +401,9 @@ function muteUser(userItem) {
                 field: 'mute_end_time',
                 title: '禁言时间',
                 value: '',
-                validate: [{ type: 'string', required: true, message: '请选择自定义禁言时间' }],
+                effect: {
+                  required: true,
+                },
                 props: {
                   placeholder: '请选择时间',
                   showTime: { defaultValue: dayjs('00:00:00', 'HH:mm:ss') },
@@ -420,7 +426,9 @@ function muteUser(userItem) {
         props: {
           type: 'textarea'
         },
-        validate: [{ type: 'string', required: true, message: '请输入禁言理由' }]
+        effect: {
+          required: true,
+        },
       },
     ],
   }
@@ -477,7 +485,9 @@ function blockUser(userItem) {
         title: '拉黑类型',
         value: '',
         options: Object.keys(ENUM.block_type).map(key => ({ label: ENUM.block_type[key], value: parseInt(key) })),
-        validate: [{ type: 'number', required: true, message: '请选择拉黑类型' }]
+        effect: {
+          required: true
+        }
       },
       {
         type: 'radio',
@@ -485,7 +495,9 @@ function blockUser(userItem) {
         title: '拉黑时效',
         value: '',
         options: Object.keys(ENUM.ageing_type).map(key => ({ label: ENUM.ageing_type[key], value: parseInt(key) })),
-        validate: [{ type: 'number', required: true, message: '请选择拉黑时效' }],
+        effect: {
+          required: true
+        },
         control: [
           {
             handle: val => val === 3,
@@ -496,7 +508,9 @@ function blockUser(userItem) {
                 field: 'end_time',
                 title: '拉黑时间',
                 value: '',
-                validate: [{ type: 'string', required: true, message: '请选择自定义拉黑时间' }],
+                effect: {
+                  required: true
+                },
                 props: {
                   placeholder: '请选择时间',
                   showTime: { defaultValue: dayjs('00:00:00', 'HH:mm:ss') },
@@ -519,7 +533,9 @@ function blockUser(userItem) {
         props: {
           type: 'textarea'
         },
-        validate: [{ type: 'string', required: true, message: '请输入拉黑理由' }]
+        effect: {
+          required: true
+        },
       },
     ],
   }

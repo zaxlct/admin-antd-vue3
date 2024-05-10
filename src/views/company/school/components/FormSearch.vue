@@ -36,7 +36,22 @@
 </template>
 
 <script setup>
-const data = defineModel()
+const data = reactive({
+  merch_id: 0,
+  app_id: 0,
+  acct_status: 0,
+  is_bind: 0,
+  os_type: 0,
+  mu_name: '',
+  au_id: '',
+  phone: '',
+  ip: '',
+  email: '',
+  hiera: 0,
+  is_online: false,
+  reg_time: '',
+})
+
 const emit = defineEmits(['addItem', 'hieraEdit'])
 const fApi = ref({})
 const option = {
@@ -57,24 +72,24 @@ const option = {
 const rule = ref([
   {
     type: 'select',
-    field: 'plat_type',
-    title: '平台',
+    field: 'merch_id',
+    title: '商户',
     value: '',
     options: [
-      { value: 0, label: '全部平台' },
-      { value: 1, label: '当前平台' },
-      { value: 2, label: '商户平台' },
+      { value: 0, label: '所有商户' },
+      { value: 1, label: '商户1' },
+      { value: 2, label: '商户2' },
     ],
   },
   {
     type: 'select',
-    field: 'app_type',
+    field: 'app_id',
     title: '应用',
     value: '',
     options: [
-      { value: 0, label: '全部平台' },
-      { value: 1, label: '当前平台' },
-      { value: 2, label: '商户平台' },
+      { value: 0, label: '所有应用' },
+      { value: 1, label: '应用1' },
+      { value: 2, label: '应用2' },
     ],
   },
   {
@@ -158,18 +173,23 @@ const rule = ref([
     ],
   },
   {
-    type: 'datePicker',
+    type: 'rangePicker',
     field: 'reg_time',
     title: '时间区间',
     value: '',
     props: {
+      format: 'YYYY-MM-DD',
+      valueFormat: 'X',
     },
   },
   {
     type: 'switch',
     field: 'is_online',
-    title: '在线用户',
+    title: '只查询在线用户',
     value: '',
+    wrap: {
+      labelCol: { span: 14 },
+    },
   },
   { type: 'btns' },
 ])

@@ -21,10 +21,12 @@
             <AButton
               type="primary"
               class="mr10"
+              @click="emit('hieraEdit')"
             >层级设置</AButton>
             <AButton
               type="primary"
               class="mr10"
+              @click="emit('addItem')"
             >添加用户</AButton>
           </div>
         </template>
@@ -34,6 +36,8 @@
 </template>
 
 <script setup>
+const data = defineModel()
+const emit = defineEmits(['addItem', 'hieraEdit'])
 const fApi = ref({})
 const option = {
   resetBtn: false,
@@ -49,23 +53,6 @@ const option = {
     },
   },
 }
-
-const data = reactive({
-  plat_type: 0,
-  app_type: 0,
-  acct_status: 0,
-  is_bind: 0,
-  os_type: 0,
-  mu_name: '',
-  au_id: '',
-  phone: '',
-  ip: '',
-  email: '',
-  hiera: '',
-  is_online: '',
-  reg_time: 0, // TODO: 默认为零？
-})
-
 
 const rule = ref([
   {

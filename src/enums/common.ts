@@ -4,10 +4,11 @@ export default {
     2: '登录',
   },
   os_type: {
-    0: '未知', // TODO 全部？
+    0: '全部',
     1: 'iOS',
     2: 'Android',
     3: 'PC',
+    99: '未知',
   },
   block_type: {
     1: '账号拉黑',

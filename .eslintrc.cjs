@@ -32,6 +32,7 @@ module.exports = {
         },
       },
     ],
+    "vue/v-on-event-hyphenation": 0,
     'vue/require-default-prop': 1,
     'vue/no-setup-props-destructure': 0,
     'vue/no-dupe-keys': 0,

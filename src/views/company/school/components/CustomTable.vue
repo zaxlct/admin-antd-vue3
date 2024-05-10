@@ -11,6 +11,10 @@
 import dayjs from 'dayjs'
 import { getUserListReq, getUserLogListReq, getUserFunclubListReq, setUserRemarkReq, setBlackReq, setMuteReq, setUserTagsReq, userAddOrEditReq } from '@/api/users'
 
+const props = defineProps({
+  searchParams: Object,
+})
+
 const { loading } = useRequest(getItemList)
 const { createDialog } = useDialog()
 const dataSource = ref([])
@@ -393,7 +397,7 @@ function muteUser(userItem) {
                 field: 'mute_end_time',
                 title: '禁言时间',
                 value: '',
-                validate: [{ type: 'date', required: true, message: '请选择自定义禁言时间' }],
+                validate: [{ type: 'string', required: true, message: '请选择自定义禁言时间' }],
                 props: {
                   placeholder: '请选择时间',
                   showTime: { defaultValue: dayjs('00:00:00', 'HH:mm:ss') },
@@ -401,6 +405,7 @@ function muteUser(userItem) {
                     return current && current < dayjs().endOf('day')
                   },
                   format: 'YYYY-MM-DD HH:mm:ss',
+                  valueFormat: 'X',
                 }
               }
             ]
@@ -491,7 +496,7 @@ function blockUser(userItem) {
                 field: 'end_time',
                 title: '拉黑时间',
                 value: '',
-                validate: [{ type: 'date', required: true, message: '请选择自定义拉黑时间' }],
+                validate: [{ type: 'string', required: true, message: '请选择自定义拉黑时间' }],
                 props: {
                   placeholder: '请选择时间',
                   showTime: { defaultValue: dayjs('00:00:00', 'HH:mm:ss') },
@@ -499,6 +504,7 @@ function blockUser(userItem) {
                     return current && current < dayjs().endOf('day')
                   },
                   format: 'YYYY-MM-DD HH:mm:ss',
+                  valueFormat: 'X',
                 }
               }
             ]

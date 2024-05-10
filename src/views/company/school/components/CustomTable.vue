@@ -41,6 +41,7 @@ const columns = [
   {
     title: '用户信息',
     dataIndex: 'user_id',
+    // TODO: is_vanity_num 靓号标志展示
     customRender: ({ record }) =>
       <div>
         <p>
@@ -218,9 +219,7 @@ function editUser(userItem = {}) {
         field: 'nickname',
         title: '用户昵称',
         value: '',
-        effect: {
-          required: true
-        },
+        validate: [{ type: 'string', max: 10, message: '用户昵称最多10个字'}],
       },
       {
         type: 'input',
@@ -236,7 +235,7 @@ function editUser(userItem = {}) {
         field: 'phone',
         title: '手机号',
         value: '',
-        validate: [{ type: 'string', required: true, message: '请输入手机号' }],
+        validate: [{ type: 'string', message: '请输入正确的手机号' }],
         props: {
           type: 'tel'
         },
@@ -246,7 +245,7 @@ function editUser(userItem = {}) {
         field: 'email',
         title: '邮箱',
         value: '',
-        validate: [{ type: 'email', required: true, message: '请输入邮箱' }],
+        validate: [{ type: 'email', message: '请输入正确的邮箱' }],
         props: {
           type: 'email'
         },

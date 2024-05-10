@@ -1,7 +1,6 @@
 <!-- eslint-disable unused-imports/no-unused-imports -->
 <template>
   <slot></slot>
-  <slot name="test"></slot>
   <form-create
     v-model:api="fApi"
     v-model="value"
@@ -9,6 +8,7 @@
     :rule
   >
   </form-create>
+  <slot name="footer"></slot>
 </template>
 
 <script lang="ts" setup>

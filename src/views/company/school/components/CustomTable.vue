@@ -9,7 +9,7 @@
 
 <script setup lang="jsx">
 import dayjs from 'dayjs'
-import { getUserListReq, getUserLogListReq, getUserFunclubListReq, setUserRemarkReq, setBlackReq, setMuteReq, setUserTagsReq } from '@/api/users'
+import { getUserListReq, getUserLogListReq, getUserFunclubListReq, setUserRemarkReq, setBlackReq, setMuteReq, setUserTagsReq, userAddOrEditReq } from '@/api/users'
 
 const { loading } = useRequest(getItemList)
 const { createDialog } = useDialog()
@@ -140,7 +140,7 @@ const columns = [
     width: 120,
     dataIndex: 'action',
     customRender: ({ record }) =>
-      <a-dropdown-button size="small" onClick={handleButtonClick}>
+      <a-dropdown-button size="small" onClick={() => editUser(record)}>
       编辑
       <template v-slot:overlay>
         <a-menu onClick={e => handleMenuClick(record, e)}>
@@ -162,10 +162,6 @@ const columns = [
   },
 ]
 
-function handleButtonClick() {
-  console.log('click dropdown button')
-}
-
 function handleMenuClick(userItem, { key }) {
   if (key === '备注') {
     editRemark(userItem)
@@ -176,6 +172,113 @@ function handleMenuClick(userItem, { key }) {
   } else if (key === '标签') {
     setTags(userItem)
   }
+}
+
+
+// 添加/编辑用户
+function editUser(userItem = {}) {
+  const formValue = ref({
+    user_id: userItem.user_id,
+    avatar_url: userItem.avatar_url,
+    nickname: userItem.nickname,
+    phone: userItem.phone,
+    email: userItem.email,
+    password: userItem.password,
+  })
+
+  const formModalProps = {
+    request: data => userAddOrEditReq(userItem.user_id, data),
+    getData(data) {
+      // TODO
+      return {
+        ...data,
+        user_id: userItem.user_id,
+      }
+    },
+    rule: [
+      {
+        type: 'upload',
+        field: 'avatar_url',
+        title: '用户头像',
+        props: {
+          listType: "picture-card",
+          action: 'https://jsonplaceholder.typicode.com/posts/',
+          onSuccess(file) {
+            file.url = file.response.url || 'http://form-create.com/logo.png'
+          },
+        },
+        value: []
+      },
+      {
+        type: 'input',
+        field: 'nickname',
+        title: '用户昵称',
+        value: '',
+        validate: [{ type: 'string', required: true, message: '请输入用户名称' }]
+      },
+      {
+        type: 'input',
+        field: 'user_id',
+        title: '用户ID',
+        value: '',
+        props: {
+          disabled: true
+        }
+      },
+      {
+        type: 'input',
+        field: 'phone',
+        title: '手机号',
+        value: '',
+        validate: [{ type: 'string', required: true, message: '请输入手机号' }],
+        props: {
+          type: 'tel'
+        },
+      },
+      {
+        type: 'input',
+        field: 'email',
+        title: '邮箱',
+        value: '',
+        validate: [{ type: 'string', required: true, message: '请输入邮箱' }],
+        props: {
+          type: 'email'
+        },
+      },
+      {
+        type: 'input',
+        field: 'password',
+        title: '密码',
+        value: '',
+        validate: [{ type: 'pattern', required: true, pattern: '^(?=.*[0-9])(?=.*[a-zA-Z])[a-zA-Z0-9]{8,16}$', message: '请输入 8~16位数字和字母组合密码' }],
+        props: {
+          type: 'password'
+        },
+      },
+    ],
+  }
+
+  createDialog({
+    title: '编辑用户',
+    width: 500,
+    component:
+      <ModalForm
+        v-model={formValue.value}
+        {...formModalProps}
+      >
+        <template v-slot:footer>
+          <div class='flex_end mt-20'>
+            <a-button type='link'>重置密码</a-button>
+          </div>
+        </template>
+      </ModalForm>
+    ,
+    onConfirm(status) {
+      if (status) {
+        // 刷新表格
+      }
+    },
+  })
 }
 
 // 设置用户标签
@@ -227,7 +330,6 @@ function setTags(userItem) {
       },
     ],
   }
-
 
   createDialog({
     title: '用户标签',

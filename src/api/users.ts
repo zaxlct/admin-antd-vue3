@@ -12,3 +12,12 @@ export const setUserTagsReq = data => put('/api/v1/users/tags', data)
 
 // 获取某个用户的标签列表
 export const getUserTagsReq = (user_id) => get('/api/v1/users/tags/' + user_id)
+
+// 用户添加与编辑
+export const userAddOrEditReq = (user_id, data) => {
+  if (user_id) {
+    return post('/api/v1/users/' + user_id, data)
+  } else {
+    return post('/api/v1/users', data)
+  }
+}

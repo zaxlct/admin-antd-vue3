@@ -1,45 +1,83 @@
 <template>
-  <div class="__table_form_search_component">
-    <form-create
-      v-model:api="fApi"
-      v-model="value"
-      :option
-      :rule
-    >
-    </form-create>
-  </div>
+  <a-card class="mb15">
+    <div class="__table_form_search_component">
+      <form-create
+        v-model:api="fApi"
+        v-model="data"
+        :option
+        :rule
+      >
+        <template #type-btns>
+          <AButton
+            @click="submitForm"
+            type="primary"
+            class="mr10"
+          >查询</AButton>
+          <AButton
+            class="mr10"
+            @click="resetForm"
+          >重置</AButton>
+          <div class="flex1 flex_end">
+            <AButton
+              type="primary"
+              class="mr10"
+            >层级设置</AButton>
+            <AButton
+              type="primary"
+              class="mr10"
+            >添加用户</AButton>
+          </div>
+        </template>
+      </form-create>
+    </div>
+  </a-card>
 </template>
 
 <script setup>
 const fApi = ref({})
 const option = {
-  submitBtn: false,
   resetBtn: false,
+  submitBtn: false,
+  global: {
+    '*': {
+      col: {
+        show: false,
+      },
+      wrap: {
+        labelCol: { span: 8 },
+      },
+    },
+  },
 }
 
-const value = reactive({
-
+const data = reactive({
+  plat_type: 0,
+  app_type: 0,
+  acct_status: 0,
+  is_bind: 0,
+  os_type: 0,
+  mu_name: '',
+  au_id: '',
+  phone: '',
+  ip: '',
+  email: '',
+  hiera: '',
+  is_online: '',
+  reg_time: 0, // TODO: 默认为零？
 })
 
 
-const rule = [
+const rule = ref([
   {
     type: 'select',
     field: 'plat_type',
     title: '平台',
     value: '',
     options: [
-      { value: 1, label: '全部平台' },
-      { value: 2, label: '当前平台' },
-      { value: 3, label: '商户平台' },
+      { value: 0, label: '全部平台' },
+      { value: 1, label: '当前平台' },
+      { value: 2, label: '商户平台' },
     ],
-    col: {
-      span: 4
-    },
-    wrap: {
-      labelCol: { span: 8 },
-      // colon: false,
-    },
   },
   {
     type: 'select',
@@ -47,16 +85,10 @@ const rule = [
     title: '应用',
     value: '',
     options: [
-      { value: 1, label: '全部平台' },
-      { value: 2, label: '当前平台' },
-      { value: 3, label: '商户平台' },
+      { value: 0, label: '全部平台' },
+      { value: 1, label: '当前平台' },
+      { value: 2, label: '商户平台' },
     ],
-    col: {
-      span: 4
-    },
-    wrap: {
-      labelCol: { span: 8 },
-    },
   },
   {
     type: 'select',
@@ -68,12 +100,6 @@ const rule = [
       { value: 1, label: '已绑定' },
       { value: 2, label: '未绑定' },
     ],
-    col: {
-      span: 4
-    },
-    wrap: {
-      labelCol: { span: 8 },
-    },
   },
   {
     type: 'select',
@@ -86,12 +112,6 @@ const rule = [
       { value: 2, label: '拉黑' },
       { value: 3, label: '禁言' },
     ],
-    col: {
-      span: 4
-    },
-    wrap: {
-      labelCol: { span: 8 },
-    },
   },
   {
     type: 'select',
@@ -99,21 +119,12 @@ const rule = [
     title: '系统',
     value: '',
     options: Object.keys(ENUM.os_type).map(key => ({ value: parseInt(key), label: ENUM.os_type[key] })),
-    col: {
-      span: 4
-    },
-    wrap: {
-      labelCol: { span: 8 },
-    },
   },
   {
     type: 'input',
     field: 'mu_name',
     title: '商户名称/用户昵称',
     value: '',
-    col: {
-      span: 5
-    },
     wrap: {
       labelCol: { span: 10 },
     },
@@ -123,12 +134,6 @@ const rule = [
     field: 'au_id',
     title: '应用ID/用户ID',
     value: '',
-    col: {
-      span: 5
-    },
-    wrap: {
-      labelCol: { span: 8 },
-    },
   },
   {
     type: 'input',
@@ -138,24 +143,12 @@ const rule = [
     props: {
       type: 'tel',
     },
-    col: {
-      span: 4
-    },
-    wrap: {
-      labelCol: { span: 8 },
-    },
   },
   {
     type: 'input',
     field: 'phone',
     title: 'IP',
     value: '',
-    col: {
-      span: 4
-    },
-    wrap: {
-      labelCol: { span: 8 },
-    },
   },
   {
     type: 'input',
@@ -164,12 +157,6 @@ const rule = [
     value: '',
     props: {
       type: 'email',
-    },
-    col: {
-      span: 4
-    },
-    wrap: {
-      labelCol: { span: 8 },
     },
   },
   {
@@ -182,12 +169,6 @@ const rule = [
       { value: 1, label: '层级A' },
       { value: 2, label: '层级B' },
     ],
-    col: {
-      span: 4
-    },
-    wrap: {
-      labelCol: { span: 8 },
-    },
   },
   {
     type: 'datePicker',
@@ -196,24 +177,26 @@ const rule = [
     value: '',
     props: {
     },
-    col: {
-      span: 4
-    },
-    wrap: {
-      labelCol: { span: 8 },
-    },
   },
   {
-    type: 'checkbox',
-    field: 'reg_time',
+    type: 'switch',
+    field: 'is_online',
     title: '在线用户',
     value: '',
-    col: {
-      span: 4
-    },
-    wrap: {
-      labelCol: { span: 8 },
-    },
   },
-]
+  { type: 'btns' },
+])
+
+function resetForm() {
+  fApi.value.resetFields()
+}
+
+function submitForm() {
+  fApi.value.submit(formData => {
+    console.log('formData', formData)
+  })
+}
 </script>
+
+<style lang="sass scoped">
+</style>

@@ -219,14 +219,11 @@ async function editUser(userItem = {}) {
   const isCreateUser = !userItem.user_id
   if (!userItem.user_id) {
     // user_id 需要生成
-    loading.value = true
     const [err, { user_id }] = await to(createUserIdReq())
     if (err) {
       console.log(err)
-      loading.value = false
       return
     }
-    loading.value = false
     formValue.value.user_id = user_id
   }
   const formModalProps = {

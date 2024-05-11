@@ -36,6 +36,7 @@
 </template>
 
 <script setup>
+const params = defineModel()
 const data = reactive({
   merch_id: 0,
   app_id: 0,
@@ -196,15 +197,20 @@ const rule = ref([
 
 function resetForm() {
   fApi.value.resetFields()
+  getData(data)
 }
 
 function submitForm() {
   fApi.value.submit(formData => {
-    emit('search', {
-      ...formData,
-      reg_time: formData.reg_time?.join(','),
-    })
+    getData(formData)
   })
+}
+
+function getData(data) {
+  params.value = {
+    ...data,
+    reg_time: data.reg_time ? data.reg_time?.join(',') : undefined,
+  }
 }
 </script>
 

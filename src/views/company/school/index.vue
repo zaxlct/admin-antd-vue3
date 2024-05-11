@@ -1,12 +1,13 @@
 <template>
   <div class="page_container">
     <FormSearch
+      v-model="searchParams"
       @addItem="addItem"
       @hieraEdit="hieraEdit"
-      @search="search"
     />
     <CustomTable
       ref="customTableRef"
+      :searchParams="searchParams"
     />
   </div>
 
@@ -17,6 +18,7 @@ import CustomTable from './components/CustomTable.vue'
 import FormSearch from './components/FormSearch.vue'
 
 const customTableRef = ref(null)
+const searchParams = ref({})
 
 function addItem() {
   customTableRef.value.editUser()
@@ -24,7 +26,5 @@ function addItem() {
 function hieraEdit() {
   customTableRef.value.hieraEdit()
 }
-function search(data) {
-  customTableRef.value.search(data)
-}
+
 </script>

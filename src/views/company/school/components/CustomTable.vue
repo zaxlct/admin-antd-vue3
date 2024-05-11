@@ -8,8 +8,10 @@
     :loading="loading"
   />
   <a-pagination
+    class="mt15"
     v-model:current="pagination.page"
     v-model:pageSize="pagination.limit"
+    size="small"
     :total="pagination.total"
     hideOnSinglePage
   />
@@ -32,7 +34,7 @@ const pagination = reactive({
   total: 0,
 })
 const dataSource = ref([])
-const { loading } = useRequest(() => getItemList({
+const { loading } = useRequest(() => getUserListReq({
   ...props.searchParams,
   page: pagination.page,
   limit: pagination.limit,

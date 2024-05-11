@@ -6,14 +6,18 @@
     :dataSource
     :columns="columns"
     :loading="loading"
+    :row-selection="{
+      selectedRowKeys: selectedRowKeys,
+      onChange: selectedRowKeys = $event,
+    }"
   />
   <a-pagination
     class="mt15"
+    hideOnSinglePage
     v-model:current="pagination.page"
     v-model:pageSize="pagination.limit"
     size="small"
     :total="pagination.total"
-    hideOnSinglePage
   />
 </template>
 
@@ -46,6 +50,7 @@ const { loading } = useRequest(() => getUserListReq({
   },
 })
 const { createDialog } = useDialog()
+const selectedRowKeys = ref([])
 
 const columns = [
   {
@@ -188,6 +193,7 @@ const columns = [
     </a-dropdown-button>
   },
 ]
+
 
 function handleMenuClick(userItem, { key }) {
   if (key === '备注') {

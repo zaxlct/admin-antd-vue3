@@ -21,18 +21,7 @@ module.exports = {
     __APP_CONFIG__: true,
   },
   rules: {
-    'vue/max-attributes-per-line': [
-      'error',
-      {
-        singleline: {
-          max: 3,
-        },
-        multiline: {
-          max: 1,
-        },
-      },
-    ],
-    "vue/v-on-event-hyphenation": 0,
+    'vue/attribute-hyphenation': 'off',
     'vue/require-default-prop': 1,
     'vue/no-setup-props-destructure': 0,
     'vue/no-dupe-keys': 0,

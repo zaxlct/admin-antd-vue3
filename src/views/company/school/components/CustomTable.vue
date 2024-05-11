@@ -1,6 +1,6 @@
 <template>
 <a-table
-  :scroll="{ x: 1500, y: 300 }"
+  :scroll="{ x: 1200, y: 800 }"
   :dataSource
   :columns="columns"
   :loading="loading"
@@ -9,7 +9,7 @@
 
 <script setup lang="jsx">
 import dayjs from 'dayjs'
-import { getUserListReq, getUserLogListReq, getUserFunclubListReq, setUserRemarkReq, setBlackReq, setMuteReq, setUserTagsReq, userAddOrEditReq } from '@/api/users'
+import { getUserListReq, getUserLogListReq, getUserFunclubListReq, setUserRemarkReq, setBlackReq, setMuteReq, setUserTagsReq, userAddOrEditReq, createUserIdReq } from '@/api/users'
 
 const props = defineProps({
   searchParams: Object,
@@ -197,7 +197,7 @@ async function editUser(userItem = {}) {
   if (!userItem.user_id) {
     // user_id 需要生成
     loading.value = true
-    const [err, user_id] = await to(createUserIdReq())
+    const [err, { user_id }] = await to(createUserIdReq())
     if (err) {
       console.log(err)
       loading.value = false
@@ -206,14 +206,13 @@ async function editUser(userItem = {}) {
     loading.value = false
     formValue.value.user_id = user_id
   }
-
   const formModalProps = {
     request: data => userAddOrEditReq(isCreateUser ? null : userItem.user_id, data),
     getData(data) {
       return {
         ...data,
         // 如果是修改用户，body 里 user_id 传 null，user_id 放到 url path中。反之，创建用户，user_id 放到 body 中
-        user_id: isCreateUser ? userItem.user_id : null,
+        user_id: isCreateUser ? data.user_id : undefined,
       }
     },
     rule: [

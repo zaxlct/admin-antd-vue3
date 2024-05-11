@@ -1,11 +1,17 @@
 <template>
   <a-table
-    :pagination="pagination"
+    rowKey="user_id"
+    :pagination="false"
     :scroll="{ x: 1200, y: 800 }"
     :dataSource
     :columns="columns"
     :loading="loading"
-    @change="handleTableChange"
+  />
+  <a-pagination
+    v-model:current="pagination.page"
+    v-model:pageSize="pagination.limit"
+    :total="pagination.total"
+    hideOnSinglePage
   />
 </template>
 
@@ -21,34 +27,23 @@ const props = defineProps({
 })
 
 const pagination = reactive({
-  current: 1,
-  pageSize: 10,
+  page: 1,
+  limit: 10,
   total: 0,
 })
-
-const { loading } = useRequest(getItemList)
-const { createDialog } = useDialog()
 const dataSource = ref([])
-
-function getItemList() {
-  const params = {
-    ...props.searchParams,
-    page: pagination.current,
-    limit: pagination.pageSize,
-  }
-  getUserListReq(params).then(res => {
-    dataSource.value = res.items
-    pagination.total = res.total_data
-  }).catch(err => {
-    console.log(err)
-  })
-}
-
-const handleTableChange = ({ pageSize, current }) => {
-  pagination.page = current
-  pagination.limit = pageSize
-  getItemList()
-}
+const { loading } = useRequest(() => getItemList({
+  ...props.searchParams,
+  page: pagination.page,
+  limit: pagination.limit,
+}), {
+  refreshDeps: true,
+  onSuccess(data) {
+    dataSource.value = data.items
+    pagination.total = data.total_data
+  },
+})
+const { createDialog } = useDialog()
 
 const columns = [
   {

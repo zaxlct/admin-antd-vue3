@@ -1,10 +1,12 @@
 <template>
-<a-table
-  :scroll="{ x: 1200, y: 800 }"
-  :dataSource
-  :columns="columns"
-  :loading="loading"
-/>
+  <a-table
+    :pagination="pagination"
+    :scroll="{ x: 1200, y: 800 }"
+    :dataSource
+    :columns="columns"
+    :loading="loading"
+    @change="handleTableChange"
+  />
 </template>
 
 <script setup lang="jsx">
@@ -12,7 +14,16 @@ import dayjs from 'dayjs'
 import { getUserListReq, getUserLogListReq, getUserFunclubListReq, setUserRemarkReq, setBlackReq, setMuteReq, setUserTagsReq, userAddOrEditReq, createUserIdReq, resetPasswordReq } from '@/api/users'
 
 const props = defineProps({
-  searchParams: Object,
+  searchParams: {
+    type: Object,
+    default: () => ({}),
+  },
+})
+
+const pagination = reactive({
+  current: 1,
+  pageSize: 10,
+  total: 0,
 })
 
 const { loading } = useRequest(getItemList)
@@ -20,11 +31,23 @@ const { createDialog } = useDialog()
 const dataSource = ref([])
 
 function getItemList() {
-  getUserListReq().then(res => {
+  const params = {
+    ...props.searchParams,
+    page: pagination.current,
+    limit: pagination.pageSize,
+  }
+  getUserListReq(params).then(res => {
     dataSource.value = res.items
+    pagination.total = res.total_data
   }).catch(err => {
     console.log(err)
   })
+}
+
+const handleTableChange = ({ pageSize, current }) => {
+  pagination.page = current
+  pagination.limit = pageSize
+  getItemList()
 }
 
 const columns = [

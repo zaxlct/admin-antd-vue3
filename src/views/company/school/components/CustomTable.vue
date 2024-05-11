@@ -9,7 +9,7 @@
 
 <script setup lang="jsx">
 import dayjs from 'dayjs'
-import { getUserListReq, getUserLogListReq, getUserFunclubListReq, setUserRemarkReq, setBlackReq, setMuteReq, setUserTagsReq, userAddOrEditReq, createUserIdReq } from '@/api/users'
+import { getUserListReq, getUserLogListReq, getUserFunclubListReq, setUserRemarkReq, setBlackReq, setMuteReq, setUserTagsReq, userAddOrEditReq, createUserIdReq, resetPasswordReq } from '@/api/users'
 
 const props = defineProps({
   searchParams: Object,
@@ -278,6 +278,7 @@ async function editUser(userItem = {}) {
     ],
   }
 
+  const resetPasswordBtnLoading = ref(false)
   createDialog({
     title: '编辑用户',
     width: 500,
@@ -288,7 +289,7 @@ async function editUser(userItem = {}) {
       >
         <template v-slot:footer>
           <div class='flex_end mt-20'>
-            <a-button type='link'>重置密码</a-button>
+            <a-button loading={resetPasswordBtnLoading.value} onClick={() => resetPassword(userItem.user_id, resetPasswordBtnLoading)} type='link' v-if={!isCreateUser}>重置密码</a-button>
           </div>
         </template>
       </ModalForm>
@@ -298,6 +299,16 @@ async function editUser(userItem = {}) {
         // 刷新表格
       }
     },
+  })
+}
+
+function resetPassword(user_id, resetPasswordBtnLoading) {
+  resetPasswordBtnLoading.value = true
+  resetPasswordReq(user_id).then(() => {
+    resetPasswordBtnLoading.value = false
+  }).catch(err => {
+    console.log(err)
+    resetPasswordBtnLoading.value = false
   })
 }
 

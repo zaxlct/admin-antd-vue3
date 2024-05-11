@@ -26,3 +26,6 @@ export const userAddOrEditReq = (user_id, data) => {
     return post('/api/v1/users', data)
   }
 }
+
+// 重置密码
+export const resetPasswordReq = user_id => put('/api/v1/users/reset/password/' + user_id)

@@ -1,7 +1,7 @@
-import { initAuth } from '@bwrong/auth-tool'
-import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
-import { getMenusRequest } from '@/api/auth'
-import dynamicRoutes from './dynamicRoutes'
+import { createRouter, createWebHistory } from 'vue-router'
+// import { getMenusRequest } from '@/api/auth'
+import ganerRoutesAndMenus from './ganerRoutesAndMenus'
+import mock from './mock'
 import routes, { noMatchRoute } from './staticRoutes'
 
 import config from '@/config'
@@ -32,10 +32,19 @@ router.beforeEach(async to => {
   // 3.未登录且不在白名单，重定向到登录页，带上回调地址，方便回归
   if (!token) return `/login?redirect=${encodeURIComponent(to.fullPath)}`
   // 4.根据后台返回权限标识洗出有权限的路由，并将洗过的路由表动态添加到路由中
-  const allowRoutes = await _getAllowRoutes(dynamicRoutes)
-  allowRoutes.push(noMatchRoute)
+  // const allowRoutes = await _getAllowRoutes(dynamicRoutes)
+
+  const dynamicRoutes = ganerRoutesAndMenus(mock)
+  console.log('dynamicRoutes', dynamicRoutes)
+  dynamicRoutes.forEach(route => {
+    router.addRoute(route)
+  })
+
+  console.log(router.getRoutes())
+
+
   // 未加载则动态加载
-  removeRouters = allowRoutes.map(item => router.addRoute(item))
+  // removeRouters = allowRoutes.map(item => router.addRoute(item))
   routerLoaded = true
   return to.fullPath
 })
@@ -47,28 +56,6 @@ router.afterEach(to => {
   useTitle(to.meta?.title ? `${to.meta.title} - ${config.appTitle}` : `${config.appTitle}`)
 })
 
-// 获取路由
-async function _getAllowRoutes(dynamicRoutes: RouteRecordRaw[]) {
-  // 如果需要刷新更新菜单数据，可以去掉登录时获取，在这获取菜单数据
-  const menus = await getMenusRequest()
-
-  // 从本地缓存中获取菜单数据
-  // const menus = getStorage<Record<string, unknown>[]>('rawMenu') || []
-  return _ganerRoutesAndMenus(dynamicRoutes, menus)
-}
-/**
- * 生成权限路由和菜单
- * @param {*} routes 需要鉴权的路由
- * @param {*} permissions 菜单和权限标识集
- */
-function _ganerRoutesAndMenus(routes: Array<RouteRecordRaw>, permissions: Record<string, unknown>[]) {
-  const { routes: filterRoutes } = initAuth({
-    routes,
-    permissions,
-    authKey: 'permission',
-  })
-  return filterRoutes as RouteRecordRaw[]
-}
 // 重置路由
 export function resetRouter() {
   removeRouters.map(item => item())

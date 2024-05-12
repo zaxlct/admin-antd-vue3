@@ -178,7 +178,7 @@ import type { ColumnProps } from 'ant-design-vue/es/table'
 import IconPicker from '@/components/IconPicker/index.vue'
 import { RESOURCE_TYPE } from '@/enums/menu'
 import type { IMenu } from '@/api/auth'
-import { getPermissionsTree } from '@bwrong/auth-tool'
+// import { getPermissionsTree } from '@bwrong/auth-tool'
 // 列表
 const columns: ColumnProps[] = [
   {
@@ -216,9 +216,9 @@ const state = reactive({
   tableLoading: false,
 })
 function getData() {
-  state.tableData = getPermissionsTree({
-    pid: 0,
-  })
+  // state.tableData = getPermissionsTree({
+  //   pid: 0,
+  // })
 }
 getData()
 function handleDel(row) {

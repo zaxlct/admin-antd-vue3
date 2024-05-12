@@ -17,7 +17,6 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
-    "@bwrong/auth-tool": "^3.0.7",
     "@bwrong/request": "^1.0.1",
     "@bwrong/storage": "^1.1.0",
     "@form-create/ant-design-vue": "^3.1.28",
@@ -56,6 +55,7 @@
     "@vue/eslint-config-typescript": "^13.0.0",
     "@vue/language-plugin-pug": "^2.0.14",
     "@vue/tsconfig": "^0.5.1",
+    "auto-import-types": "^0.0.4",
     "autoprefixer": "^10.4.19",
     "eslint": "^8.57.0",
     "eslint-plugin-vue": "^9.24.1",

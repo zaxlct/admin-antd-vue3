@@ -52,7 +52,7 @@ import { useRootStore } from '@/store'
 import { convertToTree } from '@/utils'
 import { getStorage } from '@bwrong/storage'
 import type { IMenu, IUser } from '@/api/auth'
-import { getPermissionsData } from '@bwrong/auth-tool'
+// import { getPermissionsData } from '@bwrong/auth-tool'
 
 const rootStore = useRootStore()
 const { push } = useRouter()
@@ -62,7 +62,8 @@ if (userInfo) {
 } else {
   push('/login')
 }
-let menus: IMenu[] = getPermissionsData() || []
+// let menus: IMenu[] = getPermissionsData() || []
+let menus: IMenu[] = []
 menus = menus.filter(item => item.type === 0)
 menus = convertToTree({
   data: menus,

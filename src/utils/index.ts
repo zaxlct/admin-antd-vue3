@@ -86,7 +86,7 @@ export function checkIsVideo(mime: string, types = ['video/mp4'], msg = '上传�
  * @param {*} pidName    父级标识key
  * @param {*} idName     id标识key
  */
-interface ITreeData<T> {
+export interface ITreeData<T> {
   data: T[]
   pid?: number | string
   children?: string

@@ -15,6 +15,7 @@ module.exports = {
     '@vue/eslint-config-prettier',
     '@vue/eslint-config-prettier/skip-formatting',
     './.eslintrc-auto-import.json',
+    './.eslintrc-auto-import-types.json',
   ],
   globals: {
     Iconfont: true,

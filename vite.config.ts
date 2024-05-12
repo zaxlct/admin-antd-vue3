@@ -5,6 +5,7 @@ import vue from '@vitejs/plugin-vue'
 import VueMacros from 'unplugin-vue-macros/vite'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 import legacy from '@vitejs/plugin-legacy'
+import AutoImportTypes from 'auto-import-types'
 import viteCompression from 'vite-plugin-compression'
 import { createHtmlPlugin } from 'vite-plugin-html'
 import autoImport from 'unplugin-auto-import/vite'
@@ -68,6 +69,7 @@ export default defineConfig(({ command, mode }: ConfigEnv) => {
         logVersion: true,
         injectFileBase: VITE_BASE_URL
       }),
+      AutoImportTypes(),
       VueMacros({
         plugins: {
           vue: vue(),

@@ -5,10 +5,6 @@ const AllRouter = import.meta.glob('@/views/**/*.vue')
 export default function transformRoutes(serverRoutes: Types.RouteItem[]): Types.RouteItem[] {
   const treeData: ITreeData<Types.RouteItem> = {
     data: serverRoutes,
-    parentId: 0,                // 顶级节点的 ID
-    children: 'children',  // 子集标识key
-    pidName: 'parentId',        // 父级标译key
-    idName: 'id'           // ID 标识key
   }
 
   // 使用通用的 convertToTree 函数转换路由数据

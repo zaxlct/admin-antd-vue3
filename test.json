@@ -1,0 +1,103 @@
+{
+  "code": 200,
+  "msg": "登录成功",
+  "data": [
+    {
+      "id": 1,
+      "permission": "home",
+      "title": "首页",
+      "type": 0,
+      "icon": "icon-home",
+      "url": "/home",
+      "parentId": 0
+    },
+    {
+      "id": 2,
+      "permission": "system",
+      "title": "系统管理",
+      "type": 0,
+      "icon": "icon-setting",
+      "parentId": 0
+    },
+    {
+      "id": 3,
+      "permission": "system/menu",
+      "title": "菜单管理",
+      "type": 0,
+      "icon": "icon-menu",
+      "parentId": 2
+    },
+    {
+      "id": 4,
+      "permission": "user",
+      "title": "用户",
+      "type": 0,
+      "icon": "icon-menu",
+      "parentId": 0
+    },
+    {
+      "id": 5,
+      "permission": "user/list",
+      "title": "用户管理",
+      "type": 0,
+      "icon": "icon-menu",
+      "parentId": 4
+    },
+    {
+      "id": 6,
+      "permission": "user/hierarchy",
+      "title": "层级管理",
+      "type": 0,
+      "icon": "icon-menu",
+      "parentId": 4
+    },
+    {
+      "id": 7,
+      "permission": "guild",
+      "title": "工会管理",
+      "type": 0,
+      "icon": "icon-menu",
+      "parentId": 0
+    },
+    {
+      "id": 8,
+      "permission": "anchor",
+      "title": "主播",
+      "type": 0,
+      "icon": "icon-menu",
+      "parentId": 0
+    },
+    {
+      "id": 9,
+      "permission": "anchor/list",
+      "title": "主播管理",
+      "type": 0,
+      "icon": "icon-menu",
+      "parentId": 8
+    },
+    {
+      "id": 10,
+      "permission": "anchor/detail",
+      "title": "编辑主播信息",
+      "type": 0,
+      "icon": "icon-menu",
+      "parentId": 8
+    },
+    {
+      "id": 11,
+      "permission": "anchor/statistics",
+      "title": "主播直播数据",
+      "type": 0,
+      "icon": "icon-menu",
+      "parentId": 8
+    },
+    {
+      "id": 12,
+      "permission": "anchor/statistics",
+      "title": "推荐位配置",
+      "type": 0,
+      "icon": "icon-menu",
+      "parentId": 0
+    }
+  ]
+}

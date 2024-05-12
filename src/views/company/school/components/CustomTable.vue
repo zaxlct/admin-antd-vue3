@@ -325,6 +325,8 @@ async function editItem(userItem = {}) {
     ,
     onConfirm() {
       if (isCreateUser) {
+        pagination.page = 1
+        pagination.total = 0
         props.resetSearch()
       } else {
         refresh()

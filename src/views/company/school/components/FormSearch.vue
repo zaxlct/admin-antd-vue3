@@ -20,12 +20,12 @@
           <div class="flex1 flex_end">
             <AButton
               type="primary"
-              class="mr10"
+              class="mr10 mb15"
               @click="emit('hieraEdit')"
             >层级设置</AButton>
             <AButton
               type="primary"
-              class="mr10"
+              class="mr10 mb15"
               @click="emit('addItem')"
             >添加用户</AButton>
           </div>
@@ -76,22 +76,36 @@ const rule = ref([
     field: 'merch_id',
     title: '商户',
     value: '',
-    options: [
-      { value: 0, label: '所有商户' },
-      { value: 1, label: '商户1' },
-      { value: 2, label: '商户2' },
-    ],
+    options: [],
+    effect: {
+      fetch: {
+        action: '/api/v1/merchant/summary',
+        to: 'options',
+        method: 'get',
+        parse: res => [
+          { value: 0, label: '所有商户' },
+          ...res.items.map(item => ({ value: item.merch_id, label: item.merch_name })),
+        ],
+      },
+    },
   },
   {
     type: 'select',
     field: 'app_id',
     title: '应用',
     value: '',
-    options: [
-      { value: 0, label: '所有应用' },
-      { value: 1, label: '应用1' },
-      { value: 2, label: '应用2' },
-    ],
+    options: [],
+    effect: {
+      fetch: {
+        action: '/api/v1/app/summary',
+        to: 'options',
+        method: 'get',
+        parse: res => [
+          { value: 0, label: '所有应用' },
+          ...res.items.map(item => ({ value: item.app_id, label: item.app_name })),
+        ],
+      },
+    },
   },
   {
     type: 'select',

@@ -23,7 +23,8 @@
 
 <script setup lang="jsx">
 import dayjs from 'dayjs'
-import { getUserListReq, getUserLogListReq, getUserFunclubListReq, setUserRemarkReq, setBlackReq, setMuteReq, setUserTagsReq, userAddOrEditReq, createUserIdReq, resetPasswordReq } from '@/api/users'
+import { getUserListReq, getUserLogListReq, setUserRemarkReq, setBlackReq, setMuteReq, setUserTagsReq, userAddOrEditReq, createUserIdReq, resetPasswordReq } from '@/api/users'
+import { getUserFunclubListReq } from '@/api/public'
 
 const props = defineProps({
   searchParams: {
@@ -143,13 +144,14 @@ const columns = [
             {record.fanclub?.sample_data?.label}
           </span>
           <a-button
-            v-else
+            v-else-if={record.fanclub?.total > 1}
             type="link"
             size="small"
             onClick={() => openFunclubModal(record.user_id)}
           >
             {record.fanclub?.total || 0}个粉丝团
           </a-button>
+          <span v-else-if={record.fanclub?.total === 0}>无</span>
         </p>
       </div>
   },

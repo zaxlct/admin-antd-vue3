@@ -3,7 +3,7 @@ import { createApp } from 'vue'
 import formCreate from '@form-create/ant-design-vue'
 import install from '@form-create/ant-design-vue/auto-import'
 import router from './router'
-import request from '@/utils/request'
+import { get } from '@/utils/request'
 
 import directives from '@/directives'
 import plugins from '@/plugins'
@@ -14,9 +14,14 @@ import { authPlugin } from '@bwrong/auth-tool'
 formCreate.use(install)
 
 formCreate.fetch = options => {
-  request[options.method](options.action, options.data).then(res => {
-    options.onSuccess(res)
-  })
+  get(options.action, options.data)
+    .then(res => {
+      console.log('res', res)
+      options.onSuccess(res)
+    })
+    .catch(err => {
+      console.log('fetch err', err)
+    })
 }
 
 const app = createApp(App)

@@ -51,7 +51,9 @@ const request = new Request<ResponseType>({
     responseInterceptor({ data, config }) {
       // 跳过拦截器
       if ((config as RequestConfig).skipIntercept) return Promise.resolve(data)
-      if (data.code === 200) {
+      // TODO: 临时写死
+      // if (data.code === 200) {
+      if (data.code) {
         // 接口自动提示
         handleShowTips(data, config)
         return Promise.resolve(data.data)

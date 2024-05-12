@@ -8,27 +8,28 @@
         :rule
       >
         <template #type-btns>
-          <AButton
-            @click="submitForm"
-            type="primary"
-            class="mr10"
-          >查询</AButton>
-          <AButton
-            class="mr10"
-            @click="resetForm"
-          >重置</AButton>
-          <div class="flex1 flex_end">
+          <section class="flex mb15" style="width: 100%;">
             <AButton
+              @click="submitForm"
               type="primary"
-              class="mr10 mb15"
-              @click="emit('hieraEdit')"
-            >层级设置</AButton>
+              class="mr10"
+            >查询</AButton>
             <AButton
-              type="primary"
-              class="mr10 mb15"
-              @click="emit('addItem')"
-            >添加用户</AButton>
-          </div>
+              class="mr10"
+              @click="resetForm"
+            >重置</AButton>
+            <div class="flex1 flex_end">
+              <AButton
+                type="primary"
+                class="mr10"
+                @click="emit('hieraEdit')"
+              >层级设置</AButton>
+              <AButton
+                type="primary"
+                @click="emit('addItem')"
+              >添加用户</AButton>
+            </div>
+          </section>
         </template>
       </form-create>
     </div>

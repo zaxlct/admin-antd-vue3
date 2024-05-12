@@ -3,8 +3,8 @@
     <FormSearch
       ref="formSearchRef"
       v-model="searchParams"
-      @addItem="addItem"
-      @hieraEdit="hieraEdit"
+      @addItem="() => customTableRef.editItem()"
+      @hieraEdit="() => customTableRef.hieraEdit()"
     />
     <CustomTable
       ref="customTableRef"
@@ -22,12 +22,4 @@ import FormSearch from './components/FormSearch.vue'
 const customTableRef = ref(null)
 const formSearchRef = ref(null)
 const searchParams = ref({})
-
-function addItem() {
-  customTableRef.value.editItem()
-}
-function hieraEdit() {
-  customTableRef.value.hieraEdit()
-}
-
 </script>

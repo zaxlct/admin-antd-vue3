@@ -1,0 +1,138 @@
+<template>
+  <a-card class="mb15">
+    <div class="__table_form_search_component">
+      <form-create
+        v-model:api="fApi"
+        v-model="data"
+        :option
+        :rule
+      >
+        <template #type-btns>
+          <section class="flex mb15" style="width: 100%;">
+            <AButton
+              @click="submitForm"
+              type="primary"
+            >查询</AButton>
+            <AButton
+              class="ml10"
+              @click="resetForm"
+            >重置</AButton>
+            <div class="flex1 flex_end">
+              <AButton
+                type="primary"
+                @click="emit('addItem')"
+              >添加工会</AButton>
+            </div>
+          </section>
+        </template>
+      </form-create>
+    </div>
+  </a-card>
+</template>
+
+<script setup>
+const params = defineModel()
+const data = reactive({
+  merch_id: 0,
+  merch_name: '', // TODO: 原型图上是商户筛选
+  status: 0,
+  reg_time: 0,
+})
+
+const emit = defineEmits(['addItem', 'hieraEdit', 'search'])
+const fApi = ref({})
+const option = {
+  resetBtn: false,
+  submitBtn: false,
+  global: {
+    '*': {
+      col: {
+        show: false,
+      },
+      wrap: {
+        labelCol: { span: 8 },
+      },
+    },
+  },
+}
+
+const rule = ref([
+  {
+    type: 'select',
+    field: 'merch_id',
+    title: '商户',
+    value: '',
+    options: [],
+    effect: {
+      fetch: {
+        action: '/api/v1/merchant/summary',
+        to: 'options',
+        method: 'get',
+        parse: res => [
+          { value: 0, label: '所有商户' },
+          ...res.items.map(item => ({ value: item.merch_id, label: item.merch_name })),
+        ],
+      },
+    },
+  },
+  {
+    type: 'input',
+    field: 'merch_name',
+    title: '工会名称',
+    value: '',
+    wrap: {
+      labelCol: { span: 10 },
+    },
+  },
+  {
+    type: 'rangePicker',
+    field: 'reg_time',
+    title: '时间区间',
+    value: '',
+    props: {
+      format: 'YYYY-MM-DD',
+      valueFormat: 'X',
+    },
+  },
+  {
+    type: 'select',
+    field: 'acct_status',
+    title: '账号状态',
+    value: '',
+    options: Object.keys(ENUM.guild_status).map(key => ({ value: parseInt(key), label: ENUM.os_type[key] })),
+  },
+
+  {
+    type: 'input',
+    field: 'au_id',
+    title: '应用ID/用户ID',
+    value: '',
+  },
+  { type: 'btns' },
+])
+
+function resetForm() {
+  fApi.value.resetFields()
+  getData(data)
+}
+
+function submitForm() {
+  fApi.value.submit(formData => {
+    getData(formData)
+  })
+}
+
+function getData(data) {
+  params.value = {
+    ...data,
+    reg_time: data.reg_time ? data.reg_time?.join(',') : undefined,
+  }
+}
+
+defineExpose({
+  resetForm,
+})
+</script>
+
+<style lang="sass scoped">
+</style>

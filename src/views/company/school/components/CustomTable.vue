@@ -96,7 +96,7 @@ const columns = [
     dataIndex: 'hierarchy',
     customRender: ({ record }) =>
       <>
-        <p className="dialog_item_list" v-for={(item, index) in record.hierarchy} key={index}>{item.label}</p>
+        <p class="dialog_item_list" v-for={(item, index) in record.hierarchy} key={index}>{item.label}</p>
       </>
   },
   {
@@ -225,7 +225,7 @@ async function editItem(userItem = {}) {
     password: userItem.password,
   })
 
-  const isCreateUser = !userItem.user_id
+  const isCreate = !userItem.user_id
   if (!userItem.user_id) {
     // user_id 需要生成
     const [err, { user_id }] = await to(createUserIdReq())
@@ -236,12 +236,12 @@ async function editItem(userItem = {}) {
     formValue.value.user_id = user_id
   }
   const formModalProps = {
-    request: data => userAddOrEditReq(isCreateUser ? null : userItem.user_id, data),
+    request: data => userAddOrEditReq(isCreate ? null : userItem.user_id, data),
     getData(data) {
       return {
         ...data,
         // 如果是修改用户，body 里 user_id 传 null，user_id 放到 url path中。反之，创建用户，user_id 放到 body 中
-        user_id: isCreateUser ? data.user_id : undefined,
+        user_id: isCreate ? data.user_id : undefined,
       }
     },
     rule: [
@@ -309,7 +309,7 @@ async function editItem(userItem = {}) {
 
   const resetPasswordBtnLoading = ref(false)
   createDialog({
-    title: '编辑用户',
+    title: isCreate ? '添加用户' : '编辑用户',
     width: 500,
     component:
       <ModalForm
@@ -318,13 +318,13 @@ async function editItem(userItem = {}) {
       >
         <template v-slot:footer>
           <div class='flex_end mt-20'>
-            <a-button loading={resetPasswordBtnLoading.value} onClick={() => resetPassword(userItem.user_id, resetPasswordBtnLoading)} type='link' v-if={!isCreateUser}>重置密码</a-button>
+            <a-button loading={resetPasswordBtnLoading.value} onClick={() => resetPassword(userItem.user_id, resetPasswordBtnLoading)} type='link' v-if={!isCreate}>重置密码</a-button>
           </div>
         </template>
       </ModalForm>
     ,
     onConfirm() {
-      if (isCreateUser) {
+      if (isCreate) {
         pagination.page = 1
         pagination.total = 0
         props.resetSearch()
@@ -653,7 +653,7 @@ async function openDeviceLogModal(type, user_id) {
     footer: null,
     component: () =>
       <div>
-        <div className="dialog_item_list" v-for={(item, index) in data} key={index}>
+        <div class="dialog_item_list" v-for={(item, index) in data} key={index}>
           <span v-if={type === 'device'}>
             {ENUM.log_type[item.log_type]}设备：{item.dev_model} | {item.log_time}
           </span>
@@ -694,13 +694,8 @@ function hieraEdit() {
   console.log('hieraEdit')
 }
 
-function search(params) {
-  console.log(params)
-}
-
 defineExpose({
   editItem,
   hieraEdit,
-  search,
 })
 </script>

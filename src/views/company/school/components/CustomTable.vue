@@ -174,7 +174,7 @@ const columns = [
     width: 120,
     dataIndex: 'action',
     customRender: ({ record }) =>
-      <a-dropdown-button size="small" onClick={() => editUser(record)}>
+      <a-dropdown-button size="small" onClick={() => editItem(record)}>
       编辑
       <template v-slot:overlay>
         <a-menu onClick={e => handleMenuClick(record, e)}>
@@ -211,7 +211,7 @@ function handleMenuClick(userItem, { key }) {
 
 
 // 添加/编辑用户
-async function editUser(userItem = {}) {
+async function editItem(userItem = {}) {
   const formValue = ref({
     user_id: userItem.user_id,
     avatar_url: userItem.avatar_url,
@@ -691,7 +691,7 @@ function search(params) {
 }
 
 defineExpose({
-  editUser,
+  editItem,
   hieraEdit,
   search,
 })

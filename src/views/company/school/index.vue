@@ -21,7 +21,7 @@ const customTableRef = ref(null)
 const searchParams = ref({})
 
 function addItem() {
-  customTableRef.value.editUser()
+  customTableRef.value.editItem()
 }
 function hieraEdit() {
   customTableRef.value.hieraEdit()

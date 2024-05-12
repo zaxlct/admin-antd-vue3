@@ -80,9 +80,6 @@ const rule = ref([
     field: 'merch_name',
     title: '工会名称',
     value: '',
-    wrap: {
-      labelCol: { span: 10 },
-    },
   },
   {
     type: 'rangePicker',
@@ -99,7 +96,7 @@ const rule = ref([
     field: 'acct_status',
     title: '账号状态',
     value: '',
-    options: Object.keys(ENUM.guild_status).map(key => ({ value: parseInt(key), label: ENUM.os_type[key] })),
+    options: Object.keys(ENUM.guild_status).map(key => ({ value: parseInt(key), label: ENUM.guild_status[key] })),
   },
 
   {

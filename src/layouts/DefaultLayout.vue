@@ -67,7 +67,7 @@ let menus: IMenu[] = []
 menus = menus.filter(item => item.type === 0)
 menus = convertToTree({
   data: menus,
-  pid: 0,
+  parentId: 0,
 })
 const collapse = ref(false)
 

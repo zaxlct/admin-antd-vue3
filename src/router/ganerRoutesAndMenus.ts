@@ -2,12 +2,12 @@ import { convertToTree, type ITreeData } from '@/utils/index'
 
 const AllRouter = import.meta.glob('@/views/**/*.vue')
 
-export default function transformRoutes(serverRoutes: Types.RouteItem[]): Types.RouteItems[] {
+export default function transformRoutes(serverRoutes: Types.RouteItem[]): Types.RouteItem[] {
   const treeData: ITreeData<Types.RouteItem> = {
     data: serverRoutes,
-    pid: 0,                // 顶级节点的 ID
+    parentId: 0,                // 顶级节点的 ID
     children: 'children',  // 子集标识key
-    pidName: 'pid',        // 父级标译key
+    pidName: 'parentId',        // 父级标译key
     idName: 'id'           // ID 标识key
   }
 

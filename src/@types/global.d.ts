@@ -1,7 +1,7 @@
-declare namespace Common {
-  export interface RouteItem {
+declare namespace Types {
+  interface RouteItem {
     id: number              // 路由的唯一标识
-    pid: number             // 父路由的唯一标识，如果为0，则表示是根路由
+    parentId: number             // 父路由的唯一标识，如果为0，则表示是根路由
     path: string            // 路由的路径
     title: string           // 路由的标题
     component?: string      // 路由的组件路径
@@ -11,7 +11,7 @@ declare namespace Common {
     children?: RouteItem[]  // 子路由数组
   }
 
-  export interface Menu {
+  interface Menu {
     path: string //地址
     icon: string //图标
     title: string //标题

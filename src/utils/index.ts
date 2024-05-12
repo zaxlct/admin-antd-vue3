@@ -81,14 +81,14 @@ export function checkIsVideo(mime: string, types = ['video/mp4'], msg = '上传�
 /**
  * 将一维数组格式转换成树结构
  * @param {*} data  需要转换的数据
- * @param {*} pid   顶级节点的id
+ * @param {*} parentId   顶级节点的id
  * @param {*} children   子集标识key
  * @param {*} pidName    父级标识key
  * @param {*} idName     id标识key
  */
 export interface ITreeData<T> {
   data: T[]
-  pid?: number | string
+  parentId?: number | string
   children?: string
   pidName?: string
   idName?: string
@@ -96,7 +96,7 @@ export interface ITreeData<T> {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function convertToTree<T = any>({
   data,
-  pid = 0,
+  parentId = 0,
   children = 'children',
   pidName = 'parentId',
   idName = 'id',
@@ -112,7 +112,7 @@ export function convertToTree<T = any>({
       tree.push(item)
     }
   })
-  return pid ? map[pid] : tree
+  return parentId ? map[parentId] : tree
 }
 
 /**

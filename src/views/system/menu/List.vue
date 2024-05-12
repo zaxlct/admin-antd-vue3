@@ -217,7 +217,7 @@ const state = reactive({
 })
 function getData() {
   // state.tableData = getPermissionsTree({
-  //   pid: 0,
+  //   parentId: 0,
   // })
 }
 getData()

@@ -31,6 +31,10 @@ const props = defineProps({
     type: Object,
     default: () => ({}),
   },
+  resetSearch: {
+    type: Function,
+    default: () => {},
+  },
 })
 
 const pagination = reactive({
@@ -39,7 +43,7 @@ const pagination = reactive({
   total: 0,
 })
 const dataSource = ref([])
-const { loading } = useRequest(() => getUserListReq({
+const { loading, refresh } = useRequest(() => getUserListReq({
   ...props.searchParams,
   page: pagination.page,
   limit: pagination.limit,
@@ -92,7 +96,7 @@ const columns = [
     dataIndex: 'hierarchy',
     customRender: ({ record }) =>
       <>
-        <p v-for={(item, index) in record.hierarchy} key={index}>{item.label}</p>
+        <p className="dialog_item_list" v-for={(item, index) in record.hierarchy} key={index}>{item.label}</p>
       </>
   },
   {
@@ -319,9 +323,11 @@ async function editItem(userItem = {}) {
         </template>
       </ModalForm>
     ,
-    onConfirm(status) {
-      if (status) {
-        // 刷新表格
+    onConfirm() {
+      if (isCreateUser) {
+        props.resetSearch()
+      } else {
+        refresh()
       }
     },
   })
@@ -645,7 +651,7 @@ async function openDeviceLogModal(type, user_id) {
     footer: null,
     component: () =>
       <div>
-        <div v-for={(item, index) in data} key={index}>
+        <div className="dialog_item_list" v-for={(item, index) in data} key={index}>
           <span v-if={type === 'device'}>
             {ENUM.log_type[item.log_type]}设备：{item.dev_model} | {item.log_time}
           </span>
@@ -673,7 +679,7 @@ async function openFunclubModal(user_id) {
     footer: null,
     component: () =>
       <div>
-        <div v-for={(item, index) in data} key={index}>
+        <div class="dialog_item_list" v-for={(item, index) in data} key={index}>
           {item.label} | {item.lv_name}
         </div>
       </div>

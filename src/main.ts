@@ -16,7 +16,6 @@ formCreate.use(install)
 formCreate.fetch = options => {
   get(options.action, options.data)
     .then(res => {
-      console.log('res', res)
       options.onSuccess(res)
     })
     .catch(err => {

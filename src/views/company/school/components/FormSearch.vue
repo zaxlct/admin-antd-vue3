@@ -226,6 +226,10 @@ function getData(data) {
     reg_time: data.reg_time ? data.reg_time?.join(',') : undefined,
   }
 }
+
+defineExpose({
+  resetForm,
+})
 </script>
 
 <style lang="sass scoped">

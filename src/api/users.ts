@@ -16,11 +16,11 @@ export const getUserTagsReq = (user_id) => get('/api/v1/users/tags/' + user_id)
 export const createUserIdReq = () => get('/api/v1/users/gen/userid')
 
 
-// 用户添加与编辑
-// user_id 为 null 时为添加用户
-export const userAddOrEditReq = (user_id, data) => {
-  if (user_id) {
-    return post('/api/v1/users/' + user_id, data)
+// 添加与编辑
+// id 为 null 时为添加
+export const userAddOrEditReq = (id, data) => {
+  if (id) {
+    return post('/api/v1/users/' + id, data)
   } else {
     return post('/api/v1/users', data)
   }

@@ -49,11 +49,13 @@ import LHeader from '@/layouts/components/LHeader.vue'
 import LLogo from '@/layouts/components/LLogo.vue'
 import LSider from '@/layouts/components/LSider.vue'
 import { useRootStore } from '@/store'
-import { convertToTree } from '@/utils'
+import useMenuStore from '@/store/menu'
+
 import { getStorage } from '@bwrong/storage'
 import type { IMenu, IUser } from '@/api/auth'
 // import { getPermissionsData } from '@bwrong/auth-tool'
 
+const menuStore = useMenuStore()
 const rootStore = useRootStore()
 const { push } = useRouter()
 const userInfo = getStorage<IUser>('userinfo')
@@ -62,13 +64,8 @@ if (userInfo) {
 } else {
   push('/login')
 }
-// let menus: IMenu[] = getPermissionsData() || []
-let menus: IMenu[] = []
-menus = menus.filter(item => item.type === 0)
-menus = convertToTree({
-  data: menus,
-  parentId: 0,
-})
+
+const menus = computed(() => menuStore.dynamicRoutes)
 const collapse = ref(false)
 
 const { themeOptions } = useTheme()

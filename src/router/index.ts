@@ -1,12 +1,14 @@
 import { createRouter, createWebHistory } from 'vue-router'
 // import { getMenusRequest } from '@/api/auth'
-import ganerRoutesAndMenus from './ganerRoutesAndMenus'
+import generateRoutes from './generateRoutes'
 import mock from './mock'
 import routes, { noMatchRoute } from './staticRoutes'
+import useMenuStore from '@/store/menu'
 
 import config from '@/config'
 import NProgress from '@/plugins/nprogress'
 import { getToken } from '@/utils/auth'
+
 let routerLoaded = false // 动态路由是否已加载
 let removeRouters: Array<() => void> = []
 const VITE_AUTH_CHECK = import.meta.env.VITE_AUTH_CHECK
@@ -32,19 +34,11 @@ router.beforeEach(async to => {
   // 3.未登录且不在白名单，重定向到登录页，带上回调地址，方便回归
   if (!token) return `/login?redirect=${encodeURIComponent(to.fullPath)}`
   // 4.根据后台返回权限标识洗出有权限的路由，并将洗过的路由表动态添加到路由中
-  // const allowRoutes = await _getAllowRoutes(dynamicRoutes)
-
-  const dynamicRoutes = ganerRoutesAndMenus(mock)
-  console.log('dynamicRoutes', dynamicRoutes)
-  dynamicRoutes.forEach(route => {
-    router.addRoute(route)
-  })
-
-  console.log(router.getRoutes())
-
-
+  const dynamicRoutes = generateRoutes(mock)
+  const menuStore = useMenuStore()
+  menuStore.setDynamicRoutes(dynamicRoutes)
   // 未加载则动态加载
-  // removeRouters = allowRoutes.map(item => router.addRoute(item))
+  removeRouters = dynamicRoutes.map(item => router.addRoute(item))
   routerLoaded = true
   return to.fullPath
 })

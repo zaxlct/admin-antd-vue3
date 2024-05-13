@@ -1,7 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
-// import { getMenusRequest } from '@/api/auth'
+import { getMenusRequest } from '@/api/auth'
 import generateRoutes from './generateRoutes'
-import mock from './mock'
 import routes, { noMatchRoute } from './staticRoutes'
 import useMenuStore from '@/store/menu'
 
@@ -34,9 +33,12 @@ router.beforeEach(async to => {
   // 3.未登录且不在白名单，重定向到登录页，带上回调地址，方便回归
   if (!token) return `/login?redirect=${encodeURIComponent(to.fullPath)}`
   // 4.根据后台返回权限标识洗出有权限的路由，并将洗过的路由表动态添加到路由中
-  const dynamicRoutes = generateRoutes(mock)
+
+  const asyncRouters = await getMenusRequest()
+  const dynamicRoutes = generateRoutes(asyncRouters)
   const menuStore = useMenuStore()
   menuStore.setDynamicRoutes(dynamicRoutes)
+  dynamicRoutes.push(noMatchRoute)
   // 未加载则动态加载
   removeRouters = dynamicRoutes.map(item => router.addRoute(item))
   routerLoaded = true

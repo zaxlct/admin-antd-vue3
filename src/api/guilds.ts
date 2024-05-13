@@ -11,3 +11,9 @@ export const guildAddOrEditReq = (id, data) => {
     return post('/api/v1/guild', data)
   }
 }
+
+// 解约
+export const guildRescindReq = data => put('/api/v1/guild/rescind', data)
+
+// 续约
+export const guildRenewalReq = data => put('/api/v1/guild/renewal', data)

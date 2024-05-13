@@ -18,7 +18,7 @@
 </template>
 
 <script setup lang="jsx">
-import { getGuildListReq, guildAddOrEditReq } from '@/api/guilds'
+import { getGuildListReq, guildAddOrEditReq, guildRescindReq, guildRenewalReq } from '@/api/guilds'
 import { getMerchantListReq } from '@/api/public'
 
 const props = defineProps({
@@ -134,15 +134,41 @@ const columns = [
     customRender: ({ record }) =>
       <div>
         <a-button type="link" size="small" onClick={() => editItem(record)}>编辑工会</a-button>
-        {/* TODO: 解约、续约、冻结三个状态怎么判断？ */}
-        <a-button type="link" size="small" onClick={() => openDeviceLogModal(record)}>续约</a-button>
+        <a-popconfirm title='确定解约吗？' onConfirm={() => openRescindModal(record)} v-if={record.status === 1}>
+          <a-button type="link" danger size="small">解约</a-button>
+        </a-popconfirm>
+
+        <a-popconfirm title='确定续约吗？' onConfirm={() => openRenewalModal(record)} v-if={record.status === 2}>
+          <a-button type="link" size="small">续约</a-button>
+        </a-popconfirm>
       </div>
   }
 ]
 
+// 工会解约
+function openRescindModal(item) {
+  loading.value = true
+  guildRescindReq({ guild_ids: [item.guild_id] }).then(() => {
+    loading.value = false
+    item.status = 2
+  }).catch(() => {
+    loading.value = false
+  })
+}
+
+// 工会续约
+function openRenewalModal(item) {
+  loading.value = true
+  guildRenewalReq({ guild_ids: [item.guild_id] }).then(() => {
+    loading.value = false
+    item.status = 1
+  }).catch(() => {
+    loading.value = false
+  })
+}
+
 // 添加/编辑用户
 async function editItem(Item = {}) {
-  console.log(Item)
   const formValue = ref({
     guild_name: Item.guild_name,
     supv_name: Item.supv_name,
@@ -240,6 +266,7 @@ async function editItem(Item = {}) {
   })
 }
 
+// 展示商户列表
 async function openMerchantModal(guild_id) {
   loading.value = true
   const [err, data] = await to(getMerchantListReq({ guild_id }))

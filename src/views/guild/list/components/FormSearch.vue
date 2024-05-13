@@ -34,7 +34,7 @@
 const params = defineModel()
 const data = reactive({
   merch_id: 0,
-  merch_name: '', // TODO: 原型图上是商户筛选
+  guild_name: '',
   status: 0,
   reg_time: 0,
 })
@@ -77,7 +77,7 @@ const rule = ref([
   },
   {
     type: 'input',
-    field: 'merch_name',
+    field: 'guild_name',
     title: '工会名称',
     value: '',
   },

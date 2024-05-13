@@ -1,5 +1,4 @@
 import { get, post } from '../utils/request'
-import type { IRecordBase } from './types'
 
 export interface IUser {
   username: string

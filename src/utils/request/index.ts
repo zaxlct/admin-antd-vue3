@@ -14,7 +14,8 @@ const { tokenPrefix } = appConfig
 // 统一配置请求返回数据类型
 export type ResponseType = {
   code: number
-  msg: string
+  status: number
+  message: string
   data: {
     current: number
     list: any[]

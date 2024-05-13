@@ -50,7 +50,7 @@ const statusMap = {
 export function handleNetworkError(error: AxiosError<ResponseType>) {
   messageAdaptor.destroy()
   const status = error.response?.status
-  const tips = error.response?.data?.msg || (status && statusMap[status]) || `请求失败: ${error}`
+  const tips = error.response?.data?.message || (status && statusMap[status]) || `请求失败: ${error}`
   messageAdaptor.error(tips)
   // 如果status为401，说明认证信息失效，退出登录
   error.response?.status === 401 && logout()
@@ -73,6 +73,6 @@ const errMap = {
 export function handleBusinessError(data: ResponseType) {
   messageAdaptor.destroy()
   // 返回接口返回提示信息
-  const msg = data?.msg || errMap[data?.code] || '请求失败，请联系管理员'
-  messageAdaptor.error(msg)
+  const message = data?.message || errMap[data?.code] || '请求失败，请联系管理员'
+  messageAdaptor.error(message)
 }

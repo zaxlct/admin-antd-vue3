@@ -182,11 +182,18 @@ const rule = ref([
     field: 'hiera',
     title: '层级',
     value: '',
-    options: [
-      { value: 0, label: '所有层级' },
-      { value: 1, label: '层级A' },
-      { value: 2, label: '层级B' },
-    ],
+    options: [],
+    effect: {
+      fetch: {
+        action: '/api/v1/hierarchy/summary',
+        to: 'options',
+        method: 'get',
+        parse: res => [
+          { value: 0, label: '所有层级' },
+          ...res.items.map(item => ({ value: item.hier_id, label: item.hier_name })),
+        ],
+      },
+    },
   },
   {
     type: 'rangePicker',

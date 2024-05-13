@@ -50,10 +50,10 @@ import LLogo from '@/layouts/components/LLogo.vue'
 import LSider from '@/layouts/components/LSider.vue'
 import { useRootStore } from '@/store'
 import useMenuStore from '@/store/menu'
+import generateMenus from '@/router/generateMenus'
 
 import { getStorage } from '@bwrong/storage'
-import type { IMenu, IUser } from '@/api/auth'
-// import { getPermissionsData } from '@bwrong/auth-tool'
+import type { IUser } from '@/api/auth'
 
 const menuStore = useMenuStore()
 const rootStore = useRootStore()
@@ -65,7 +65,7 @@ if (userInfo) {
   push('/login')
 }
 
-const menus = computed(() => menuStore.dynamicRoutes)
+const menus = computed(() => generateMenus(menuStore.dynamicRoutes))
 const collapse = ref(false)
 
 const { themeOptions } = useTheme()

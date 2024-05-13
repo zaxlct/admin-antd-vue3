@@ -22,7 +22,7 @@ interface LoginParams {
   code: string
 }
 // 菜单
-export interface IMenu extends IRecordBase {
+export interface IMenu {
   title: string
   path: string
   url?: string
@@ -30,7 +30,6 @@ export interface IMenu extends IRecordBase {
   type?: number
   hide?: boolean
   children?: IMenu[]
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [K: string]: any
 }
 

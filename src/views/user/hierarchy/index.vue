@@ -2,6 +2,7 @@
   <HierarchySetting
     @openUserList="openUserList"
     :userListData="userListData"
+    :nobleList="nobleList"
   />
   <a-card
     class="mt20"
@@ -22,8 +23,10 @@
 <script setup lang="jsx">
 import HierarchySetting from './components/HierarchySetting.vue'
 import { getHierarchyUsersReq, getHierarchyListReq } from '@/api/hierarchy'
-const { createDialog } = useDialog()
+import { getNobleListReq } from '@/api/public'
 
+const { createDialog } = useDialog()
+const nobleList = ref([])
 const userListData = reactive({
   items: [],
   total: 0,
@@ -119,6 +122,13 @@ const columns = [
 
 onMounted(() => {
   getHierarchyList()
+  getNobleListReq().then(data => {
+    const list = data.items.map(item => ({
+      label: item.noble_name,
+      value: item.noble_id,
+    }))
+    nobleList.value = [{ label: '全部', value: 0 }, ...list]
+  })
 })
 function getHierarchyList() {
   getHierarchyListReq({

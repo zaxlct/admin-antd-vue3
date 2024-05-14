@@ -46,7 +46,7 @@
             <a-select
               style="width: 120px;"
               v-model:value="noble.noble_lv"
-              :options="noble_options"
+              :options="nobleList"
             />
           </section>
 
@@ -56,7 +56,6 @@
               v-model:checked="os.enable"
             >系统类型</a-checkbox>
             <span class="split_line">|</span>
-            <!-- TODO: enums 中定义的 os_type有更多种类型，怎么办 -->
             <a-checkbox-group
               v-model:value="os.os_type"
               :options="[
@@ -186,24 +185,13 @@ defineProps({
       total: 0,
       loading: false,
     }),
-  }
+  },
+  nobleList: {
+    type: Array,
+    default: () => [],
+  },
 })
 const emit = defineEmits(['openUserList'])
-// TODO: 从接口获取贵族等级
-const noble_options = ref([
-  {
-    value: 0,
-    label: '全部',
-  },
-  {
-    value: 1,
-    label: '贵族1',
-  },
-  {
-    value: 2,
-    label: '贵族2',
-  },
-])
 
 const formState = reactive({
   name: '',
@@ -269,12 +257,11 @@ async function openUserList() {
 const showErrorMsg = ref(false)
 let timer = ref(null)
 // get or post
-function getData(method = 'get') {
+function getData() {
   const params = {}
 
   if (recharge.value.enable) {
     params.recharged = recharge.value.recharged
-    // TODO: 如果是 get，需要转换为字符串
     params.recharge_range = recharge.value.recharge_range
   }
 
@@ -322,7 +309,7 @@ function getData(method = 'get') {
 
 const submitLoading = ref(false)
 const onFinish = () => {
-  const conds = getData('post')
+  const conds = getData()
   submitLoading.value = true
   createHierarchyReq({
     name: formState.name,

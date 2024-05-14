@@ -20,6 +20,7 @@
 <script setup lang="jsx">
 import { getGuildListReq, guildAddOrEditReq, guildRescindReq, guildRenewalReq } from '@/api/guilds'
 import { getMerchantListReq } from '@/api/public'
+import MultipleSelect from '@/components/Form/MultipleSelect/MultipleSelect.vue'
 
 const props = defineProps({
   searchParams: {
@@ -62,7 +63,8 @@ const columns = [
     dataIndex: 'merch_rel',
     customRender: ({ record }) =>
       <div>
-        <p v-if={record.merch_rel?.count}>
+        <p v-if={record.merch_rel?.is_all}>所有商户</p>
+        <p v-else-if={record.merch_rel?.count}>
           <span v-if={record.merch_rel.count === 1}>
             {record.merch_rel?.sample_data?.merch_name}
           </span>
@@ -169,11 +171,18 @@ function openRenewalModal(item) {
 
 // 添加/编辑用户
 async function editItem(Item = {}) {
+  let merch_rel = []
+  if (Item?.merch_rel?.is_all) {
+    merch_rel = ['*']
+  } else if (Item?.merch_rel?.count && Item.guild_id) {
+    const data = await getMerchantList(Item.guild_id)
+    merch_rel = data.items.map(item => item.merch_id)
+  }
   const formValue = ref({
     guild_name: Item.guild_name,
     supv_name: Item.supv_name,
     basic_ps: Item.basic_ps,
-    merch_rel: Item.merch_rel || [], // TODO: 多选时如何回显数据
+    merch_rel,
   })
 
   const isCreate = !Item.guild_id
@@ -182,7 +191,7 @@ async function editItem(Item = {}) {
     getData(data) {
       return {
         ...data,
-        // TODO: 多选时如何回显数据
+        merch_rel: data.merch_rel.includes('*') ? [] : data.merch_rel,
       }
     },
     option: {
@@ -222,22 +231,20 @@ async function editItem(Item = {}) {
         },
       },
       {
-        type: 'select',
+        type: 'MultipleSelect',
         field: 'merch_rel',
         title: '商户',
         value: '',
         options: [],
-        // TODO: 多选时如何回显数据
         props: {
-          mode: 'multiple',
         },
         effect: {
           fetch: {
             action: '/api/v1/merchant/summary',
-            to: 'options',
+            to: 'props.options',
             method: 'get',
             parse: res => [
-              { value: -1, label: '所有商户' },
+              { value: '*', label: '所有商户' },
               ...res.items.map(item => ({ value: item.merch_id, label: item.merch_name })),
             ],
           },
@@ -267,16 +274,21 @@ async function editItem(Item = {}) {
   })
 }
 
-// 展示商户列表
-async function openMerchantModal(guild_id) {
+async function getMerchantList(guild_id) {
   loading.value = true
   const [err, data] = await to(getMerchantListReq({ guild_id }))
   if (err) {
     console.log(err)
     loading.value = false
-    return
+    throw new Error(err)
   }
   loading.value = false
+  return data
+}
+
+// 展示商户列表
+async function openMerchantModal(guild_id) {
+  const data = await getMerchantList(guild_id)
   createDialog({
     width: 500,
     footer: null,
@@ -292,5 +304,9 @@ async function openMerchantModal(guild_id) {
 
 defineExpose({
   editItem,
+})
+
+onBeforeMount(() => {
+  formCreate.component('MultipleSelect', MultipleSelect)
 })
 </script>

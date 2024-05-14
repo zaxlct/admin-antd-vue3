@@ -19,11 +19,11 @@
               @click="resetForm"
             >重置</AButton>
             <div class="flex1 flex_end">
-              <AButton
+              <!-- <AButton
                 type="primary"
                 class="mr10"
                 @click="emit('hieraEdit')"
-              >层级设置</AButton>
+              >层级设置</AButton> -->
               <AButton
                 type="primary"
                 @click="emit('addItem')"

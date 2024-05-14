@@ -4,7 +4,6 @@
       ref="formSearchRef"
       v-model="searchParams"
       @addItem="() => customTableRef.editItem()"
-      @hieraEdit="() => customTableRef.hieraEdit()"
     />
     <CustomTable
       ref="customTableRef"

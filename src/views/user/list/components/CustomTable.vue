@@ -689,11 +689,6 @@ async function openFunclubModal(user_id) {
   })
 }
 
-// TODO: 层级设置
-function hieraEdit() {
-  console.log('hieraEdit')
-}
-
 defineExpose({
   editItem,
   hieraEdit,

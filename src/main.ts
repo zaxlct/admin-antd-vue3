@@ -4,6 +4,7 @@ import formCreate from '@form-create/ant-design-vue'
 import install from '@form-create/ant-design-vue/auto-import'
 import router from './router'
 import { get } from '@/utils/request'
+import ENUMS from '@/enums/common'
 
 import directives from '@/directives'
 import plugins from '@/plugins'
@@ -23,6 +24,8 @@ formCreate.fetch = options => {
 }
 
 const app = createApp(App)
+app.config.globalProperties.$enums = ENUMS
+
 app.use(createPinia())
 app.use(formCreate, {
   wrap: {

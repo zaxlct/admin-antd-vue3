@@ -218,6 +218,7 @@ async function editItem(Item = {}) {
           formatter: value => `${value}%`,
           max: 100,
           step: 1,
+          precision: 0,
         },
       },
       {

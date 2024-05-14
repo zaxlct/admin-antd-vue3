@@ -39,7 +39,7 @@ const data = reactive({
   reg_time: 0,
 })
 
-const emit = defineEmits(['addItem', 'hieraEdit', 'search'])
+const emit = defineEmits(['addItem', 'search'])
 const fApi = ref({})
 const option = {
   resetBtn: false,

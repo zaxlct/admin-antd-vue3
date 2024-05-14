@@ -691,6 +691,5 @@ async function openFunclubModal(user_id) {
 
 defineExpose({
   editItem,
-  hieraEdit,
 })
 </script>

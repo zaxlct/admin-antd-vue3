@@ -1,10 +1,12 @@
 <template>
-  <HierarchySetting @openUserList="openUserList" />
+  <HierarchySetting
+    @openUserList="openUserList"
+    :userListData="userListData"
+  />
   <a-card
     class="mt20"
     title="层级历史"
   >
-
   </a-card>
 
 </template>
@@ -17,15 +19,16 @@ const { createDialog } = useDialog()
 const userListData = reactive({
   items: [],
   total: 0,
+  loading: false,
 })
 async function openUserList(params) {
-  const loading = ref(true)
+  userListData.loading = true
   getHierarchyUsersReq(params).then(data => {
     userListData.items = data.items
     userListData.total = data.total_data
-    loading.value = false
+    userListData.loading = false
   }).finally(() => {
-    loading.value = false
+    userListData.loading = false
   })
 
   const columns = [
@@ -46,7 +49,7 @@ async function openUserList(params) {
     component: () =>
       <div>
         <a-table
-          loading={loading.value}
+          loading={userListData.loading}
           rowKey="user_id"
           pagination={false}
           scroll={{x: 480, y: 500 }}

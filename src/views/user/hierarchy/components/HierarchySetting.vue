@@ -174,18 +174,20 @@
       </div>
     </a-form>
   </a-card>
-
-  <a-card
-    class="mt20"
-    title="层级历史"
-  >
-
-  </a-card>
-
 </template>
 
 <script setup lang="jsx">
 import { createHierarchyReq } from '@/api/hierarchy'
+defineProps({
+  userListData: {
+    type: Object,
+    default: () => ({
+      items: [],
+      total: 0,
+      loading: false,
+    }),
+  }
+})
 const emit = defineEmits(['openUserList'])
 // TODO: 从接口获取贵族等级
 const noble_options = ref([
@@ -258,10 +260,7 @@ const {
   vanity,
 } = toRefs(form)
 
-const userListData = reactive({
-  items: [],
-  total: 0,
-})
+
 async function openUserList() {
   const params = getData()
   emit('openUserList', params)

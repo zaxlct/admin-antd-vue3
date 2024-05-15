@@ -1,6 +1,26 @@
 
 export default [
   {
+    id: 9999999, //路由的id
+    parentId: 0, //父级id  顶级菜单的pid 0
+    component: "", //组件的文件地址，views下
+    path: "/", //浏览器的地址
+    title: "首页", //标题
+    icon: "icon-menu", //图标
+    menu: true, //是否为目录
+    redirect: "/home" //重定向
+  },
+  {
+    id: 888888,
+    parentId: 9999999,
+    component: "/home",
+    path: "/home",
+    title: "首页",
+    icon: "",
+    menu: false,
+    redirect: ""
+  },
+  {
     id: 1, //路由的id
     parentId: 0, //父级id  顶级菜单的pid 0
     component: "", //组件的文件地址，views下

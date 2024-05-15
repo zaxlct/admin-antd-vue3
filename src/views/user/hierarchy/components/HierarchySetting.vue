@@ -191,7 +191,7 @@ defineProps({
     default: () => [],
   },
 })
-const emit = defineEmits(['openUserList'])
+const emit = defineEmits(['openUserList', 'onAddHierarchy'])
 
 const formState = reactive({
   name: '',
@@ -314,8 +314,8 @@ const onFinish = () => {
   createHierarchyReq({
     name: formState.name,
     conds,
-  }).then(res => {
-    // TODO: 提示成功
+  }).then(() => {
+    emit('onAddHierarchy')
   }).finally(() => {
     submitLoading.value = false
   })

@@ -251,14 +251,14 @@ async function editItem() {
         field: 'nickname',
         title: '用户昵称',
         value: '',
-        validate: [{ type: 'string', max: 10, message: '用户昵称最多10个字'}],
+        validate: [{ type: 'string', max: 10, required: true, message: '用户昵称最多10个字'}],
       },
       {
         type: 'input',
         field: 'phone',
         title: '手机号',
         value: '',
-        validate: [{ type: 'string', message: '请输入正确的手机号' }],
+        validate: [{ type: 'string', message: '请输入正确的手机号', required: true }],
         props: {
           type: 'tel',
         },

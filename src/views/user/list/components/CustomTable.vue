@@ -200,7 +200,6 @@ const columns = [
   },
 ]
 
-
 function handleMenuClick(userItem, { key }) {
   if (key === '备注') {
     editRemark(userItem)
@@ -212,7 +211,6 @@ function handleMenuClick(userItem, { key }) {
     setTags(userItem)
   }
 }
-
 
 // 添加/编辑用户
 async function editItem(userItem = {}) {
@@ -301,7 +299,8 @@ async function editItem(userItem = {}) {
         value: '',
         validate: [{ type: 'pattern', required: true, pattern: '^(?=.*[0-9])(?=.*[a-zA-Z])[a-zA-Z0-9]{8,16}$', message: '请输入 8~16位数字和字母组合密码' }],
         props: {
-          type: 'password'
+          type: 'password',
+          placeholder: '请输入 8~16 位数字和字母组合密码',
         },
       },
     ],

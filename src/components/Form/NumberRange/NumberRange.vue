@@ -2,7 +2,7 @@
   <div class="number_range">
     <a-input-number
       v-model:value="rangeValue[0]"
-      :min="1"
+      :min="0"
       :max="9999"
       :step="1"
       :precision="0"

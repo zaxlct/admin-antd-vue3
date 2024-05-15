@@ -20,6 +20,7 @@
 <script setup lang="jsx">
 import { getAnchorListReq, anchorAddOrEditReq } from '@/api/anchor'
 import { getMerchantListReq } from '@/api/public'
+import MultipleSelect from '@/components/Form/MultipleSelect/MultipleSelect.vue'
 
 const props = defineProps({
   searchParams: {
@@ -208,11 +209,175 @@ async function openMerchantModal(guild_id) {
   })
 }
 
-function editItem() {
+// 添加主播，不可编辑
+async function editItem() {
+  const formValue = ref({
+    avatar_url: '',
+    nickname: '',
+    phone: '',
+    email: '',
+    password: '',
+  })
 
+  const formModalProps = {
+    request: data => anchorAddOrEditReq(null, data),
+    rule: [
+      {
+        type: 'upload',
+        field: 'avatar_url',
+        title: '主播头像',
+        props: {
+          listType: "picture-card",
+          action: 'https://jsonplaceholder.typicode.com/posts/',
+          onSuccess(file) {
+            file.url = file.response.url || 'http://form-create.com/logo.png'
+          },
+        },
+        value: []
+      },
+      {
+        type: 'input',
+        field: 'nickname',
+        title: '用户昵称',
+        value: '',
+        validate: [{ type: 'string', max: 10, message: '用户昵称最多10个字'}],
+      },
+      {
+        type: 'input',
+        field: 'phone',
+        title: '手机号',
+        value: '',
+        validate: [{ type: 'string', message: '请输入正确的手机号' }],
+        props: {
+          type: 'tel'
+        },
+      },
+      {
+        type: 'input',
+        field: 'email',
+        title: '邮箱',
+        value: '',
+        validate: [{ type: 'email', message: '请输入正确的邮箱' }],
+        props: {
+          type: 'email'
+        },
+      },
+      {
+        type: 'select',
+        field: 'guild_id',
+        title: '所属公会',
+        value: '',
+        options: [],
+        effect: {
+          fetch: {
+            action: '/api/v1/guild/summary',
+            to: 'options',
+            method: 'get',
+            // 获取分成比例
+            parse: res => res.items.map(item => ({ value: item.guild_id, label: item.guild_name })),
+          },
+        },
+      },
+      {
+        type: 'input-number',
+        field: 'ps_ratio',
+        title: '分成比例',
+        value: '',
+        props: {
+          formatter: value => `${value}%`,
+          max: 100,
+          min: 0,
+          step: 1,
+          precision: 0,
+        },
+        wrap: {
+          help: '选择公会后，默认跟随公会分成比例',
+        },
+      },
+      {
+        type: 'input-number',
+        field: 'hourly_rate',
+        title: '主播时薪',
+        value: '',
+        props: {
+          min: 0,
+          step: 1,
+          precision: 0,
+        },
+        wrap: {
+          help: '仅做直播时长薪资计算，和分成无关',
+        },
+      },
+      {
+        type: 'input-number',
+        field: 'hourly_rate_ulimit',
+        title: '时薪上限',
+        value: '',
+        props: {
+          step: 1,
+          precision: 0,
+        },
+        wrap: {
+          help: '按小时计算，直播每日可活动时薪的小时上限',
+        },
+      },
+      {
+        type: 'input',
+        field: 'password',
+        title: '登录密码',
+        value: '',
+        validate: [{ type: 'pattern', required: true, pattern: '^(?=.*[0-9])(?=.*[a-zA-Z])[a-zA-Z0-9]{8,16}$', message: '请输入 8~16位数字和字母组合密码' }],
+        props: {
+          type: 'password',
+          placeholder: '请输入 8~16 位数字和字母组合密码',
+        },
+      },
+      {
+        type: 'MultipleSelect',
+        field: 'merch_id',
+        title: '展示商户',
+        value: '',
+        options: [],
+        props: {
+        },
+        effect: {
+          fetch: {
+            action: '/api/v1/merchant/summary',
+            to: 'props.options',
+            method: 'get',
+            parse: res => [
+              { value: '*', label: '所有商户' },
+              ...res.items.map(item => ({ value: item.merch_id, label: item.merch_name })),
+            ],
+          },
+        },
+      },
+    ],
+  }
+
+  createDialog({
+    title: '添加主播',
+    width: 500,
+    component:
+      <ModalForm
+        v-model={formValue.value}
+        {...formModalProps}
+      >
+      </ModalForm>
+    ,
+    onConfirm() {
+      pagination.page = 1
+      pagination.total = 0
+      props.resetSearch()
+    },
+  })
 }
 
 defineExpose({
   editItem,
+})
+
+onBeforeMount(() => {
+  formCreate.component('MultipleSelect', MultipleSelect)
 })
 </script>

@@ -226,6 +226,7 @@ async function editItem(Item = {}) {
         props: {
           formatter: value => `${value}%`,
           max: 100,
+          min: 0,
           step: 1,
           precision: 0,
         },

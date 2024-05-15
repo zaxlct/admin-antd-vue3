@@ -76,7 +76,6 @@ async function openUserList(params) {
   })
 }
 
-const loading = ref(false)
 const dataSource = ref([])
 const columns = [
   {
@@ -166,7 +165,7 @@ const columns = [
         <a-button
           type="link"
           size="small"
-          onClick={() => openUserList({ hierarchy_id: record.id })}
+          onClick={() => openUserList(record.conds)}
         >
           查看用户
         </a-button>

@@ -19,7 +19,7 @@
 
 <script setup lang="jsx">
 import { getAnchorListReq, anchorAddOrEditReq } from '@/api/anchor'
-import { getMerchantListReq } from '@/api/public'
+import { getMerchantListReq, getGuildListReq } from '@/api/public'
 import MultipleSelect from '@/components/Form/MultipleSelect/MultipleSelect.vue'
 
 const props = defineProps({
@@ -216,10 +216,21 @@ async function editItem() {
     nickname: '',
     phone: '',
     email: '',
+    guild_id: '',
+    ps_ratio: '',
+    hourly_rate: '',
+    hourly_rate_ulimit: '',
     password: '',
+    merch_id: [],
   })
 
-  const formModalProps = {
+  let guildList = []
+  getGuildListReq().then(res => {
+    guildList = res.items
+    formCreate.setData('labelOptions', res.items.map(item => ({ value: item.guild_id, label: item.guild_name })))
+  })
+
+  const formModalProps = reactive({
     request: data => anchorAddOrEditReq(null, data),
     rule: [
       {
@@ -249,7 +260,7 @@ async function editItem() {
         value: '',
         validate: [{ type: 'string', message: '请输入正确的手机号' }],
         props: {
-          type: 'tel'
+          type: 'tel',
         },
       },
       {
@@ -268,15 +279,24 @@ async function editItem() {
         title: '所属公会',
         value: '',
         options: [],
+        props: {
+          allowClear: true,
+        },
         effect: {
-          fetch: {
-            action: '/api/v1/guild/summary',
-            to: 'options',
-            method: 'get',
-            // 获取分成比例
-            parse: res => res.items.map(item => ({ value: item.guild_id, label: item.guild_name })),
+          loadData: {
+            attr: 'labelOptions',
+            to: 'options'
           },
         },
+        update(val, rule, api) {
+          if (val) {
+            // 选择公会后，默认跟随公会分成比例
+            api.getRule('ps_ratio').value = guildList.find(item => item.guild_id === val).ps_ratio
+            api.getRule('ps_ratio').props.disabled = true
+          } else {
+            api.getRule('ps_ratio').props.disabled = false
+          }
+        }
       },
       {
         type: 'input-number',
@@ -353,7 +373,7 @@ async function editItem() {
         },
       },
     ],
-  }
+  })
 
   createDialog({
     title: '添加主播',

@@ -5,10 +5,8 @@ export default function useMultipleSelect(title='商户') {
     type: 'MultipleSelect',
     field: 'merch_rel',
     title,
-    value: '',
+    value: [],
     options: [],
-    props: {
-    },
     effect: {
       fetch: {
         action: '/api/v1/merchant/summary',

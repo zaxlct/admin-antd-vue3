@@ -18,9 +18,10 @@
 </template>
 
 <script setup lang="jsx">
-import { getAnchorListReq, anchorAddOrEditReq } from '@/api/anchor'
+import { getAnchorListReq, anchorAddOrEditReq, setAnchorBlackReq } from '@/api/anchor'
 import { getMerchantListReq, getGuildListReq } from '@/api/public'
 import ENUMS from '@/enums/common'
+import blockUserRule from '@/rules/blockUserRule'
 
 const props = defineProps({
   searchParams: {
@@ -56,6 +57,28 @@ const { loading, refresh } = useRequest(() => getAnchorListReq({
 const { createDialog } = useDialog()
 
 const columns = [
+  {
+    title: '展示商户',
+    dataIndex: 'merch_rel',
+    customRender: ({ record }) =>
+      <div>
+        <p v-if={record.merch_rel?.is_all}>所有商户</p>
+        <p v-else-if={record.merch_rel?.count}>
+          <span v-if={record.merch_rel.count === 1}>
+            {record.merch_rel?.sample_data?.merch_name}
+          </span>
+          <a-button
+            v-else-if={record.merch_rel.count > 1}
+            type="link"
+            size="small"
+            onClick={() => openMerchantModal(record.guild_id)}
+          >
+            {record.merch_rel?.count || 0}个商户
+          </a-button>
+        </p>
+        <span v-else>--</span>
+      </div>
+  },
   {
     title: '主播来源',
     dataIndex: 'source_name',
@@ -144,17 +167,59 @@ const columns = [
       <div>
         <a-button disabled={record.acct_status !== 1} type="link" size="small" onClick={() => editItem(record)}>编辑</a-button>
         <a-button type="link" size="small" onClick={() => editItem(record)}>数据</a-button>
-
-        <a-popconfirm title='确定拉黑吗？' onConfirm={() => blockUser(record)} v-if={record.acct_status === 1}>
-          <a-button type="link" size="small">拉黑</a-button>
-        </a-popconfirm>
+        <a-button type="link" size="small" onClick={() => blockUser(record)} v-if={record.acct_status === 1}>拉黑</a-button>
       </div>
   }
 ]
 
-// 拉黑用户
-function blockUser() {
-  // TODO:复用用户拉黑的接口？
+// 拉黑
+function blockUser(userItem) {
+  const formValue = ref({
+    ancor_id: userItem.ancor_id,
+    block_type: '',
+    ageing_type: '',
+    end_time: '',
+    reason: '',
+  })
+
+  const formModalProps = {
+    request: setAnchorBlackReq,
+    getData(data) {
+      const { ancor_id, ...params } = data
+      return {
+        ...params,
+        anchor_ids: [ancor_id],
+      }
+    },
+
+    rule: [
+      {
+        type: 'input',
+        field: 'ancor_id',
+        value: userItem.ancor_id,
+        hidden: true,
+      },
+      ...blockUserRule,
+    ],
+  }
+
+  createDialog({
+    title: '拉黑',
+    width: 500,
+    component:
+      <ModalForm
+        v-model={formValue.value}
+        {...formModalProps}
+      />,
+    onConfirm(status) {
+      if (status) {
+        const current = dataSource.value.find(item => item.ancor_id === userItem.ancor_id)
+        if (current) {
+          current.acct_status = 2
+        }
+      }
+    },
+  })
 }
 
 async function getMerchantList(guild_id) {
@@ -328,26 +393,7 @@ async function editItem() {
           placeholder: '请输入 8~16 位数字和字母组合密码',
         },
       },
-      {
-        type: 'MultipleSelect',
-        field: 'merch_id',
-        title: '展示商户',
-        value: '',
-        options: [],
-        props: {
-        },
-        effect: {
-          fetch: {
-            action: '/api/v1/merchant/summary',
-            to: 'props.options',
-            method: 'get',
-            parse: res => [
-              { value: '*', label: '所有商户' },
-              ...res.items.map(item => ({ value: item.merch_id, label: item.merch_name })),
-            ],
-          },
-        },
-      },
+      merchRelRule,
     ],
   })
 

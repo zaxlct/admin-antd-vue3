@@ -155,7 +155,7 @@ const columns = [
     dataIndex: 'acct_status',
     customRender: ({ record }) =>
       <a-tag color={record.acct_status === 1 ? undefined : 'red'}>
-        { ENUMS.acct_status[record.acct_status]}
+        {ENUMS.anchor_acct_status[record.acct_status]}
       </a-tag>
   },
   {

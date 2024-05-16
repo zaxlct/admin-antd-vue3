@@ -109,13 +109,12 @@ const rule = ref([
     value: '',
     options: Object.keys(ENUM.guild_status).map(key => ({ value: parseInt(key), label: ENUM.guild_status[key] })),
   },
-  // TODO: 状态字段约定
   {
     type: 'select',
     field: 'acct_status',
     title: '账号状态',
     value: '',
-    options: Object.keys(ENUM.guild_status).map(key => ({ value: parseInt(key), label: ENUM.guild_status[key] })),
+    options: Object.keys(ENUM.anchor_acct_status).map(key => ({ value: parseInt(key), label: ENUM.anchor_acct_status[key] })),
   },
   { type: 'btns' },
 ])

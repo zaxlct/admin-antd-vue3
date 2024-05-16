@@ -37,6 +37,7 @@
 </template>
 
 <script setup>
+import merchSelectRule from '@/rules/merchSelectRule'
 const params = defineModel()
 const data = reactive({
   merch_id: 0,
@@ -72,24 +73,7 @@ const option = {
 }
 
 const rule = ref([
-  {
-    type: 'select',
-    field: 'merch_id',
-    title: '商户',
-    value: '',
-    options: [],
-    effect: {
-      fetch: {
-        action: '/api/v1/merchant/summary',
-        to: 'options',
-        method: 'get',
-        parse: res => [
-          { value: 0, label: '所有商户' },
-          ...res.items.map(item => ({ value: item.merch_id, label: item.merch_name })),
-        ],
-      },
-    },
-  },
+  merchSelectRule,
   {
     type: 'select',
     field: 'app_id',
@@ -124,12 +108,7 @@ const rule = ref([
     field: 'acct_status',
     title: '账号状态',
     value: '',
-    options: [
-      { value: 0, label: '全部' },
-      { value: 1, label: '正常' },
-      { value: 2, label: '拉黑' },
-      { value: 3, label: '禁言' },
-    ],
+    options: Object.keys(ENUM.user_acct_status).map(key => ({ value: parseInt(key), label: ENUM.user_acct_status[key] })),
   },
   {
     type: 'select',

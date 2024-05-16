@@ -42,7 +42,13 @@ export default {
     vi: '越南语',
     id: '印尼语',
   },
-  acct_status: {
+  user_acct_status: {
+    0: '全部',
+    1: '正常',
+    2: '已拉黑',
+    3: '已禁言',
+  },
+  anchor_acct_status: {
     0: '全部',
     1: '正常',
     2: '已拉黑',

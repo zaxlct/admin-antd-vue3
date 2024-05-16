@@ -20,7 +20,6 @@
 <script setup lang="jsx">
 import { getAnchorListReq, anchorAddOrEditReq } from '@/api/anchor'
 import { getMerchantListReq, getGuildListReq } from '@/api/public'
-import MultipleSelect from '@/components/Form/MultipleSelect/MultipleSelect.vue'
 import ENUMS from '@/enums/common'
 
 const props = defineProps({
@@ -39,7 +38,9 @@ const pagination = reactive({
   limit: 10,
   total: 0,
 })
-
+const {
+  merchRelRule
+} = useMultipleSelect('展示商户')
 const dataSource = ref([])
 const { loading, refresh } = useRequest(() => getAnchorListReq({
   ...props.searchParams,
@@ -59,28 +60,7 @@ const columns = [
     title: '主播来源',
     dataIndex: 'source_name',
   },
-  {
-    title: '展示商户',
-    dataIndex: 'merch_rel',
-    customRender: ({ record }) =>
-      <div>
-        <p v-if={record.merch_rel?.is_all}>所有商户</p>
-        <p v-else-if={record.merch_rel?.count}>
-          <span v-if={record.merch_rel.count === 1}>
-            {record.merch_rel?.sample_data?.merch_name}
-          </span>
-          <a-button
-            v-else-if={record.merch_rel.count > 1}
-            type="link"
-            size="small"
-            onClick={() => openMerchantModal(record.guild_id)}
-          >
-            {record.merch_rel?.count || 0}个商户
-          </a-button>
-        </p>
-        <span v-else>--</span>
-      </div>
-  },
+  merchRelRule,
   {
     title: '主播头像',
     dataIndex: 'avatar_url',
@@ -391,9 +371,5 @@ async function editItem() {
 
 defineExpose({
   editItem,
-})
-
-onBeforeMount(() => {
-  formCreate.component('MultipleSelect', MultipleSelect)
 })
 </script>

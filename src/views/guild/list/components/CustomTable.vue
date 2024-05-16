@@ -20,7 +20,6 @@
 <script setup lang="jsx">
 import { getGuildListReq, guildAddOrEditReq, guildRescindReq, guildRenewalReq } from '@/api/guilds'
 import { getMerchantListReq } from '@/api/public'
-import MultipleSelect from '@/components/Form/MultipleSelect/MultipleSelect.vue'
 
 const props = defineProps({
   searchParams: {
@@ -40,6 +39,9 @@ const pagination = reactive({
 })
 
 const dataSource = ref([])
+const {
+  merchRelRule
+} = useMultipleSelect()
 const { loading, refresh } = useRequest(() => getGuildListReq({
   ...props.searchParams,
   page: pagination.page,
@@ -231,26 +233,7 @@ async function editItem(Item = {}) {
           precision: 0,
         },
       },
-      {
-        type: 'MultipleSelect',
-        field: 'merch_rel',
-        title: '商户',
-        value: '',
-        options: [],
-        props: {
-        },
-        effect: {
-          fetch: {
-            action: '/api/v1/merchant/summary',
-            to: 'props.options',
-            method: 'get',
-            parse: res => [
-              { value: '*', label: '所有商户' },
-              ...res.items.map(item => ({ value: item.merch_id, label: item.merch_name })),
-            ],
-          },
-        },
-      },
+      merchRelRule,
     ],
   }
 
@@ -305,9 +288,5 @@ async function openMerchantModal(guild_id) {
 
 defineExpose({
   editItem,
-})
-
-onBeforeMount(() => {
-  formCreate.component('MultipleSelect', MultipleSelect)
 })
 </script>

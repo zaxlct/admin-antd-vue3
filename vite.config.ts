@@ -100,7 +100,11 @@ export default defineConfig(({ command, mode }: ConfigEnv) => {
           {
             'await-to-js': [
               // default imports
-              ['default', 'to'], // import { default as axios } from 'axios',
+              ['default', 'to'], // import { default as to } from 'await-to-js',
+            ],
+            '@form-create/ant-design-vue': [
+              // default imports
+              ['default', 'formCreate'],
             ],
             'ant-design-vue': [
               ['message', '$message']

@@ -1,4 +1,3 @@
-import formCreate from '@form-create/ant-design-vue'
 import install from '@form-create/ant-design-vue/auto-import'
 import { get } from '@/utils/request'
 import type { App } from 'vue'

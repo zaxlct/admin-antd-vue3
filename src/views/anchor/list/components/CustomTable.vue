@@ -21,6 +21,7 @@
 import { getAnchorListReq, anchorAddOrEditReq } from '@/api/anchor'
 import { getMerchantListReq, getGuildListReq } from '@/api/public'
 import MultipleSelect from '@/components/Form/MultipleSelect/MultipleSelect.vue'
+import ENUMS from '@/enums/common'
 
 const props = defineProps({
   searchParams: {
@@ -149,13 +150,10 @@ const columns = [
   {
     title: '账号状态',
     dataIndex: 'acct_status',
-    // TODO: acct_status 没有API文档说明
-    // TODO: 正常、拉黑、注销、冻结，状态太多，需要确认
     customRender: ({ record }) =>
-      <div>
-        <a-tag color="green" v-if={record.acct_status}>正常</a-tag>
-        <a-tag v-else>拉黑</a-tag>
-      </div>
+      <a-tag color={record.acct_status === 1 ? undefined : 'red'}>
+        { ENUMS.acct_status[record.acct_status]}
+      </a-tag>
   },
   {
     title: '操作',
@@ -164,12 +162,10 @@ const columns = [
     dataIndex: 'action',
     customRender: ({ record }) =>
       <div>
-        {/* TODO:拉黑或者注销时不可编辑 */}
-        <a-button type="link" size="small" onClick={() => editItem(record)}>编辑</a-button>
+        <a-button disabled={record.acct_status !== 1} type="link" size="small" onClick={() => editItem(record)}>编辑</a-button>
         <a-button type="link" size="small" onClick={() => editItem(record)}>数据</a-button>
 
-        <a-popconfirm title='确定拉黑吗？' onConfirm={() => blockUser(record)}>
-          {/* TODO:判断已经拉黑或者未拉黑 */}
+        <a-popconfirm title='确定拉黑吗？' onConfirm={() => blockUser(record)} v-if={record.acct_status === 1}>
           <a-button type="link" size="small">拉黑</a-button>
         </a-popconfirm>
       </div>

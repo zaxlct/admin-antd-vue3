@@ -20,7 +20,7 @@
 <script setup lang="jsx">
 import { getGuildListReq, guildAddOrEditReq, guildRescindReq, guildRenewalReq } from '@/api/guilds'
 import { getMerchantListReq } from '@/api/public'
-
+import MerchCell from '@/components/Business/MerchCell.jsx'
 const props = defineProps({
   searchParams: {
     type: Object,
@@ -55,33 +55,16 @@ const { loading, refresh } = useRequest(() => getGuildListReq({
 })
 const { createDialog } = useDialog()
 
+const {
+  customRender,
+  getMerchantList,
+} = MerchCell(loading)
 const columns = [
   {
     title: '工会来源',
     dataIndex: 'source_name',
   },
-  {
-    title: '展示商户',
-    dataIndex: 'merch_rel',
-    customRender: ({ record }) =>
-      <div>
-        <p v-if={record.merch_rel?.is_all}>所有商户</p>
-        <p v-else-if={record.merch_rel?.count}>
-          <span v-if={record.merch_rel.count === 1}>
-            {record.merch_rel?.sample_data?.merch_name}
-          </span>
-          <a-button
-            v-else-if={record.merch_rel.count > 1}
-            type="link"
-            size="small"
-            onClick={() => openMerchantModal(record.guild_id)}
-          >
-            {record.merch_rel?.count || 0}个商户
-          </a-button>
-        </p>
-        <span v-else>--</span>
-      </div>
-  },
+  customRender,
   {
     title: '工会名称',
     dataIndex: 'guild_name',
@@ -255,34 +238,6 @@ async function editItem(Item = {}) {
         refresh()
       }
     },
-  })
-}
-
-async function getMerchantList(guild_id) {
-  loading.value = true
-  const [err, data] = await to(getMerchantListReq({ guild_id }))
-  if (err) {
-    console.log(err)
-    loading.value = false
-    throw new Error(err)
-  }
-  loading.value = false
-  return data
-}
-
-// 展示商户列表
-async function openMerchantModal(guild_id) {
-  const data = await getMerchantList(guild_id)
-  createDialog({
-    width: 500,
-    footer: null,
-    component: () =>
-      <div v-if={data.items}>
-        <div class="dialog_item_list" v-for={(item, index) in data.items} key={index}>
-          {item.merch_name}
-        </div>
-      </div>
-    ,
   })
 }
 

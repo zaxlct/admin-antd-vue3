@@ -19,9 +19,10 @@
 
 <script setup lang="jsx">
 import { getAnchorListReq, anchorAddOrEditReq, setAnchorBlackReq } from '@/api/anchor'
-import { getMerchantListReq, getGuildListReq } from '@/api/public'
+import { getGuildListReq } from '@/api/public'
 import ENUMS from '@/enums/common'
 import blockUserRule from '@/rules/blockUserRule'
+import MerchCell from '@/components/Business/MerchCell.jsx'
 
 const props = defineProps({
   searchParams: {
@@ -56,29 +57,10 @@ const { loading, refresh } = useRequest(() => getAnchorListReq({
 })
 const { createDialog } = useDialog()
 
+const { customRender } = MerchCell(loading)
+
 const columns = [
-  {
-    title: '展示商户',
-    dataIndex: 'merch_rel',
-    customRender: ({ record }) =>
-      <div>
-        <p v-if={record.merch_rel?.is_all}>所有商户</p>
-        <p v-else-if={record.merch_rel?.count}>
-          <span v-if={record.merch_rel.count === 1}>
-            {record.merch_rel?.sample_data?.merch_name}
-          </span>
-          <a-button
-            v-else-if={record.merch_rel.count > 1}
-            type="link"
-            size="small"
-            onClick={() => openMerchantModal(record.guild_id)}
-          >
-            {record.merch_rel?.count || 0}个商户
-          </a-button>
-        </p>
-        <span v-else>--</span>
-      </div>
-  },
+  customRender,
   {
     title: '主播来源',
     dataIndex: 'source_name',
@@ -119,11 +101,11 @@ const columns = [
   {
     title: '直播状态',
     dataIndex: 'live_status',
-    // TODO: live_status 没有API文档说明
     customRender: ({ record }) =>
     <div>
-        <a-tag color="green" v-if={record.live_status}>直播中</a-tag>
-        <a-tag v-else>未开播</a-tag>
+        <a-tag color="green" v-if={record.live_status === 1}>直播中</a-tag>
+        <a-tag v-if={record.live_status === 2}>未开播</a-tag>
+        <a-tag v-else>--</a-tag>
     </div>
   },
   {
@@ -219,34 +201,6 @@ function blockUser(userItem) {
         }
       }
     },
-  })
-}
-
-async function getMerchantList(guild_id) {
-  loading.value = true
-  const [err, data] = await to(getMerchantListReq({ guild_id }))
-  if (err) {
-    console.log(err)
-    loading.value = false
-    throw new Error(err)
-  }
-  loading.value = false
-  return data
-}
-
-// 展示商户列表
-async function openMerchantModal(guild_id) {
-  const data = await getMerchantList(guild_id)
-  createDialog({
-    width: 500,
-    footer: null,
-    component: () =>
-      <div v-if={data.items}>
-        <div class="dialog_item_list" v-for={(item, index) in data.items} key={index}>
-          {item.merch_name}
-        </div>
-      </div>
-    ,
   })
 }
 

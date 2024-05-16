@@ -65,7 +65,6 @@ const columns = [
     title: '主播来源',
     dataIndex: 'source_name',
   },
-  merchRelRule,
   {
     title: '主播头像',
     dataIndex: 'avatar_url',

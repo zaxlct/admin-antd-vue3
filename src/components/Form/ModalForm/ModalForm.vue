@@ -6,6 +6,7 @@
     v-model="value"
     :option="formCreateOptions"
     :rule
+    @change="onChange"
   >
   </form-create>
   <slot name="footer"></slot>
@@ -14,14 +15,8 @@
 <script lang="ts" setup>
 import type { DialogExpose } from '@/composables/useDialog'
 
-const value = defineModel()
+const value = ref({})
 const props = defineProps({
-  modalProps: {
-    type: Object,
-    default: () => ({
-      width: 800,
-    }),
-  },
   rule: {
     type: Array,
     default: () => [],
@@ -30,12 +25,25 @@ const props = defineProps({
     type: Object,
     default: () => ({}),
   },
+  modelValue: {
+    type: Object,
+    default: () => ({}),
+  },
   getData: Function as PropType<(data: any) => Promise<void>>, // 提交时修改数据
   request: Function as PropType<(data: any) => Promise<void>>,
 })
-const emits = defineEmits(['cancel', 'confirm', 'loading'])
-
+const emits = defineEmits(['cancel', 'confirm', 'loading', 'update:modelValue'])
+watch(() => props.modelValue, val => {
+  value.value = val
+}, {
+  immediate: true,
+  deep: true,
+})
 const fApi = ref({})
+
+function onChange() {
+  emits('update:modelValue', value.value)
+}
 
 const formCreateOptions = computed(() => {
   const propsFormCreateOptions = props?.option || {}

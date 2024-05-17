@@ -16,4 +16,13 @@ export const anchorAddOrEditReq = (id, data) => {
 
 // 拉黑
 export const setAnchorBlackReq = data => put('/api/v1/anchor/set/blacklist', data)
-export const setRecweightReq = data => put('/api/v1/anchor/recweight', data)
+
+// 推荐位添加与编辑
+// id 为 null 时为添加
+export const recweightAddOrEditReq = (id, data) => {
+  if (id) {
+    return put('/api/v1/anchor/recweight/' + id, data)
+  } else {
+    return put('/api/v1/anchor/recweight', data)
+  }
+}

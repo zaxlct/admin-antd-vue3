@@ -112,10 +112,9 @@ const columns = [
 async function editItem(Item = {}) {
   const formValue = ref({
     rec_weight: Item.rec_weight,
-    anchor_id: Item.anchor_id?.toString(), // formCreate 不支持 number 类型
+    anchor_id: Item.anchor_id?.toString(), // formCreate 不支持 number 类型，所以转为字符串。提交接口时需要转为 number 类型
     nickname: Item.nickname,
     guild_name: Item.guild_rel?.guild_name,
-    // format('X')
     effect_time: Item.effect_time?.length ? [dayjs(Item.effect_time[0]).format('X'), dayjs(Item.effect_time[1]).format('X')] : [],
   })
 

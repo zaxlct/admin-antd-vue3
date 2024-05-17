@@ -19,7 +19,6 @@
 
 <script setup lang="jsx">
 import { getGuildListReq, guildAddOrEditReq, guildRescindReq, guildRenewalReq } from '@/api/guilds'
-import { getMerchantListReq } from '@/api/public'
 import MerchCell from '@/components/Business/MerchCell.jsx'
 const props = defineProps({
   searchParams: {

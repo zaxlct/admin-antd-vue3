@@ -5,4 +5,4 @@ export const getMerchantListReq = params => get('/api/v1/merchant/summary', para
 export const getNobleListReq = params => get('/api/v1/noble/summary', params)
 
 // 工会列表
-export const getGuildListReq = params => get('/api/v1/guild/summary', params)
+export const getGuildListReq = (params = {}) => get('/api/v1/guild/summary', params)

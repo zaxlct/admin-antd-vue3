@@ -380,14 +380,10 @@ function setTags(userItem) {
             action: '/api/v1/users/tags/' + userItem.user_id,
             to: 'options',
             method: 'get',
-            parse(res) {
-              return res.map(row => {
-                return {
-                  label: row.label,
-                  value: row.id
-                }
-              })
-            }
+            parse: res => res.items.map(row => ({
+              label: row.label,
+              value: row.id
+            })),
           }
         }
       },

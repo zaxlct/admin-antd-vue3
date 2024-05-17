@@ -141,14 +141,10 @@ const formModalProps = {
           action: 'https://dev.ruzhi.com/api/common/getDictsByType?dict_type=COMPANY_SIZE_DATA',
           to: 'options',
           method: 'get',
-          parse(res) {
-            return res.map(row => {
-              return {
-                label: row.dict_label,
-                value: row.dict_id
-              }
-            })
-          }
+          parse: res => res.items.map(row => ({
+            label: row.dict_label,
+            value: row.dict_id
+          })),
         }
       }
     },

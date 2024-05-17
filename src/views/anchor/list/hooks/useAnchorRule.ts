@@ -75,7 +75,7 @@ export default function () {
         } else {
           api.getRule('ps_ratio').props.disabled = false
         }
-      }
+      },
     },
     {
       type: 'input-number',

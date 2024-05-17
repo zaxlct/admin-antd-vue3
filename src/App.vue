@@ -11,6 +11,10 @@
 <script lang="ts" setup>
 import type { ThemeConfig } from 'ant-design-vue/es/config-provider/context'
 import zhCN from 'ant-design-vue/es/locale/zh_CN'
+import dayjs from 'dayjs'
+import 'dayjs/locale/zh-cn'
+dayjs.locale('zh-cn')
+
 const { themeOptions, initTheme, antAlgorithm } = useTheme()
 
 const customTheme = computed<ThemeConfig>(() => ({

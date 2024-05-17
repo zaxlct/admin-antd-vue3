@@ -1,21 +1,28 @@
 <!-- eslint-disable unused-imports/no-unused-imports -->
 <template>
   <slot></slot>
-  <form-create
-    v-model:api="fApi"
-    v-model="value"
-    :option="formCreateOptions"
-    :rule
-    @change="onChange"
-  >
-  </form-create>
+  <a-spin :spinning="loading">
+    <a-config-provider :locale="zhCN">
+      <form-create
+        v-model:api="fApi"
+        v-model="value"
+        :option="formCreateOptions"
+        :rule
+        @change="onChange"
+      >
+      </form-create>
+    </a-config-provider>
+  </a-spin>
+
   <slot name="footer"></slot>
 </template>
 
 <script lang="ts" setup>
+import zhCN from 'ant-design-vue/es/locale/zh_CN';
 import type { DialogExpose } from '@/composables/useDialog'
 
 const value = ref({})
+const loading = ref(false)
 const props = defineProps({
   rule: {
     type: Array,
@@ -31,6 +38,7 @@ const props = defineProps({
   },
   getData: Function as PropType<(data: any) => Promise<void>>, // 提交时修改数据
   request: Function as PropType<(data: any) => Promise<void>>,
+  eventBus: Object,
 })
 const emits = defineEmits(['cancel', 'confirm', 'loading', 'update:modelValue'])
 watch(() => props.modelValue, val => {
@@ -39,6 +47,7 @@ watch(() => props.modelValue, val => {
   immediate: true,
   deep: true,
 })
+
 const fApi = ref({})
 
 function onChange() {
@@ -74,5 +83,27 @@ defineExpose<DialogExpose>({
       })
     })
   },
+})
+
+function fApiHandleCallBack(callback: any) {
+  callback(fApi.value)
+}
+
+function switchLoading() {
+  loading.value = !loading.value
+}
+
+onMounted(() => {
+  if (props.eventBus?.on) {
+    props.eventBus.on('fApiHandle', fApiHandleCallBack)
+    props.eventBus.on('switchLoading', switchLoading)
+  }
+})
+
+onUnmounted(() => {
+  if (props.eventBus?.on) {
+    props.eventBus.off('fApiHandle', fApiHandleCallBack)
+    props.eventBus.off('switchLoading', switchLoading)
+  }
 })
 </script>

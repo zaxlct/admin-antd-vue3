@@ -36,7 +36,7 @@ const recweightComponent = defineComponent({
       default: 1,
     },
   },
-  setup() {
+  setup(props) {
     const customTableRef = ref(null)
     const formSearchRef = ref(null)
     const searchParams = ref({})
@@ -54,7 +54,7 @@ const recweightComponent = defineComponent({
         />
         <CustomTable
           ref={el => customTableRef.value = el}
-          recType={activeKey.value}
+          recType={props.recType}
           searchParams={searchParams.value}
           v-on={
             {

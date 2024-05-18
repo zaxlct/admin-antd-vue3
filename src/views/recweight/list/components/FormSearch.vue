@@ -24,7 +24,7 @@
               <AButton
                 type="primary"
                 @click="emit('addItem')"
-              >添加工会</AButton>
+              >推荐主播</AButton>
             </div>
           </section>
         </template>
@@ -34,13 +34,13 @@
 </template>
 
 <script setup>
-import merchSelectRule from '@/rules/merchSelectRule'
 const params = defineModel()
+
 const data = reactive({
-  merch_id: 0,
-  guild_name: '',
-  status: 0,
-  reg_time: 0,
+  anchor_id: '',
+  nickname: '',
+  rc_status: 0,
+  rec_type: 0,
 })
 
 const emit = defineEmits(['addItem', 'search'])
@@ -61,36 +61,24 @@ const option = {
 }
 
 const rule = ref([
-  merchSelectRule,
   {
     type: 'input',
-    field: 'guild_name',
-    title: '工会名称',
+    field: 'anchor_id',
+    title: '房间号',
     value: '',
   },
   {
-    type: 'rangePicker',
-    field: 'reg_time',
-    title: '时间区间',
+    type: 'input',
+    field: 'nickname',
+    title: '主播昵称',
     value: '',
-    props: {
-      format: 'YYYY-MM-DD',
-      valueFormat: 'X',
-    },
   },
   {
     type: 'select',
     field: 'acct_status',
     title: '账号状态',
     value: '',
-    options: Object.keys(ENUM.guild_status).map(key => ({ value: parseInt(key), label: ENUM.guild_status[key] })),
-  },
-
-  {
-    type: 'input',
-    field: 'au_id',
-    title: '应用ID/用户ID',
-    value: '',
+    options: Object.keys(ENUM.recweight_status).map(key => ({ value: parseInt(key), label: ENUM.recweight_status[key] })),
   },
   { type: 'btns' },
 ])
@@ -108,8 +96,7 @@ function submitForm() {
 
 function getData(data) {
   params.value = {
-    ...data,
-    reg_time: data.reg_time ? data.reg_time?.join(',') : undefined,
+    ...data
   }
 }
 

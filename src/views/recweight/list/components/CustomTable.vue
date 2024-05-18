@@ -47,6 +47,7 @@ const pagination = reactive({
 const dataSource = ref([])
 const { loading, refresh } = useRequest(() => getAnchorReweightListReq({
   ...props.searchParams,
+  rec_type: props.recType,
   page: pagination.page,
   limit: pagination.limit,
 }), {

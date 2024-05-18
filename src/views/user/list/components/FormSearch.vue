@@ -52,7 +52,7 @@ const data = reactive({
   email: '',
   hiera: 0,
   is_online: false,
-  reg_time: '',
+  reg_time: [],
 })
 
 const emit = defineEmits(['addItem', 'hieraEdit', 'search'])

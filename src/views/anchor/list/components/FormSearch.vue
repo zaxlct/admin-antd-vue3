@@ -38,7 +38,7 @@ const data = reactive({
   nickname: '',
   live_status: 0,
   acct_status: 0,
-  join_time: 0,
+  join_time: [],
 })
 
 const emit = defineEmits(['addItem', 'search'])

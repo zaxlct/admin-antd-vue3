@@ -1,3 +1,15 @@
+    // label 宽度不够时，使用这个代码
+    option: {
+      global: {
+        '*': {
+          wrap: {
+            labelCol: { span: 6 },
+          },
+        },
+      },
+    },
+
+
   {
     type: 'a-input-search',
     field: 'anchor_id',

@@ -25,6 +25,10 @@ import { getAnchorReweightListReq, recweightAddOrEditReq, getAnchorInfoReq } fro
 import ENUMS from '@/enums/common'
 
 const props = defineProps({
+  recType: {
+    type: Number,
+    default: 1,
+  },
   searchParams: {
     type: Object,
     default: () => ({}),
@@ -127,7 +131,7 @@ async function editItem(Item = {}) {
     getData(data) {
       return {
         rec_id: Item.rec_id || currentInfo.value.rec_id,
-        rec_type: 'TODO',
+        rec_type: props.recType,
         rec_weight: data.rec_weight,
         anchor_id: parseInt(data.anchor_id),
         nickname: data.nickname,
@@ -163,7 +167,7 @@ async function editItem(Item = {}) {
           change: debounce(e => {
             const value = e.target.value.trim()
             eventBus.emit('switchLoading')
-            getAnchorInfoReq({ anchor_id: value, rec_type: 'TODO' }).then(data => {
+            getAnchorInfoReq({ anchor_id: value, rec_type: props.recType }).then(data => {
               if (data?.nickname) {
                 currentInfo.value = data // 保存查询的结果
                 formValue.value.nickname = data.nickname

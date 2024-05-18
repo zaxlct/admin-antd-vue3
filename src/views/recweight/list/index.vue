@@ -1,12 +1,41 @@
 <template>
-  <recweightComponent></recweightComponent>
+  <a-tabs v-model:activeKey="activeKey">
+    <a-tab-pane
+      v-for="item in tabs"
+      :key="item.key"
+      :tab="item.title"
+    >
+      <recweightComponent :recType="item.key" />
+    </a-tab-pane>
+  </a-tabs>
 </template>
 
 <script setup lang="jsx">
 import CustomTable from './components/CustomTable.vue'
 import FormSearch from './components/FormSearch.vue'
+const activeKey = ref(1)
+const tabs = ref([
+  {
+    key: 1,
+    title: '推荐页搜索',
+  },
+  {
+    key: 2,
+    title: '关注页搜索',
+  },
+  {
+    key: 3,
+    title: '房间推荐',
+  },
+])
 
 const recweightComponent = defineComponent({
+  props: {
+    recType: {
+      type: Number,
+      default: 1,
+    },
+  },
   setup() {
     const customTableRef = ref(null)
     const formSearchRef = ref(null)
@@ -25,6 +54,7 @@ const recweightComponent = defineComponent({
         />
         <CustomTable
           ref={el => customTableRef.value = el}
+          recType={activeKey.value}
           searchParams={searchParams.value}
           v-on={
             {

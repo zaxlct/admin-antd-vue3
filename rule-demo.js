@@ -9,6 +9,19 @@
       },
     },
 
+  {
+    title: '主播头像',
+    dataIndex: 'avatar_url',
+    customRender: ({ record }) =>
+      <a-avatar src={record.avatar_url} size={40} />
+  },
+
+
+    customRender: ({ record }) =>
+      <a-tag color={record.acct_status === 1 ? undefined : 'red'}>
+        {ENUMS.anchor_acct_status[record.acct_status]}
+      </a-tag>
+
 
   {
     type: 'a-input-search',

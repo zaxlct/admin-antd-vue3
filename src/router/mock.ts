@@ -13,7 +13,7 @@ export default [
   {
     id: 888888,
     parentId: 9999999,
-    component: "/home",
+    component: "/home/home",
     path: "/home",
     title: "首页",
     icon: "",

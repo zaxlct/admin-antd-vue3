@@ -25,7 +25,7 @@
               <AButton
                 type="primary"
                 @click="emit('addItem')"
-              >添加礼物</AButton>
+              >添加消息</AButton>
             </div>
           </section>
         </template>
@@ -37,8 +37,9 @@
 <script setup>
 const params = defineModel()
 const data = reactive({
-  gift_name: '',
-  gift_type: 0,
+  title: '',
+  status: 0,
+  push_type: 0,
   create_time: [],
 })
 
@@ -62,19 +63,27 @@ const option = {
 const rule = ref([
   {
     type: 'input',
-    field: 'gift_name',
-    title: '礼物名称',
+    field: 'title',
+    title: '消息标题',
     value: '',
   },
   {
     type: 'select',
-    field: 'gift_type',
-    title: '礼物类型',
+    field: 'status',
+    title: '消息状态',
     value: '',
-    options: Object.keys(ENUM.gift_type).map(key => ({ value: parseInt(key), label: ENUM.gift_type[key] })),
-    wrap: {
-      labelCol: { span: 9 },
-    },
+    options: [
+      { label: '全部', value: 0 },
+      { label: '已发送', value: 1 },
+      { label: '待发送', value: 2 },
+    ],
+  },
+  {
+    type: 'select',
+    field: 'push_type',
+    title: '推送方式',
+    value: '',
+    options: Object.keys(ENUM.push_type).map(key => ({ value: parseInt(key), label: ENUM.push_type[key] })),
   },
   {
     type: 'rangePicker',

@@ -91,7 +91,7 @@ const columns = [
   {
     title: '发送时间',
     dataIndex: 'push_time',
-    customRender: ({ record }) => <div>{record.push_time[0]} - {record.push_time[1]}</div>
+    customRender: ({ record }) => <div>{record.push_time}</div>
   },
   {
     title: '创建时间',
@@ -141,13 +141,19 @@ function delItem(item) {
   })
 }
 
+const { userRelRule } = useUserSelect()
 async function editItem(item = {}) {
   const formValue = ref({
-    id: item.msg_id,
-    merch_name: item.merch_name,
-    supv_name: item.supv_name,
-    phone: item.phone,
-    password: item.password,
+    msg_id: item.msg_id,
+    push_type: item.push_type,
+    title: item.title,
+    content: item.content,
+    msg_cover: item.msg_cover,
+    target_user_type: item.target_user?.type,
+    target_user_list: [], // TODO:
+    redirect_type: item.redirect_conf?.type,
+    redirect_url: item.redirect_conf?.url,
+    push_time: item.push_time ? dayjs(item.push_time).format('X') : null,
   })
 
   const isCreate = !item.msg_id
@@ -157,6 +163,7 @@ async function editItem(item = {}) {
       return {
         ...data,
         msg_id: isCreate ? data.msg_id : undefined,
+        target_user_list: data.target_user_type === 4 ? data.target_user_list.map(item => item.value) : undefined,
       }
     },
     rule: [
@@ -195,7 +202,7 @@ async function editItem(item = {}) {
         },
         value: [],
         effect: {
-          required: true,
+          // required: true,
         }
       },
       {
@@ -213,10 +220,16 @@ async function editItem(item = {}) {
         title: '推送用户',
         value: '',
         options: Object.keys(ENUM.push_user_type).map(key => ({ value: parseInt(key), label: ENUM.push_user_type[key] })),
-        // TODO: 下拉选择自定义用户
         effect: {
           required: true,
         },
+        control: [
+          {
+            handle: val => val === 4,
+            append: 'target_user_type',
+            rule: [ userRelRule ]
+          }
+        ]
       },
       {
         type: 'radio',
@@ -230,17 +243,12 @@ async function editItem(item = {}) {
         effect: {
           required: true,
         },
-        // TODO: 输入地址/页面内容
       },
       {
-        type: 'radio',
-        field: 'is_featured_message',
-        title: '精选礼物',
+        type: 'input',
+        field: 'redirect_url',
+        title: '跳转地址',
         value: '',
-        options: [
-          { label: '是', value: 1 },
-          { label: '否', value: 0 },
-        ],
         effect: {
           required: true,
         },

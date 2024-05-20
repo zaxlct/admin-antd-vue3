@@ -122,7 +122,7 @@ function delItem(item) {
 async function editItem(userItem = {}) {
   const formValue = ref({
     gift_id: userItem.gift_id,
-    gift_label: userItem.gift_label,
+    gift_name: userItem.gift_name,
     gift_price: userItem.gift_price,
     gift_icon: userItem.gift_icon,
     gift_anim: userItem.gift_anim,

@@ -12,4 +12,4 @@ export const giftAddOrEditReq = (id, data) => {
   }
 }
 
-export const delGiftReq = id => del(`/api/v1/gift/${id}`)
+export const delGiftReq = data => del('/api/v1/gift', data)

@@ -27,7 +27,7 @@ const props = defineProps({
   },
   resetSearch: {
     type: Function,
-    default: () => { },
+    default: () => ({}),
   },
 })
 
@@ -107,7 +107,9 @@ const columns = [
 
 function delItem(item) {
   loading.value = true
-  delGiftReq(item.gift_id).then(() => {
+  delGiftReq({
+    gift_ids: [item.gift_id]
+  }).then(() => {
     loading.value = false
     pagination.page = 1
     pagination.total = 0
@@ -119,21 +121,24 @@ function delItem(item) {
 
 async function editItem(userItem = {}) {
   const formValue = ref({
-    merch_id: userItem.merch_id,
-    merch_name: userItem.merch_name,
-    supv_name: userItem.supv_name,
-    phone: userItem.phone,
-    password: userItem.password,
+    gift_id: userItem.gift_id,
+    gift_label: userItem.gift_label,
+    gift_price: userItem.gift_price,
+    gift_icon: userItem.gift_icon,
+    gift_anim: userItem.gift_anim,
+    gift_type: userItem.gift_type,
+    is_featured_gift: userItem.is_featured_gift,
+    remark: userItem.remark,
+    gift_status: userItem.gift_status,
   })
 
-  const isCreate = !userItem.merch_id
+  const isCreate = !userItem.gift_id
   const formModalProps = {
-    request: data => giftAddOrEditReq(isCreate ? null : userItem.merch_id, data),
+    request: data => giftAddOrEditReq(isCreate ? null : userItem.gift_id, data),
     getData(data) {
       return {
         ...data,
-        // 如果是修改商户，body 里 merch_id 传 null，merch_id 放到 url path中。反之，创建用户，merch_id 放到 body 中
-        merch_id: isCreate ? data.merch_id : undefined,
+        gift_id: isCreate ? data.gift_id : undefined,
       }
     },
     rule: [

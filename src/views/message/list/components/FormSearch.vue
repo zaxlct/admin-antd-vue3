@@ -25,7 +25,7 @@
               <AButton
                 type="primary"
                 @click="emit('addItem')"
-              >添加商户</AButton>
+              >添加礼物</AButton>
             </div>
           </section>
         </template>
@@ -37,8 +37,9 @@
 <script setup>
 const params = defineModel()
 const data = reactive({
-  merch_name: '',
-  reg_time: [],
+  gift_name: '',
+  gift_type: 0,
+  create_time: [],
 })
 
 const emit = defineEmits(['addItem', 'search'])
@@ -61,9 +62,19 @@ const option = {
 const rule = ref([
   {
     type: 'input',
-    field: 'merch_name',
-    title: '商户名称',
+    field: 'gift_name',
+    title: '礼物名称',
     value: '',
+  },
+  {
+    type: 'select',
+    field: 'gift_type',
+    title: '礼物类型',
+    value: '',
+    options: Object.keys(ENUM.gift_type).map(key => ({ value: parseInt(key), label: ENUM.gift_type[key] })),
+    wrap: {
+      labelCol: { span: 9 },
+    },
   },
   {
     type: 'rangePicker',

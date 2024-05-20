@@ -34,7 +34,6 @@ export default [
               required: true
             },
             props: {
-              placeholder: '请选择时间',
               showTime: { defaultValue: dayjs('00:00:00', 'HH:mm:ss') },
               disabledDate: (current) => {
                 return current && current < dayjs().endOf('day')

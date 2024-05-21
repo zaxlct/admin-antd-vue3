@@ -3,7 +3,7 @@ import MultipleSelect from '@/components/Form/MultipleSelect/MultipleSelect.vue'
 export default function useMultipleSelect(title='商户') {
   const merchRelRule = {
     type: 'MultipleSelect',
-    field: 'merch_rel',
+    field: 'merch_id',
     title,
     value: [],
     options: [],

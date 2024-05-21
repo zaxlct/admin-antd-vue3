@@ -1,6 +1,6 @@
 import { getGuildListReq } from '@/api/public'
 
-export default function () {
+export default function (ps_ratio_disabled = false) {
   const {
     merchRelRule
   } = useMultipleSelect('展示商户')
@@ -70,10 +70,10 @@ export default function () {
       update(val, rule, api) {
         if (val) {
           // 选择公会后，默认跟随公会分成比例
-          api.getRule('ps_ratio').value = guildList.find(item => item.guild_id === val).ps_ratio
+          api.getRule('ps_ratio').value = guildList.find(item => item.guild_id === val)?.ps_ratio ?? null
           api.getRule('ps_ratio').props.disabled = true
         } else {
-          api.getRule('ps_ratio').props.disabled = false
+          api.getRule('ps_ratio').props.disabled = ps_ratio_disabled || false
         }
       },
     },
@@ -88,6 +88,7 @@ export default function () {
         min: 0,
         step: 1,
         precision: 0,
+        disabled: ps_ratio_disabled,
       },
       wrap: {
         help: '选择公会后，默认跟随公会分成比例',

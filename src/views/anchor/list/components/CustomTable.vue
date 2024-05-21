@@ -1,6 +1,6 @@
 <template>
   <a-table
-    rowKey="ancor_id"
+    rowKey="anchor_id"
     :pagination="false"
     :scroll="{ x: 1200, y: 800 }"
     :dataSource
@@ -23,7 +23,6 @@ import ENUMS from '@/enums/common'
 import blockUserRule from '@/rules/blockUserRule'
 import MerchCell from '@/components/Business/MerchCell.jsx'
 import useAnchorRule from '../hooks/useAnchorRule'
-
 const props = defineProps({
   searchParams: {
     type: Object,
@@ -35,6 +34,7 @@ const props = defineProps({
   },
 })
 
+const router = useRouter()
 const pagination = reactive({
   page: 1,
   limit: 10,
@@ -144,7 +144,7 @@ const columns = [
     dataIndex: 'action',
     customRender: ({ record }) =>
       <div>
-        <a-button disabled={record.acct_status !== 1} type="link" size="small" onClick={() => editItem(record)}>编辑</a-button>
+        <a-button disabled={record.acct_status !== 1} type="link" size="small" onClick={() => router.push('/anchor/detail?anchor_id=' + record.anchor_id)}>编辑</a-button>
         <a-button type="link" size="small" onClick={() => editItem(record)}>数据</a-button>
         <a-button type="link" size="small" onClick={() => blockUser(record)} v-if={record.acct_status === 1}>拉黑</a-button>
       </div>
@@ -154,7 +154,7 @@ const columns = [
 // 拉黑
 function blockUser(userItem) {
   const formValue = ref({
-    ancor_id: userItem.ancor_id,
+    anchor_id: userItem.anchor_id,
     block_type: '',
     ageing_type: '',
     end_time: '',
@@ -164,18 +164,18 @@ function blockUser(userItem) {
   const formModalProps = {
     request: setAnchorBlackReq,
     getData(data) {
-      const { ancor_id, ...params } = data
+      const { anchor_id, ...params } = data
       return {
         ...params,
-        anchor_ids: [ancor_id],
+        anchor_ids: [anchor_id],
       }
     },
 
     rule: [
       {
         type: 'input',
-        field: 'ancor_id',
-        value: userItem.ancor_id,
+        field: 'anchor_id',
+        value: userItem.anchor_id,
         hidden: true,
       },
       ...blockUserRule,
@@ -192,7 +192,7 @@ function blockUser(userItem) {
       />,
     onConfirm(status) {
       if (status) {
-        const current = dataSource.value.find(item => item.ancor_id === userItem.ancor_id)
+        const current = dataSource.value.find(item => item.anchor_id === userItem.anchor_id)
         if (current) {
           current.acct_status = 2
         }

@@ -1,6 +1,8 @@
 import { get, post, put } from '../utils/request'
 
 export const getAnchorListReq = (params?) => get('/api/v1/anchor', params)
+export const getAnchorDetailReq = (anchor_id) => get(`/api/v1/anchor/${anchor_id}`)
+export const getAnchorGuildReq = (anchor_id) => get(`/api/v1/anchor/guild/${anchor_id}`)
 export const getAnchorInfoReq = (params?) => get('/api/v1/anchor/recweight/info', params)
 export const getAnchorReweightListReq = (params?) => get('/api/v1/anchor/recweight', params)
 

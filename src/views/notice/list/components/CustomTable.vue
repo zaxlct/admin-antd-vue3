@@ -19,7 +19,7 @@
 
 <script setup lang="jsx">
 import dayjs from 'dayjs'
-import { getNoticeListReq, noticeAddOrEditReq, delNoticeReq } from '@/api/notice'
+import { getNoticeListReq, noticeAddOrEditReq, delNoticeReq, getNoticeUserListReq } from '@/api/notice'
 
 const props = defineProps({
   searchParams: {
@@ -140,12 +140,25 @@ async function editItem(item = {}) {
     content: item.content,
     target_os_type: item.target_os_type,
     target_user_type: item.target_user?.type,
-    target_user_list: [], // TODO:
+    target_user_list: [],
     is_bind_marquee: item.is_bind_marquee,
     effect_time: item.effect_time ? [dayjs(item.effect_time[0]).format('X'), dayjs(item.effect_time[1]).format('X')] : [],
   })
 
   const isCreate = !item.notice_id
+  if (item.target_user?.type === 4) {
+    loading.value = true
+
+    const [err, data] = await to(getNoticeUserListReq(item.notice_id))
+    if (err) {
+      console.log(err)
+      loading.value = false
+      return
+    }
+    formValue.value.target_user_list = data.items.map(item => ({ label: item.nickname, value: item.user_id }))
+    loading.value = false
+  }
+
   const formModalProps = {
     request: data => noticeAddOrEditReq(isCreate ? null : item.notice_id, data),
     getData(data) {

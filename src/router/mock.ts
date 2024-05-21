@@ -1,26 +1,6 @@
 
 export default [
   {
-    id: 9999999, //路由的id
-    parentId: 0, //父级id  顶级菜单的pid 0
-    component: "", //组件的文件地址，views下
-    path: "/", //浏览器的地址
-    title: "首页", //标题
-    icon: "icon-menu", //图标
-    menu: true, //是否为目录
-    redirect: "/home" //重定向
-  },
-  {
-    id: 888888,
-    parentId: 9999999,
-    component: "/home/home",
-    path: "/home",
-    title: "首页",
-    icon: "",
-    menu: false,
-    redirect: ""
-  },
-  {
     id: 1, //路由的id
     parentId: 0, //父级id  顶级菜单的pid 0
     component: "", //组件的文件地址，views下
@@ -28,13 +8,13 @@ export default [
     title: "用户", //标题
     icon: "icon-menu", //图标
     menu: true, //是否为目录
-    redirect: "/user/list" //重定向
+    redirect: "/user/index" //重定向
   },
   {
     id: 2,
     parentId: 1,
     component: "/user/list",
-    path: "/user/list",
+    path: "/user/index",
     title: "用户管理",
     icon: "",
     menu: false,
@@ -58,13 +38,13 @@ export default [
     title: "工会管理",
     icon: "icon-menu",
     menu: true,
-    redirect: "/guild/list"
+    redirect: "/guild/index"
   },
   {
     id: 44, //路由的id
     parentId: 4,
     component: "/guild/list",
-    path: "/guild/list",
+    path: "/guild/index",
     title: "工会管理",
     icon: "icon-menu",
     menu: false,
@@ -78,13 +58,13 @@ export default [
     title: "主播",
     icon: "icon-menu",
     menu: true,
-    redirect: "/anchor/list",
+    redirect: "/anchor/index",
   },
   {
     id: 6,
     parentId: 5,
     component: "/anchor/list",
-    path: "/anchor/list",
+    path: "/anchor/index",
     title: "主播管理",
     icon: "icon-menu",
     menu: false,
@@ -120,13 +100,13 @@ export default [
     title: "推荐位配置",
     icon: "icon-menu",
     menu: true,
-    redirect: "/recweight/list",
+    redirect: "/recweight/index",
   },
   {
     id: 10,
     parentId: 9,
     component: "/recweight/list",
-    path: "/recweight/list",
+    path: "/recweight/index",
     title: "推荐位配置",
     icon: "icon-menu",
     menu: false,
@@ -140,13 +120,13 @@ export default [
     title: "商户管理",
     icon: "icon-menu",
     menu: true,
-    redirect: "/merchant/list",
+    redirect: "/merchant/index",
   },
   {
     id: 900,
     parentId: 899,
     component: "/merchant/list",
-    path: "/merchant/list",
+    path: "/merchant/index",
     title: "商户管理",
     icon: "icon-menu",
     menu: false,
@@ -160,13 +140,13 @@ export default [
     title: "礼物管理",
     icon: "icon-menu",
     menu: true,
-    redirect: "/gift/list",
+    redirect: "/gift/index",
   },
   {
     id: 902,
     parentId: 901,
     component: "/gift/list",
-    path: "/gift/list",
+    path: "/gift/index",
     title: "礼物管理",
     icon: "icon-menu",
     menu: false,
@@ -180,13 +160,13 @@ export default [
     title: "消息管理",
     icon: "icon-menu",
     menu: true,
-    redirect: "/message/list",
+    redirect: "/message/index",
   },
   {
     id: 904,
     parentId: 903,
     component: "/message/list",
-    path: "/message/list",
+    path: "/message/index",
     title: "消息管理",
     icon: "icon-menu",
     menu: false,
@@ -200,13 +180,13 @@ export default [
     title: "公告",
     icon: "icon-menu",
     menu: true,
-    redirect: "/notice/list"
+    redirect: "/notice/index"
   },
   {
     id: 906,
     parentId: 905,
     component: "/notice/list",
-    path: "/notice/list",
+    path: "/notice/index",
     title: "公告管理",
     icon: "",
     menu: false,
@@ -218,6 +198,47 @@ export default [
     component: "/notice/marquee",
     path: "/notice/marquee",
     title: "跑马灯配置",
+    icon: "",
+    menu: false,
+    redirect: ""
+  },
+
+  {
+    id: 908,
+    parentId: 0,
+    component: "",
+    path: "/permissions",
+    title: "权限管理",
+    icon: "icon-menu",
+    menu: true,
+    redirect: "/permissions/role"
+  },
+  {
+    id: 909,
+    parentId: 908,
+    component: "/permissions/role",
+    path: "/permissions/role",
+    title: "角色管理",
+    icon: "",
+    menu: false,
+    redirect: ""
+  },
+  {
+    id: 910,
+    parentId: 908,
+    component: "/permissions/department",
+    path: "/permissions/department",
+    title: "部门管理",
+    icon: "",
+    menu: false,
+    redirect: ""
+  },
+  {
+    id: 911,
+    parentId: 908,
+    component: "/permissions/account",
+    path: "/permissions/account",
+    title: "账号管理",
     icon: "",
     menu: false,
     redirect: ""

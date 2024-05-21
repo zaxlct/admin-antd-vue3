@@ -1,6 +1,6 @@
 <template>
   <a-table
-    rowKey="guild_id"
+    rowKey="gift_id"
     :pagination="false"
     :scroll="{ x: 1200, y: 800 }"
     :dataSource

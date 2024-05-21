@@ -1,6 +1,6 @@
 <template>
   <a-table
-    rowKey="guild_id"
+    rowKey="msg_id"
     :pagination="false"
     :scroll="{ x: 1200, y: 800 }"
     :dataSource
@@ -130,7 +130,7 @@ const columns = [
 function delItem(item) {
   loading.value = true
   delMessageReq({
-    message_ids: item.id,
+    message_ids: item.msg_id,
   }).then(() => {
     loading.value = false
     pagination.page = 1

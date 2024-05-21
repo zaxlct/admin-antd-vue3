@@ -19,7 +19,7 @@
 
 <script setup lang="jsx">
 import dayjs from 'dayjs'
-import { getMessageListReq, messageAddOrEditReq, delMessageReq } from '@/api/message'
+import { getMessageListReq, messageAddOrEditReq, delMessageReq, getNoticeUserListReq } from '@/api/message'
 
 const props = defineProps({
   searchParams: {
@@ -150,13 +150,26 @@ async function editItem(item = {}) {
     content: item.content,
     msg_cover: item.msg_cover,
     target_user_type: item.target_user?.type,
-    target_user_list: [], // TODO:
+    target_user_list: [],
     redirect_type: item.redirect_conf?.type,
     redirect_url: item.redirect_conf?.url,
     push_time: item.push_time ? dayjs(item.push_time).format('X') : null,
   })
 
   const isCreate = !item.msg_id
+  if (item.target_user?.type === 4) {
+    loading.value = true
+
+    const [err, data] = await to(getMessageUserListReq(item.msg_id))
+    if (err) {
+      console.log(err)
+      loading.value = false
+      return
+    }
+    formValue.value.target_user_list = data.items.map(item => ({ label: item.nickname, value: item.user_id }))
+    loading.value = false
+  }
+
   const formModalProps = {
     request: data => messageAddOrEditReq(isCreate ? null : item.msg_id, data),
     getData(data) {

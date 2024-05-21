@@ -1,6 +1,6 @@
 <template>
   <a-table
-    rowKey="guild_id"
+    rowKey="marquee_id"
     :pagination="false"
     :scroll="{ x: 1200, y: 800 }"
     :dataSource
@@ -18,7 +18,8 @@
 </template>
 
 <script setup lang="jsx">
-import { getMerchantListReq, merchantAddOrEditReq, setMerchantStatusReq } from '@/api/merchant'
+import dayjs from 'dayjs'
+import { getMarqueeListReq, marqueeAddOrEditReq, delMarqueeReq } from '@/api/marquee'
 
 const props = defineProps({
   searchParams: {
@@ -27,7 +28,7 @@ const props = defineProps({
   },
   resetSearch: {
     type: Function,
-    default: () => { },
+    default: () => ({}),
   },
 })
 
@@ -37,7 +38,7 @@ const pagination = reactive({
   total: 0,
 })
 const dataSource = ref([])
-const { loading, refresh } = useRequest(() => getMerchantListReq({
+const { loading, refresh } = useRequest(() => getMarqueeListReq({
   ...props.searchParams,
   page: pagination.page,
   limit: pagination.limit,
@@ -52,34 +53,34 @@ const { createDialog } = useDialog()
 
 const columns = [
   {
-    title: '商户名称',
-    dataIndex: 'merch_name',
+    title: '跑马灯位置',
+    dataIndex: 'position',
+    customRender: ({ record }) => <div v-if={record.position?.length}>{record.position.map(item => ENUM.marquee_position[item]).join(',')}</div>
   },
   {
-    title: '商户负责人',
-    dataIndex: 'supv_name',
+    title: '跑马灯内容',
+    dataIndex: 'content',
   },
   {
-    title: '手机号',
-    dataIndex: 'phone',
+    title: '展示时间',
+    dataIndex: 'effect_time',
+    customRender: ({ record }) => <div v-if={record.effect_time}>{record.effect_time[0]}-{record.effect_time[1]}</div>
+  },
+  {
+    title: '状态',
+    dataIndex: 'status',
+    customRender: ({ record }) => <div>{record.status === 1 ? '进行中' : '已失效'}</div>
   },
   {
     title: '创建时间',
     dataIndex: 'create_time',
   },
   {
-    title: '状态',
-    dataIndex: 'status',
-    customRender: ({ record }) =>
-      <a-tag color={record.status === 1 ? 'green' : 'red'}>
-        {record.status === 1 ? '启用中' : '已停用'}
-      </a-tag>
-  },
-  {
     title: '操作账号',
     dataIndex: 'oper_info',
-    customRender: ({ record }) => <div>{ record.oper_info.name }</div>
+    customRender: ({ record }) => <div>{record.oper_info?.name}</div>
   },
+
   {
     title: '操作',
     fixed: 'right',
@@ -88,46 +89,42 @@ const columns = [
     customRender: ({ record }) =>
       <div>
         <a-button type="link" size="small" onClick={() => editItem(record)}>编辑</a-button>
-        <a-popconfirm title='确定停用当前商户吗？' onConfirm={() => setStatus(record)} v-if={record.status === 1}>
-          <a-button type="link" danger size="small">停用</a-button>
-        </a-popconfirm>
-
-        <a-popconfirm title='确定启用当前商户吗？' onConfirm={() => setStatus(record)} v-if={record.status === 2}>
-          <a-button type="link" size="small">启用</a-button>
+        <a-popconfirm title='确定删除当前跑马灯吗？' onConfirm={() => delItem(record)}>
+          <a-button type="link" danger size="small">删除</a-button>
         </a-popconfirm>
       </div>
   }
 ]
 
-// 商户启用/停用
-function setStatus(item) {
+function delItem(item) {
   loading.value = true
-  setMerchantStatusReq(item.merch_id, { status: item.status === 1 ? 2 : 1 }).then(() => {
+  delMarqueeReq({
+    marquee_ids: [item.marquee_id]
+  }).then(() => {
     loading.value = false
-    item.status = item.status === 1 ? 2 : 1
+    pagination.page = 1
+    pagination.total = 0
+    props.resetSearch()
   }).catch(() => {
     loading.value = false
   })
 }
 
-// 推荐主播/修改推荐权重
-async function editItem(userItem = {}) {
+async function editItem(item = {}) {
   const formValue = ref({
-    merch_id: userItem.merch_id,
-    merch_name: userItem.merch_name,
-    supv_name: userItem.supv_name,
-    phone: userItem.phone,
-    password: userItem.password,
+    marquee_id: item.marquee_id,
+    position: item.position || [],
+    content: item.content,
+    effect_time: item.effect_time ? [dayjs(item.effect_time[0]).format('X'), dayjs(item.effect_time[1]).format('X')] : [],
   })
 
-  const isCreate = !userItem.merch_id
+  const isCreate = !item.marquee_id
   const formModalProps = {
-    request: data => merchantAddOrEditReq(isCreate ? null : userItem.merch_id, data),
+    request: data => marqueeAddOrEditReq(isCreate ? null : item.marquee_id, data),
     getData(data) {
       return {
         ...data,
-        // 如果是修改商户，body 里 merch_id 传 null，merch_id 放到 url path中。反之，创建用户，merch_id 放到 body 中
-        merch_id: isCreate ? data.merch_id : undefined,
+        marquee_id: isCreate ? data.marquee_id : undefined,
       }
     },
     option: {
@@ -142,44 +139,47 @@ async function editItem(userItem = {}) {
     rule: [
       {
         type: 'input',
-        field: 'merch_name',
-        title: '商户名称',
+        field: 'content',
+        title: '跑马灯内容',
         value: '',
-        validate: [{ type: 'string', max: 10, required: true, message: '商户名称最多10个字'}],
-      },
-      {
-        type: 'input',
-        field: 'supv_name',
-        title: '商户负责人',
-        value: '',
-        validate: [{ type: 'string', max: 10, required: true, message: '商户负责人姓名最多10个字' }],
-      },
-      {
-        type: 'input',
-        field: 'phone',
-        title: '手机号',
-        value: '',
-        validate: [{ type: 'string', message: '请输入正确的手机号' }],
         props: {
-          type: 'tel'
+          type: 'textarea'
+        },
+        effect: {
+          required: true,
         },
       },
       {
-        type: 'input',
-        field: 'password',
-        title: '密码',
-        value: '',
-        validate: [{ type: 'pattern', required: true, pattern: '^(?=.*[0-9])(?=.*[a-zA-Z])[a-zA-Z0-9]{8,16}$', message: '请输入 8~16位数字和字母组合密码' }],
-        props: {
-          type: 'password',
-          placeholder: '请输入 8~16 位数字和字母组合密码',
+        type: 'checkbox',
+        field: 'position',
+        title: '跑马灯位置',
+        value: [],
+        options: Object.keys(ENUM.marquee_position).filter(key => parseInt(key) !== 0).map(key => ({ value: parseInt(key), label: ENUM.marquee_position[key] })),
+        effect: {
+          required: true,
         },
       },
+      {
+        type: 'rangePicker',
+        field: 'effect_time',
+        title: '展示时间',
+        value: '',
+        effect: {
+          required: true
+        },
+        props: {
+          format: 'YYYY-MM-DD',
+          valueFormat: 'X',
+          disabledDate: (current) => {
+            return current && current < dayjs().endOf('day')
+          },
+        }
+      }
     ],
   }
 
   createDialog({
-    title: isCreate ? '添加商户' : '编辑商户',
+    title: isCreate ? '添加跑马灯' : '编辑跑马灯',
     width: 500,
     component:
       <ModalForm

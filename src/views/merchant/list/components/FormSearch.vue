@@ -38,7 +38,7 @@
 const params = defineModel()
 const data = reactive({
   merch_name: '',
-  reg_time: [],
+  create_time: [],
 })
 
 const emit = defineEmits(['addItem', 'search'])
@@ -92,7 +92,7 @@ function submitForm() {
 function getData(data) {
   params.value = {
     ...data,
-    reg_time: data.reg_time ? data.reg_time?.join(',') : undefined,
+    create_time: data.create_time ? data.create_time?.join(',') : undefined,
   }
 }
 

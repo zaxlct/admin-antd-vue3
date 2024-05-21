@@ -1,6 +1,18 @@
 <template>
   <a-card class="mb15">
     <div class="__table_form_search_component">
+      <div class="inset_wrap">
+        <span>跑马灯状态：</span>
+        <a-switch
+          v-model:checked="isOpen"
+          @change="changeOpenStatus"
+          :loading="loading"
+          :checkedValue="1"
+          :unCheckedValue="2"
+          checked-children="开"
+          un-checked-children="关"
+        />
+      </div>
       <form-create
         v-model:api="fApi"
         v-model="data"
@@ -25,7 +37,7 @@
               <AButton
                 type="primary"
                 @click="emit('addItem')"
-              >添加商户</AButton>
+              >添加跑马灯</AButton>
             </div>
           </section>
         </template>
@@ -35,11 +47,30 @@
 </template>
 
 <script setup>
+import { getMarqueeStatusReq, setMarqueeStatusReq } from '@/api/marquee'
+
 const params = defineModel()
 const data = reactive({
-  merch_name: '',
-  reg_time: [],
+  status: 0,
+  position: 0,
+  create_time: [],
 })
+const isOpen = ref(true)
+
+const loading = ref(false)
+onMounted(async () => {
+  loading.value = true
+  const { status } = await getMarqueeStatusReq().catch(() => loading.value = false)
+  isOpen.value = status
+  loading.value = false
+})
+
+function changeOpenStatus(status) {
+  loading.value = true
+  setMarqueeStatusReq({ status }).then(() => {
+    loading.value = false
+  }).catch(() => loading.value = false)
+}
 
 const emit = defineEmits(['addItem', 'search'])
 const fApi = ref({})
@@ -60,10 +91,25 @@ const option = {
 
 const rule = ref([
   {
-    type: 'input',
-    field: 'merch_name',
-    title: '商户名称',
+    type: 'select',
+    field: 'position',
+    title: '跑马灯位置',
     value: '',
+    options: Object.keys(ENUM.marquee_position).map(key => ({ value: parseInt(key), label: ENUM.marquee_position[key] })),
+    wrap: {
+      labelCol: { span: 9 },
+    },
+  },
+  {
+    type: 'select',
+    field: 'status',
+    title: '状态',
+    value: '',
+    options: [
+      { label: '全部', value: 0 },
+      { label: '进行中', value: 1 },
+      { label: '已失效', value: 2 },
+    ],
   },
   {
     type: 'rangePicker',
@@ -92,7 +138,7 @@ function submitForm() {
 function getData(data) {
   params.value = {
     ...data,
-    reg_time: data.reg_time ? data.reg_time?.join(',') : undefined,
+    create_time: data.create_time ? data.create_time?.join(',') : undefined,
   }
 }
 

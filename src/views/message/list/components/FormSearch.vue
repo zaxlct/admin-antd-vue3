@@ -112,7 +112,7 @@ function submitForm() {
 function getData(data) {
   params.value = {
     ...data,
-    reg_time: data.reg_time ? data.reg_time?.join(',') : undefined,
+    create_time: data.create_time ? data.create_time?.join(',') : undefined,
   }
 }
 

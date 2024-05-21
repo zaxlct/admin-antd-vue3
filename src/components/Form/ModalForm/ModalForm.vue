@@ -18,7 +18,7 @@
 </template>
 
 <script lang="ts" setup>
-import zhCN from 'ant-design-vue/es/locale/zh_CN';
+import zhCN from 'ant-design-vue/es/locale/zh_CN'
 import type { DialogExpose } from '@/composables/useDialog'
 
 const value = ref({})

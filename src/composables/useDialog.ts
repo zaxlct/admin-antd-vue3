@@ -19,6 +19,8 @@ export default () => {
     const openValue = ref(options?.defaultOpen ?? true)
     const instance = createApp(Dialog, {
       // footer: undefined,
+      maskClosable: false,
+      keyboard: false,
       ...options,
       open: openValue,
       onConfirm(data: any) {

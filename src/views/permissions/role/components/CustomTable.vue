@@ -1,6 +1,6 @@
 <template>
   <a-table
-    rowKey="gift_id"
+    rowKey="role_id"
     :pagination="false"
     :scroll="{ x: 1200, y: 800 }"
     :dataSource
@@ -18,7 +18,7 @@
 </template>
 
 <script setup lang="jsx">
-import { getGiftListReq, giftAddOrEditReq, delGiftReq } from '@/api/gift'
+import { getRoleListReq, roleAddOrEditReq, delRoleReq } from '@/api/role'
 
 const props = defineProps({
   searchParams: {
@@ -37,7 +37,7 @@ const pagination = reactive({
   total: 0,
 })
 const dataSource = ref([])
-const { loading, refresh } = useRequest(() => getGiftListReq({
+const { loading, refresh } = useRequest(() => getRoleListReq({
   ...props.searchParams,
   page: pagination.page,
   limit: pagination.limit,
@@ -52,43 +52,26 @@ const { createDialog } = useDialog()
 
 const columns = [
   {
-    title: '礼物ID',
-    dataIndex: 'gift_id',
+    title: '角色名称',
+    dataIndex: 'role_name',
   },
   {
-    title: '礼物图标',
-    dataIndex: 'gift_icon',
-    customRender: ({ record }) => <img src={record.gift_icon} width="50" height="50" />
+    title: '角色类型',
+    dataIndex: 'role_type',
+    customRender: ({ record }) => <div>{ENUM.role_type[record.role_type]}</div>
   },
   {
-    title: '礼物名称',
-    dataIndex: 'gift_name',
-  },
-  {
-    title: '礼物价值',
-    dataIndex: 'gift_price',
-  },
-  {
-    title: '动画文件',
-    dataIndex: 'gift_anim',
-  },
-  {
-    title: '礼物类型',
-    dataIndex: 'gift_type',
-    customRender: ({ record }) => <div>{ENUM.gift_type[record.gift_type]}</div>
-  },
-  {
-    title: '精选礼物',
-    dataIndex: 'is_featured_gift',
-    customRender: ({ record }) => <div>{record.is_featured_gift ? '是' : '否'}</div>
-  },
-  {
-    title: '备注',
-    dataIndex: 'remark',
+    title: '引用账号数',
+    dataIndex: 'acct_ref_count',
   },
   {
     title: '创建时间',
     dataIndex: 'create_time',
+  },
+  {
+    title: '操作账号',
+    dataIndex: 'oper_info',
+    customRender: ({ record }) => <div>{record.oper_info?.name}</div>
   },
   {
     title: '操作',
@@ -98,8 +81,8 @@ const columns = [
     customRender: ({ record }) =>
       <div>
         <a-button type="link" size="small" onClick={() => editItem(record)}>编辑</a-button>
-        <a-popconfirm title='确定删除当前礼物吗？' onConfirm={() => delItem(record)}>
-          <a-button type="link" danger size="small">删除</a-button>
+        <a-popconfirm title='确定删除当前角色吗？' onConfirm={() => delItem(record)}>
+          <a-button type="link" disabled={record.acct_ref_count} danger size="small">删除</a-button>
         </a-popconfirm>
       </div>
   }
@@ -107,8 +90,8 @@ const columns = [
 
 function delItem(item) {
   loading.value = true
-  delGiftReq({
-    gift_ids: [item.gift_id]
+  delRoleReq({
+    role_ids: [item.role_id]
   }).then(() => {
     loading.value = false
     pagination.page = 1
@@ -121,30 +104,30 @@ function delItem(item) {
 
 async function editItem(userItem = {}) {
   const formValue = ref({
-    gift_id: userItem.gift_id,
-    gift_name: userItem.gift_name,
-    gift_price: userItem.gift_price,
-    gift_icon: userItem.gift_icon,
-    gift_anim: userItem.gift_anim,
-    gift_type: userItem.gift_type,
-    is_featured_gift: userItem.is_featured_gift,
+    role_id: userItem.role_id,
+    role_name: userItem.role_name,
+    role_price: userItem.role_price,
+    role_icon: userItem.role_icon,
+    role_anim: userItem.role_anim,
+    role_type: userItem.role_type,
+    is_featured_role: userItem.is_featured_role,
     remark: userItem.remark,
-    gift_status: userItem.gift_status,
+    role_status: userItem.role_status,
   })
 
-  const isCreate = !userItem.gift_id
+  const isCreate = !userItem.role_id
   const formModalProps = {
-    request: data => giftAddOrEditReq(isCreate ? null : userItem.gift_id, data),
+    request: data => roleAddOrEditReq(isCreate ? null : userItem.role_id, data),
     getData(data) {
       return {
         ...data,
-        gift_id: isCreate ? data.gift_id : undefined,
+        role_id: isCreate ? data.role_id : undefined,
       }
     },
     rule: [
       {
         type: 'upload',
-        field: 'gift_icon',
+        field: 'role_icon',
         title: '礼物图标',
         props: {
           listType: "picture-card",
@@ -160,14 +143,14 @@ async function editItem(userItem = {}) {
       },
       {
         type: 'input',
-        field: 'gift_name',
+        field: 'role_name',
         title: '礼物名称',
         value: '',
         validate: [{ type: 'string', max: 10, required: true, message: '礼物名称最多10个字'}],
       },
       {
         type: 'input-number',
-        field: 'gift_price',
+        field: 'role_price',
         title: '礼物价值',
         value: '',
         props: {
@@ -182,7 +165,7 @@ async function editItem(userItem = {}) {
       },
       {
         type: 'input',
-        field: 'gift_anim',
+        field: 'role_anim',
         title: '动画文件',
         value: '',
         props: {
@@ -194,17 +177,17 @@ async function editItem(userItem = {}) {
       },
       {
         type: 'select',
-        field: 'gift_type',
+        field: 'role_type',
         title: '礼物类型',
         value: '',
-        options: Object.keys(ENUM.gift_type).map(key => ({ value: parseInt(key), label: ENUM.gift_type[key] })),
+        options: Object.keys(ENUM.role_type).map(key => ({ value: parseInt(key), label: ENUM.role_type[key] })),
         effect: {
           required: true,
         },
       },
       {
         type: 'radio',
-        field: 'is_featured_gift',
+        field: 'is_featured_role',
         title: '精选礼物',
         value: '',
         options: [

@@ -25,7 +25,7 @@
               <AButton
                 type="primary"
                 @click="emit('addItem')"
-              >添加礼物</AButton>
+              >添加角色</AButton>
             </div>
           </section>
         </template>
@@ -37,8 +37,8 @@
 <script setup>
 const params = defineModel()
 const data = reactive({
-  gift_name: '',
-  gift_type: 0,
+  role_name: '',
+  role_type: 0,
   create_time: [],
 })
 
@@ -62,16 +62,16 @@ const option = {
 const rule = ref([
   {
     type: 'input',
-    field: 'gift_name',
-    title: '礼物名称',
+    field: 'role_name',
+    title: '角色名称',
     value: '',
   },
   {
     type: 'select',
-    field: 'gift_type',
-    title: '礼物类型',
+    field: 'role_type',
+    title: '角色类型',
     value: '',
-    options: Object.keys(ENUM.gift_type).map(key => ({ value: parseInt(key), label: ENUM.gift_type[key] })),
+    options: Object.keys(ENUM.role_type).map(key => ({ value: parseInt(key), label: ENUM.role_type[key] })),
     wrap: {
       labelCol: { span: 9 },
     },

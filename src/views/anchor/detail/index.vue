@@ -1,104 +1,118 @@
 <template>
-  <a-card title="主播详情">
-    <div class="flex_box">
-      <form-create
-        class="flex1 mr30"
-        v-model:api="fApi"
-        v-model="formValue"
-        :option="formCreateOptions"
-        :rule
-      >
-      </form-create>
+  <a-spin :spinning="spinning">
+    <a-card title="主播详情">
+      <div class="flex_box">
+        <form-create
+          class="flex1 mr30"
+          v-model:api="fApi"
+          v-model="formValue"
+          :option="formCreateOptions"
+          :rule
+        >
+        </form-create>
 
-      <a-form
-        layout="vertical"
-        class="anchor_info flex1 align_self_start"
-      >
-        <a-form-item label="主播封面：">
-          <img
-            :src="formValue.cover_image"
-            alt=""
-            width="300"
-            height="80"
-          />
-        </a-form-item>
-        <a-form-item label="直播视频：">
-          <video
-            width="300"
-            height="80"
-          >
-            <source
-              :src="formValue.cover_video"
-              type="video/mp4"
+        <a-form
+          layout="vertical"
+          class="anchor_info flex1 align_self_start"
+        >
+          <a-form-item label="主播封面：">
+            <img
+              :src="anchorDetail.cover_image"
+              alt=""
+              width="300"
+              height="80"
+            />
+          </a-form-item>
+          <a-form-item label="直播视频：">
+            <video
+              width="300"
+              height="80"
             >
-          </video>
-        </a-form-item>
-        <a-form-item label="个人简介：">
-          <a-textarea
-            :value="formValue.anchor_intro"
+              <source
+                :src="anchorDetail.cover_video"
+                type="video/mp4"
+              >
+            </video>
+          </a-form-item>
+          <a-form-item label="个人简介：">
+            <a-textarea
+              :value="anchorDetail.anchor_intro"
+              disabled
+            />
+          </a-form-item>
+          <span>
+          </span>
+          <a-form-item
+            label="直播时间："
+            v-if="anchorDetail.live_time_conf"
+          >
+            <div
+              class="flex_box c666"
+              style="width: 240px;"
+              v-for="item in anchorDetail.live_time_conf"
+              :key="item.label"
+            >
+              <span>{{ item.label }}</span>
+              <span v-if="item.time_range">{{ item.time_range[0] }}-{{ item.time_range[1] }}</span>
+              <span v-else>休息</span>
+            </div>
+          </a-form-item>
+        </a-form>
+      </div>
+      <div class="hr"></div>
+      <h3 class="mb20">工会信息</h3>
+      <a-form style="width: 600px">
+        <a-form-item label="所属公会">
+          <a-input
+            v-model:value="guildInfo.guild_name"
             disabled
           />
         </a-form-item>
-        <span>
-        </span>
-        <a-form-item
-          label="直播时间："
-          v-if="formValue.live_time_conf"
-        >
-          <div
-            class="flex_box"
-            v-for="item in formValue.live_time_conf"
-            :key="item.label"
-          >
-            <span>{{ item.label }}</span>
-            <span v-if="item.time_range">{{ item.time_range[0] }}-{{ item.time_range[1] }}</span>
-            <span v-else>休息</span>
-          </div>
+
+        <a-form-item label="转会记录">
+          <table border>
+            <tr style="background: #eee;">
+              <td>所属公会</td>
+              <td>分成比例</td>
+              <td>转会时间</td>
+              <td>操作账号</td>
+            </tr>
+
+            <tr
+              v-for="item in guildInfo.history"
+              :key="item.guild_id"
+            >
+              <td>{{ item.guild_name }}</td>
+              <td>{{ item.ps_ratio }}%</td>
+              <td>{{ item.trans_time }}</td>
+              <td>{{ item.oper_info?.name }}</td>
+            </tr>
+          </table>
         </a-form-item>
       </a-form>
-    </div>
-    <div class="hr"></div>
-    <h3>工会信息</h3>
-    <a-form style="width: 600px">
-      <a-form-item label="所属公会">
-        <a-input
-          v-model:value="guildInfo.guild_name"
-          disabled
-        />
-      </a-form-item>
-
-      <a-form-item label="转会记录">
-        <table border>
-          <tr style="background: #eee;">
-            <td>所属公会</td>
-            <td>分成比例</td>
-            <td>转会时间</td>
-            <td>操作账号</td>
-          </tr>
-
-          <tr
-            v-for="item in guildInfo.history"
-            :key="item.guild_id"
-          >
-            <td>{{ item.guild_name }}</td>
-            <td>{{ item.ps_ratio }}%</td>
-            <td>{{ item.trans_time }}</td>
-            <td>{{ item.oper_info?.name }}</td>
-          </tr>
-        </table>
-      </a-form-item>
-    </a-form>
-  </a-card>
+      <div class="tc">
+        <a-button
+          @click="submit"
+          style="width: 240px;"
+          size="large"
+          type="primary"
+        >保存</a-button>
+      </div>
+    </a-card>
+  </a-spin>
 </template>
 
 <script setup lang="jsx">
-import { getAnchorDetailReq, getAnchorGuildReq } from '@/api/anchor'
+import { getAnchorDetailReq, getAnchorGuildReq, anchorAddOrEditReq } from '@/api/anchor'
 import useAnchorRule from '@/views/anchor/list/hooks/useAnchorRule'
 const route = useRoute()
 const anchor_id = route.query.anchor_id
-const anchorRule = useAnchorRule(true)
+const anchorRule = useAnchorRule(true, false)
 
-// TODO: 主播重置密码
+// TODO: 重置主播账号的密码
+
+const spinning = ref(false)
+const anchorDetail = ref({})
 const formValue = ref({
   avatar_url: '',
   nickname: '',
@@ -133,8 +147,21 @@ const formCreateOptions = {
 }
 
 onMounted(async () => {
+  spinning.value = true
   const res = await getAnchorDetailReq(anchor_id)
-  formValue.value = res
+  formValue.value = {
+    avatar_url: res.avatar_url,
+    nickname: res.nickname,
+    phone: res.phone,
+    email: res.email,
+    guild_id: res.guild_id,
+    ps_ratio: res.ps_ratio,
+    hourly_rate: res.hourly_rate,
+    hourly_rate_ulimit: res.hourly_rate_ulimit,
+    merch_id: res.merch_id,
+  }
+  anchorDetail.value = res
+  spinning.value = false
 })
 
 const guildInfo = reactive({
@@ -153,6 +180,18 @@ watch(() => formValue.value.guild_id, () => {
     })
   }
 })
+
+function submit() {
+  fApi.value.submit(async formData => {
+    spinning.value = true
+    anchorAddOrEditReq(anchor_id, formData).then(() => {
+      spinning.value = false
+    }).catch(() => {
+      spinning.value = false
+    })
+  })
+}
+
 </script>
 
 <style lang="sass" scoped>

@@ -1,6 +1,6 @@
 import { getGuildListReq } from '@/api/public'
 
-export default function (ps_ratio_disabled = false) {
+export default function (ps_ratio_disabled = false, requiredPassword = true) {
   const {
     merchRelRule
   } = useMultipleSelect('展示商户')
@@ -70,8 +70,11 @@ export default function (ps_ratio_disabled = false) {
       update(val, rule, api) {
         if (val) {
           // 选择公会后，默认跟随公会分成比例
-          api.getRule('ps_ratio').value = guildList.find(item => item.guild_id === val)?.ps_ratio ?? null
-          api.getRule('ps_ratio').props.disabled = true
+          const ps_ratio = guildList.find(item => item.guild_id === val)?.ps_ratio
+          if (ps_ratio) {
+            api.getRule('ps_ratio').value = ps_ratio
+            api.getRule('ps_ratio').props.disabled = true
+          }
         } else {
           api.getRule('ps_ratio').props.disabled = ps_ratio_disabled || false
         }
@@ -126,7 +129,7 @@ export default function (ps_ratio_disabled = false) {
       field: 'password',
       title: '登录密码',
       value: '',
-      validate: [{ type: 'pattern', required: true, pattern: '^(?=.*[0-9])(?=.*[a-zA-Z])[a-zA-Z0-9]{8,16}$', message: '请输入 8~16位数字和字母组合密码' }],
+      validate: [{ type: 'pattern', required: requiredPassword, pattern: '^(?=.*[0-9])(?=.*[a-zA-Z])[a-zA-Z0-9]{8,16}$', message: '请输入 8~16位数字和字母组合密码' }],
       props: {
         type: 'password',
         placeholder: '请输入 8~16 位数字和字母组合密码',

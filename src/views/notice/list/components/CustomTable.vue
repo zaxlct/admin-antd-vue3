@@ -1,6 +1,6 @@
 <template>
   <a-table
-    rowKey="guild_id"
+    rowKey="notice_id"
     :pagination="false"
     :scroll="{ x: 1200, y: 800 }"
     :dataSource
@@ -18,7 +18,8 @@
 </template>
 
 <script setup lang="jsx">
-import { getMerchantListReq, merchantAddOrEditReq, setMerchantStatusReq } from '@/api/merchant'
+import dayjs from 'dayjs'
+import { getNoticeListReq, noticeAddOrEditReq, delNoticeReq } from '@/api/notice'
 
 const props = defineProps({
   searchParams: {
@@ -27,7 +28,7 @@ const props = defineProps({
   },
   resetSearch: {
     type: Function,
-    default: () => { },
+    default: () => ({}),
   },
 })
 
@@ -37,7 +38,7 @@ const pagination = reactive({
   total: 0,
 })
 const dataSource = ref([])
-const { loading, refresh } = useRequest(() => getMerchantListReq({
+const { loading, refresh } = useRequest(() => getNoticeListReq({
   ...props.searchParams,
   page: pagination.page,
   limit: pagination.limit,
@@ -49,19 +50,37 @@ const { loading, refresh } = useRequest(() => getMerchantListReq({
   },
 })
 const { createDialog } = useDialog()
-
 const columns = [
   {
-    title: '商户名称',
-    dataIndex: 'merch_name',
+    title: '公告标题',
+    dataIndex: 'title',
   },
   {
-    title: '商户负责人',
-    dataIndex: 'supv_name',
+    title: '公告内容',
+    dataIndex: 'content',
   },
   {
-    title: '手机号',
-    dataIndex: 'phone',
+    title: '推送系统',
+    dataIndex: 'target_os_type',
+    customRender: ({ record }) => <div>{ENUM.os_type[record.target_os_type]}</div>
+  },
+  {
+    title: '推送用户',
+    dataIndex: 'target_user',
+    customRender: ({ record }) => <div v-if={record.target_user}>
+      <span v-if={record.target_user.type !== 4}>{ENUM.push_user_type[record.target_user.type]}</span>
+      <span v-if={record.target_user.type === 4}>{record.target_user.count || 0}位</span>
+    </div>
+  },
+  {
+    title: '绑定跑马灯',
+    dataIndex: 'is_bind_marquee',
+    customRender: ({ record }) => <div>{record.is_bind_marquee ? '是' : '否'}</div>
+  },
+  {
+    title: '生效时间',
+    dataIndex: 'effect_time',
+    customRender: ({ record }) => <div v-if={record.effect_time}>{record.effect_time[0]}-{record.effect_time[1]}</div>
   },
   {
     title: '创建时间',
@@ -70,15 +89,18 @@ const columns = [
   {
     title: '状态',
     dataIndex: 'status',
-    customRender: ({ record }) =>
-      <a-tag color={record.status === 1 ? 'green' : 'red'}>
-        {record.status === 1 ? '启用中' : '已停用'}
-      </a-tag>
+    customRender: ({ record }) => <a-tag color={record.status === 1 ? 'green' : null}>{record.status === 1 ? '已发送' : '待发送'}</a-tag>
   },
   {
     title: '操作账号',
     dataIndex: 'oper_info',
-    customRender: ({ record }) => <div>{ record.oper_info.name }</div>
+    customRender: ({ record }) => <div>{record.oper_info?.name}</div>
+  },
+
+  {
+    title: '数据',
+    dataIndex: 'stat_data',
+    customRender: ({ record }) => <div>{record.stat_data?.pushes_count || 0}/{record.stat_data?.clicks_count || 0 }/{record.stat_data?.click_through_rate || 0}%</div>
   },
   {
     title: '操作',
@@ -87,54 +109,57 @@ const columns = [
     dataIndex: 'action',
     customRender: ({ record }) =>
       <div>
-        <a-button type="link" size="small" onClick={() => editItem(record)}>编辑</a-button>
-        <a-popconfirm title='确定停用当前商户吗？' onConfirm={() => setStatus(record)} v-if={record.status === 1}>
-          <a-button type="link" danger size="small">停用</a-button>
-        </a-popconfirm>
-
-        <a-popconfirm title='确定启用当前商户吗？' onConfirm={() => setStatus(record)} v-if={record.status === 2}>
-          <a-button type="link" size="small">启用</a-button>
+        <a-button disabled={record.status === 1} type="link" size="small" onClick={() => editItem(record)}>编辑</a-button>
+        <a-popconfirm title='确定删除当前公告吗？' onConfirm={() => delItem(record)}>
+          <a-button type="link" danger size="small">删除</a-button>
         </a-popconfirm>
       </div>
   }
 ]
 
-// 商户启用/停用
-function setStatus(item) {
+function delItem(item) {
   loading.value = true
-  setMerchantStatusReq(item.merch_id, { status: item.status === 1 ? 2 : 1 }).then(() => {
+  delNoticeReq({
+    notice_ids: item.notice_id,
+  }).then(() => {
     loading.value = false
-    item.status = item.status === 1 ? 2 : 1
+    pagination.page = 1
+    pagination.total = 0
+    props.resetSearch()
   }).catch(() => {
     loading.value = false
   })
 }
 
-// 推荐主播/修改推荐权重
-async function editItem(userItem = {}) {
+const { richEditorRule } = useRichEditor('公告内容')
+const { userRelRule } = useUserSelect()
+async function editItem(item = {}) {
   const formValue = ref({
-    merch_id: userItem.merch_id,
-    merch_name: userItem.merch_name,
-    supv_name: userItem.supv_name,
-    phone: userItem.phone,
-    password: userItem.password,
+    notice_id: item.notice_id,
+    title: item.title,
+    content: item.content,
+    target_os_type: item.target_os_type,
+    target_user_type: item.target_user?.type,
+    target_user_list: [], // TODO:
+    is_bind_marquee: item.is_bind_marquee,
+    effect_time: item.effect_time ? [dayjs(item.effect_time[0]).format('X'), dayjs(item.effect_time[1]).format('X')] : [],
   })
 
-  const isCreate = !userItem.merch_id
+  const isCreate = !item.notice_id
   const formModalProps = {
-    request: data => merchantAddOrEditReq(isCreate ? null : userItem.merch_id, data),
+    request: data => noticeAddOrEditReq(isCreate ? null : item.notice_id, data),
     getData(data) {
       return {
         ...data,
-        // 如果是修改商户，body 里 merch_id 传 null，merch_id 放到 url path中。反之，创建用户，merch_id 放到 body 中
-        merch_id: isCreate ? data.merch_id : undefined,
+        notice_id: isCreate ? data.notice_id : undefined,
+        target_user_list: data.target_user_type === 4 ? data.target_user_list.map(item => item.value) : undefined,
       }
     },
     option: {
       global: {
         '*': {
           wrap: {
-            labelCol: { span: 6 },
+            labelCol: { span: 5 },
           },
         },
       },
@@ -142,45 +167,80 @@ async function editItem(userItem = {}) {
     rule: [
       {
         type: 'input',
-        field: 'merch_name',
-        title: '商户名称',
+        field: 'title',
+        title: '公告标题',
         value: '',
-        validate: [{ type: 'string', max: 10, required: true, message: '商户名称最多10个字'}],
+        effect: {
+          required: true,
+        },
       },
+      richEditorRule,
       {
-        type: 'input',
-        field: 'supv_name',
-        title: '商户负责人',
+        type: 'radio',
+        field: 'target_os_type',
+        title: '推送系统',
         value: '',
-        validate: [{ type: 'string', max: 10, required: true, message: '商户负责人姓名最多10个字' }],
-      },
-      {
-        type: 'input',
-        field: 'phone',
-        title: '手机号',
-        value: '',
-        validate: [{ type: 'string', message: '请输入正确的手机号' }],
-        props: {
-          type: 'tel'
+        options: [
+          { label: '全部', value: 0 },
+          { label: 'iOS', value: 1 },
+          { label: '安卓', value: 2 },
+        ],
+        effect: {
+          required: true,
         },
       },
       {
-        type: 'input',
-        field: 'password',
-        title: '密码',
+        type: 'radio',
+        field: 'target_user_type',
+        title: '推送用户',
         value: '',
-        validate: [{ type: 'pattern', required: true, pattern: '^(?=.*[0-9])(?=.*[a-zA-Z])[a-zA-Z0-9]{8,16}$', message: '请输入 8~16位数字和字母组合密码' }],
-        props: {
-          type: 'password',
-          placeholder: '请输入 8~16 位数字和字母组合密码',
+        options: Object.keys(ENUM.push_user_type).map(key => ({ value: parseInt(key), label: ENUM.push_user_type[key] })),
+        effect: {
+          required: true,
+        },
+        control: [
+          {
+            handle: val => val === 4,
+            append: 'target_user_type',
+            rule: [ userRelRule ]
+          }
+        ]
+      },
+      {
+        type: 'radio',
+        field: 'is_bind_marquee',
+        title: '绑定跑马灯',
+        value: '',
+        options: [
+          { label: '是', value: true },
+          { label: '否', value: false },
+        ],
+        effect: {
+          required: true,
         },
       },
+      {
+        type: 'rangePicker',
+        field: 'effect_time',
+        title: '生效时间',
+        value: '',
+        effect: {
+          required: true
+        },
+        props: {
+          format: 'YYYY-MM-DD',
+          valueFormat: 'X',
+          disabledDate: (current) => {
+            return current && current < dayjs().endOf('day')
+          },
+        }
+      }
     ],
   }
 
   createDialog({
-    title: isCreate ? '添加商户' : '编辑商户',
-    width: 500,
+    title: isCreate ? '添加公告' : '编辑公告',
+    width: 700,
     component:
       <ModalForm
         v-model={formValue.value}

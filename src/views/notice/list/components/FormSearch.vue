@@ -25,7 +25,7 @@
               <AButton
                 type="primary"
                 @click="emit('addItem')"
-              >添加商户</AButton>
+              >添加公告</AButton>
             </div>
           </section>
         </template>
@@ -37,8 +37,10 @@
 <script setup>
 const params = defineModel()
 const data = reactive({
-  merch_name: '',
-  reg_time: [],
+  title: '',
+  status: 0,
+  marquee_status: 0,
+  create_time: [],
 })
 
 const emit = defineEmits(['addItem', 'search'])
@@ -61,9 +63,34 @@ const option = {
 const rule = ref([
   {
     type: 'input',
-    field: 'merch_name',
-    title: '商户名称',
+    field: 'title',
+    title: '公告标题',
     value: '',
+  },
+  {
+    type: 'select',
+    field: 'status',
+    title: '公告状态',
+    value: '',
+    options: [
+      { label: '全部', value: 0 },
+      { label: '已发送', value: 1 },
+      { label: '待发送', value: 2 },
+    ],
+  },
+  {
+    type: 'select',
+    field: 'marquee_status',
+    title: '绑定跑马灯',
+    value: '',
+    options: [
+      { label: '全部', value: 0 },
+      { label: '已绑定', value: 1 },
+      { label: '未绑定', value: 2 },
+    ],
+    wrap: {
+      labelCol: { span: 10 },
+    },
   },
   {
     type: 'rangePicker',

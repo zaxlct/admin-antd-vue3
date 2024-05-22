@@ -18,6 +18,8 @@
 </template>
 
 <script setup lang="jsx">
+import { convertToTree } from '@/utils/index'
+import routes from '@/router/mock'
 import { getRoleListReq, roleAddOrEditReq, delRoleReq } from '@/api/role'
 
 const props = defineProps({
@@ -102,22 +104,17 @@ function delItem(item) {
   })
 }
 
-async function editItem(userItem = {}) {
+async function editItem(item = {}) {
   const formValue = ref({
-    role_id: userItem.role_id,
-    role_name: userItem.role_name,
-    role_price: userItem.role_price,
-    role_icon: userItem.role_icon,
-    role_anim: userItem.role_anim,
-    role_type: userItem.role_type,
-    is_featured_role: userItem.is_featured_role,
-    remark: userItem.remark,
-    role_status: userItem.role_status,
+    role_id: item.role_id,
+    role_name: item.role_name,
+    role_type: item.role_type,
+    role_perms: item.role_perms || [],
   })
 
-  const isCreate = !userItem.role_id
+  const isCreate = !item.role_id
   const formModalProps = {
-    request: data => roleAddOrEditReq(isCreate ? null : userItem.role_id, data),
+    request: data => roleAddOrEditReq(isCreate ? null : item.role_id, data),
     getData(data) {
       return {
         ...data,
@@ -126,92 +123,44 @@ async function editItem(userItem = {}) {
     },
     rule: [
       {
-        type: 'upload',
-        field: 'role_icon',
-        title: '礼物图标',
-        props: {
-          listType: "picture-card",
-          action: 'https://jsonplaceholder.typicode.com/posts/',
-          onSuccess(file) {
-            file.url = file.response.url || 'http://form-create.com/logo.png'
-          },
-        },
-        value: [],
-        effect: {
-          required: true,
-        }
-      },
-      {
         type: 'input',
         field: 'role_name',
-        title: '礼物名称',
+        title: '角色名称',
         value: '',
-        validate: [{ type: 'string', max: 10, required: true, message: '礼物名称最多10个字'}],
-      },
-      {
-        type: 'input-number',
-        field: 'role_price',
-        title: '礼物价值',
-        value: '',
-        props: {
-          max: 100000,
-          min: 0,
-          step: 1,
-          precision: 0,
-        },
-        effect: {
-          required: true,
-        }
-      },
-      {
-        type: 'input',
-        field: 'role_anim',
-        title: '动画文件',
-        value: '',
-        props: {
-          placeholder: '请输入外部链接',
-        },
-        effect: {
-          required: true,
-        }
-      },
-      {
-        type: 'select',
-        field: 'role_type',
-        title: '礼物类型',
-        value: '',
-        options: Object.keys(ENUM.role_type).map(key => ({ value: parseInt(key), label: ENUM.role_type[key] })),
-        effect: {
-          required: true,
-        },
+        validate: [{ type: 'string', max: 10, required: true, message: '角色名称最多10个字'}],
       },
       {
         type: 'radio',
-        field: 'is_featured_role',
-        title: '精选礼物',
+        field: 'role_type',
+        title: '角色类型',
         value: '',
-        options: [
-          { label: '是', value: 1 },
-          { label: '否', value: 0 },
-        ],
+        options: Object.keys(ENUM.role_type).filter(key => parseInt(key) !== 0).map(key => ({ value: parseInt(key), label: ENUM.role_type[key] })),
         effect: {
           required: true,
         },
       },
       {
-        type: 'input',
-        field: 'remark',
-        title: '备注',
+        type: 'tree-select',
+        field: 'role_perms',
+        title: '角色权限',
         value: '',
-        props: {
-          type: 'textarea'
+        effect: {
+          required: true,
         },
+        props: {
+          treeData: convertToTree({ data: routes }),
+          fieldNames: { key: 'id', value: 'id' },
+          multiple: true,
+          allowClear: true,
+          treeDefaultExpandAll: true,
+          treeCheckable: true,
+        }
       },
     ],
   }
 
   createDialog({
-    title: isCreate ? '添加礼物' : '编辑礼物',
+    title: isCreate ? '添加角色' : '编辑角色',
     width: 500,
     component:
       <ModalForm

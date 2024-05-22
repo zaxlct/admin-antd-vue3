@@ -10,7 +10,6 @@ import { getToken } from '@/utils/auth'
 
 let routerLoaded = false // 动态路由是否已加载
 let removeRouters: Array<() => void> = []
-const VITE_AUTH_CHECK = import.meta.env.VITE_AUTH_CHECK
 // 创建路由
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -21,8 +20,6 @@ const router = createRouter({
   routes,
 })
 router.beforeEach(async to => {
-  // 如果不控制权，所有路由直接放行
-  if (VITE_AUTH_CHECK === 'false') return
   NProgress.start()
   const token = getToken()
   // 其实路由拦截后所做跳转仅有以下几种情况：

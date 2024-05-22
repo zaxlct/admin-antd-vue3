@@ -16,7 +16,6 @@ interface ImportMetaEnv {
   VITE_BUILD_COMPRESS: boolean;
   VITE_DROP_CONSOLE: boolean;
   VITE_DROP_DEBUGGER: boolean;
-  VITE_AUTH_CHECK: boolean | string;
   VITE_ICONFONT_URL: string;
   VITE_COLOR_SCHEME: 'auto' | 'light' | 'dark';
   VITE_UPDATE_NOTICE: boolean;

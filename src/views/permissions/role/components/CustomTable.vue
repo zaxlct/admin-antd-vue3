@@ -20,6 +20,8 @@
 <script setup lang="jsx">
 import { convertToTree } from '@/utils/index'
 import { getRoleListReq, roleAddOrEditReq, delRoleReq, getPermissionListReq } from '@/api/permission'
+const VITE_GUILD_PERMISSION = import.meta.env.VITE_GUILD_PERMISSION
+const VITE_MECHANISM_PERMISSION = import.meta.env.VITE_MECHANISM_PERMISSION
 
 const props = defineProps({
   searchParams: {
@@ -119,14 +121,27 @@ async function editItem(item = {}) {
     role_name: item.role_name,
     role_type: item.role_type,
     role_perms: item.role_perms || [],
+    role_perms2: [1, 2], // 公会账号的值，写死即可
+    role_perms3: [1], //机构账号的值，写死即可
   })
+
   const isCreate = !item.role_id
   const formModalProps = {
     request: data => roleAddOrEditReq(isCreate ? null : item.role_id, data),
     getData(data) {
+      const {
+        role_id,
+        role_name,
+        role_type,
+        role_perms,
+      } = data
+      // role_perms2 和 role_perms3压根用不到，作用仅仅是让checkbox选中，因为不能更改
+      // 提交的数据如果不是role_type为1的话，role_perms2和role_perms3都是写死的
       return {
-        ...data,
-        role_id: isCreate ? data.role_id : undefined,
+        role_id,
+        role_name,
+        role_type,
+        role_perms: role_type === 1 ? role_perms : role_type === 2 ? VITE_GUILD_PERMISSION.split(',') : VITE_MECHANISM_PERMISSION.split(',')
       }
     },
     rule: [
@@ -146,23 +161,83 @@ async function editItem(item = {}) {
         effect: {
           required: true,
         },
-      },
-      {
-        type: 'tree-select',
-        field: 'role_perms',
-        title: '角色权限',
-        value: '',
-        effect: {
-          required: true,
-        },
-        props: {
-          treeData,
-          fieldNames: { key: 'id', value: 'id' },
-          multiple: true,
-          allowClear: true,
-          treeDefaultExpandAll: true,
-          treeCheckable: true,
-        }
+        control: [
+          {
+            handle: val => val === 1,
+            append: 'role_type',
+            rule: [
+              {
+                type: 'tree-select',
+                field: 'role_perms',
+                title: '角色权限',
+                value: '',
+                effect: {
+                  required: true,
+                },
+                props: {
+                  treeData,
+                  fieldNames: { key: 'id', value: 'id' },
+                  multiple: true,
+                  allowClear: true,
+                  treeDefaultExpandAll: true,
+                  treeCheckable: true,
+                }
+              },
+            ]
+          },
+          {
+            handle: val => val === 2,
+            append: 'role_type',
+            rule: [
+              {
+                type: 'checkbox',
+                field: 'role_perms2',
+                title: '角色权限',
+                value: '',
+                effect: {
+                  required: true,
+                },
+                options: [
+                  {
+                    label: '主播管理',
+                    value: 1
+                  },
+                  {
+                    label: '直播管理',
+                    value: 2
+                  },
+                ],
+                props: {
+                  disabled: true,
+                }
+              },
+            ]
+          },
+          {
+            handle: val => val === 3,
+            append: 'role_type',
+            rule: [
+              {
+                type: 'checkbox',
+                field: 'role_perms3',
+                title: '角色权限',
+                value: '',
+                effect: {
+                  required: true,
+                },
+                options: [
+                  {
+                    label: '人脸管理',
+                    value: 1
+                  },
+                ],
+                props: {
+                  disabled: true,
+                }
+              },
+            ]
+          },
+        ]
       },
     ],
   }

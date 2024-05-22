@@ -29,5 +29,17 @@ export const departmentAddOrEditReq = (id, data) => {
 
 export const delDepartmentReq = data => del('/api/v1/permission/department', data)
 
-
 export const getAccountListReq = (params?) => get('/api/v1/permission/account', params)
+export const genSecretKeyReq = () => get('/api/v1/permission/gen/secretkey')
+
+// 添加与编辑
+// id 为 null 时为添加
+export const accountAddOrEditReq = (id, data) => {
+  if (id) {
+    return post('/api/v1/permission/account/' + id, data)
+  } else {
+    return post('/api/v1/permission/account', data)
+  }
+}
+
+export const delAccountReq = data => del('/api/v1/permission/account', data)

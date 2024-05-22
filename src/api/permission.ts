@@ -1,6 +1,7 @@
 import { get, del, post } from '../utils/request'
 
 export const getRoleListReq = (params?) => get('/api/v1/permission/role', params)
+export const getPermissionListReq = (params?) => get('/api/v1/permission/items', params)
 
 // 添加与编辑
 // id 为 null 时为添加

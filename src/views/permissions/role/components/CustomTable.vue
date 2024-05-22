@@ -19,8 +19,7 @@
 
 <script setup lang="jsx">
 import { convertToTree } from '@/utils/index'
-import routes from '@/router/mock'
-import { getRoleListReq, roleAddOrEditReq, delRoleReq } from '@/api/role'
+import { getRoleListReq, roleAddOrEditReq, delRoleReq, getPermissionListReq } from '@/api/permission'
 
 const props = defineProps({
   searchParams: {
@@ -105,13 +104,22 @@ function delItem(item) {
 }
 
 async function editItem(item = {}) {
+  loading.value = true
+  const [err, data] = await to(getPermissionListReq())
+  if (err) {
+    console.log(err)
+    loading.value = false
+    return
+  }
+  loading.value = false
+  const treeData = convertToTree({ data: data.items })
+
   const formValue = ref({
     role_id: item.role_id,
     role_name: item.role_name,
     role_type: item.role_type,
     role_perms: item.role_perms || [],
   })
-
   const isCreate = !item.role_id
   const formModalProps = {
     request: data => roleAddOrEditReq(isCreate ? null : item.role_id, data),
@@ -148,7 +156,7 @@ async function editItem(item = {}) {
           required: true,
         },
         props: {
-          treeData: convertToTree({ data: routes }),
+          treeData,
           fieldNames: { key: 'id', value: 'id' },
           multiple: true,
           allowClear: true,

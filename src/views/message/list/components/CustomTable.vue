@@ -19,7 +19,7 @@
 
 <script setup lang="jsx">
 import dayjs from 'dayjs'
-import { getMessageListReq, messageAddOrEditReq, delMessageReq, getNoticeUserListReq } from '@/api/message'
+import { getMessageListReq, messageAddOrEditReq, delMessageReq } from '@/api/message'
 
 const props = defineProps({
   searchParams: {

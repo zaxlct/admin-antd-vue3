@@ -384,7 +384,7 @@ function handleOpenModal2() {
   })
 }
 const iconSelect = ref<Iconfont | undefined>()
-const colorList = ['#1890ff', '#52c41a', '#faad14', '#ff4d4f']
+const colorList = ['#7129F8', '#1890ff', '#52c41a', '#faad14', '#ff4d4f']
 const { setTheme, themeOptions } = useTheme()
 function handleSetTheme(color) {
   setTheme({

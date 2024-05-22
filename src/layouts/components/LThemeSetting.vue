@@ -35,8 +35,8 @@
           <span
             v-for="item in colorList"
             :key="item"
-            class="m-1 inline-block h-4 w-4 cursor-pointer rounded-full"
-            :class="{ '!rounded-[3px]': themeOptions.themeToken?.colorPrimary === item }"
+            class="color_item"
+            :class="{ 'color_active': themeOptions.themeToken?.colorPrimary === item }"
             :style="{ backgroundColor: item as string }"
             @click="handleSetColor(item)"
           ></span>
@@ -87,7 +87,7 @@ function handleColorScheme(e: RadioChangeEvent) {
     colorScheme,
   })
 }
-const colorList = ['#1890ff', '#52c41a', '#faad14', '#ff4d4f']
+const colorList = ['#7129F8', '#1890ff', '#52c41a', '#faad14', '#ff4d4f']
 function handleSetColor(color) {
   setTheme({
     themeToken: {
@@ -102,3 +102,18 @@ function handleSetCompact(isCompact) {
   })
 }
 </script>
+
+<style lang="sass" scoped>
+.color_item
+  width: 24px
+  height: 24px
+  margin-right: 8px
+  cursor: pointer
+  border-radius: 50%
+
+  &.color_active
+    border-radius: 3px
+
+  &:last-child
+    margin-right: 0
+</style>

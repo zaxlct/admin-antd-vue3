@@ -16,7 +16,6 @@ import { webUpdateNotice } from '@plugin-web-update-notification/vite'
 import { visualizer } from 'rollup-plugin-visualizer'
 import buildInfo from 'vite-plugin-build-info'
 import iconfont from 'vite-plugin-iconfont'
-// import unoCSS from 'unocss/vite';
 import { themeToken } from './src/config/theme'
 import { resolve } from 'node:path'
 

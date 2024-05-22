@@ -74,6 +74,7 @@
 import { message } from 'ant-design-vue'
 import { computed, reactive, ref } from 'vue'
 import { useRoute, useRouter, type LocationQueryValue } from 'vue-router'
+import { setToken } from '@/utils/auth'
 
 import type { LocationQuery } from 'vue-router'
 
@@ -81,7 +82,6 @@ import { loginRequest } from '@/api/auth'
 import config from '@/config'
 import { cryptoPassword } from '@/utils'
 import { setStorage } from '@bwrong/storage'
-import { saveAuthData } from '@/utils/auth'
 import type { FormProps } from 'ant-design-vue/es'
 
 const rules: FormProps['rules'] = {
@@ -160,9 +160,9 @@ function handleLogin() {
       })
         .then(async res => {
           message.success('登录成功！')
+          setToken(res.token)
           // 存储用户信息
           setStorage('userinfo', res)
-          saveAuthData(res)
           router.replace({
             path: redirect.value,
             query: getOtherQuery(route.query),

@@ -21,7 +21,7 @@
 import { convertToTree } from '@/utils/index'
 import { getRoleListReq, roleAddOrEditReq, delRoleReq, getPermissionListReq } from '@/api/permission'
 const VITE_GUILD_PERMISSION = import.meta.env.VITE_GUILD_PERMISSION
-const VITE_MECHANISM_PERMISSION = import.meta.env.VITE_MECHANISM_PERMISSION
+const VITE_DEPARTMENT_PERMISSION = import.meta.env.VITE_DEPARTMENT_PERMISSION
 
 const props = defineProps({
   searchParams: {
@@ -141,7 +141,7 @@ async function editItem(item = {}) {
         role_id,
         role_name,
         role_type,
-        role_perms: role_type === 1 ? role_perms : role_type === 2 ? VITE_GUILD_PERMISSION.split(',') : VITE_MECHANISM_PERMISSION.split(',')
+        role_perms: role_type === 1 ? role_perms : role_type === 2 ? VITE_GUILD_PERMISSION.split(',') : VITE_DEPARTMENT_PERMISSION.split(',')
       }
     },
     rule: [

@@ -25,7 +25,7 @@
               <AButton
                 type="primary"
                 @click="emit('addItem')"
-              >添加部门</AButton>
+              >添加账号</AButton>
             </div>
           </section>
         </template>
@@ -37,7 +37,9 @@
 <script setup>
 const params = defineModel()
 const data = reactive({
-  dept_name: '',
+  acct_name: '',
+  phone: '',
+  role_type: '',
   create_time: [],
 })
 
@@ -61,9 +63,22 @@ const option = {
 const rule = ref([
   {
     type: 'input',
-    field: 'dept_name',
-    title: '部门名称',
+    field: 'acct_name',
+    title: '账号名称',
     value: '',
+  },
+  {
+    type: 'input',
+    field: 'phone',
+    title: '手机号',
+    value: '',
+  },
+  {
+    type: 'select',
+    field: 'acct_status',
+    title: '角色类型',
+    value: '',
+    options: Object.keys(ENUM.role_type).map(key => ({ value: parseInt(key), label: ENUM.role_type[key] })),
   },
   {
     type: 'rangePicker',

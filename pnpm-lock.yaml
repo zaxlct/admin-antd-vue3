@@ -41,9 +41,6 @@ dependencies:
   dayjs:
     specifier: ^1.11.10
     version: 1.11.10
-  js-cookie:
-    specifier: ^3.0.5
-    version: 3.0.5
   lodash-es:
     specifier: ^4.17.21
     version: 4.17.21
@@ -88,9 +85,6 @@ devDependencies:
   '@types/crypto-js':
     specifier: ^4.2.2
     version: 4.2.2
-  '@types/js-cookie':
-    specifier: ^3.0.6
-    version: 3.0.6
   '@types/node':
     specifier: ^20.12.7
     version: 20.12.7

@@ -161,9 +161,7 @@ async function editItem(item = {}) {
               limit: 99999,
             },
             method: 'get',
-            parse: res => [
-              ...res.items.map(item => ({ value: item.acct_id, label: item.acct_name })),
-            ],
+            parse: res => res.items.map(item => ({ value: item.acct_id, label: item.acct_name })),
           },
         },
       },

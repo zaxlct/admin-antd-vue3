@@ -1,4 +1,4 @@
-import { get, del, post } from '../utils/request'
+import { get, put, post } from '../utils/request'
 
 export const getGiftListReq = (params?) => get('/api/v1/gift', params)
 
@@ -12,4 +12,4 @@ export const giftAddOrEditReq = (id, data) => {
   }
 }
 
-export const delGiftReq = data => del('/api/v1/gift', data)
+export const changeGiftStatusReq = (gift_id, data) => put(`/api/v1/gift/${gift_id}/status`, data)

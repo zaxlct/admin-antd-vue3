@@ -18,7 +18,7 @@
 </template>
 
 <script setup lang="jsx">
-import { getGiftListReq, giftAddOrEditReq, delGiftReq } from '@/api/gift'
+import { getGiftListReq, giftAddOrEditReq, changeGiftStatusReq } from '@/api/gift'
 
 const props = defineProps({
   searchParams: {
@@ -78,6 +78,11 @@ const columns = [
     customRender: ({ record }) => <div>{ENUM.gift_type[record.gift_type]}</div>
   },
   {
+    title: '礼物状态',
+    dataIndex: 'gift_status',
+    customRender: ({ record }) => <div>{ record.gift_status === 1 ? '上架中' : '已下架' }</div>
+  },
+  {
     title: '精选礼物',
     dataIndex: 'is_featured_gift',
     customRender: ({ record }) => <div>{record.is_featured_gift ? '是' : '否'}</div>
@@ -98,22 +103,21 @@ const columns = [
     customRender: ({ record }) =>
       <div>
         <a-button type="link" size="small" onClick={() => editItem(record)}>编辑</a-button>
-        <a-popconfirm title='确定删除当前礼物吗？' onConfirm={() => delItem(record)}>
-          <a-button type="link" danger size="small">删除</a-button>
+        <a-popconfirm v-if={record.gift_status === 2} title='确定上架当前礼物吗？' onConfirm={() => changeStatus(record, 1)}>
+          <a-button type="link" size="small">上架</a-button>
+        </a-popconfirm>
+        <a-popconfirm v-else title='确定下架当前礼物吗？' onConfirm={() => changeStatus(record, 2)}>
+          <a-button type="link" danger size="small">下架</a-button>
         </a-popconfirm>
       </div>
   }
 ]
 
-function delItem(item) {
+function changeStatus(item, status) {
   loading.value = true
-  delGiftReq({
-    gift_ids: [item.gift_id]
-  }).then(() => {
+  changeGiftStatusReq(item.gift_id, { status }).then(() => {
     loading.value = false
-    pagination.page = 1
-    pagination.total = 0
-    props.resetSearch()
+    item.gift_status = status
   }).catch(() => {
     loading.value = false
   })

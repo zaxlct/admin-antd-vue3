@@ -39,6 +39,7 @@ const params = defineModel()
 const data = reactive({
   gift_name: '',
   gift_type: 0,
+  gift_status: 0,
   create_time: [],
 })
 
@@ -72,9 +73,17 @@ const rule = ref([
     title: '礼物类型',
     value: '',
     options: Object.keys(ENUM.gift_type).map(key => ({ value: parseInt(key), label: ENUM.gift_type[key] })),
-    wrap: {
-      labelCol: { span: 9 },
-    },
+  },
+  {
+    type: 'select',
+    field: 'gift_status',
+    title: '礼物状态',
+    value: '',
+    options: [
+      { value: 0, label: '全部' },
+      { value: 1, label: '上架中' },
+      { value: 2, label: '已下架' },
+    ],
   },
   {
     type: 'rangePicker',

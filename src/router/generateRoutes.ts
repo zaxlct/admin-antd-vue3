@@ -17,7 +17,8 @@ export default function generateRoutes(serverRoutes: Types.RouteReqItem[]): Type
       route.url = route.path
 
       // 处理组件动态加载
-      if (route.menu) {
+      // 如果是顶级路由(parentId === 0)，则使用默认布局组件
+      if (route.parentId === 0) {
         route.component = () => import('@/layouts/DefaultLayout.vue')
       } else if (route.component) {
         const componentPath = `/src/views${route.component}/index.vue`

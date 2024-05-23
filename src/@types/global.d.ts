@@ -15,7 +15,6 @@ declare namespace Types {
     title: string           // 路由的标题
     component?: any      // 路由的组件路径
     icon?: string           // 路由的图标
-    menu: boolean           // 是否作为菜单项
     redirect?: string       // 重定向路径
     children?: RouteItem[]  // 子路由数组
     hide?: boolean          // 是否隐藏
@@ -34,7 +33,6 @@ declare namespace Types {
     title: string           // 路由的标题
     component?: any      // 路由的组件路径
     icon?: string           // 路由的图标
-    menu: boolean           // 是否作为菜单项
     redirect?: string       // 重定向路径
     children?: RouteItem[]  // 子路由数组
     hide?: boolean          // 是否隐藏

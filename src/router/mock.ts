@@ -6,7 +6,6 @@ export default [
     path: '/user',
     title: '用户',
     icon: 'icon-menu',
-    menu: true,
     redirect: '/user/index',
   },
   {
@@ -16,7 +15,6 @@ export default [
     path: '/user/index',
     title: '用户管理',
     icon: '',
-    menu: false,
     redirect: '',
   },
   {
@@ -26,7 +24,6 @@ export default [
     path: '/user/hierarchy',
     title: '层级管理',
     icon: '',
-    menu: false,
     redirect: '',
   },
   {
@@ -36,7 +33,6 @@ export default [
     path: '/guild',
     title: '工会管理',
     icon: 'icon-menu',
-    menu: true,
     redirect: '/guild/index',
   },
   {
@@ -46,7 +42,6 @@ export default [
     path: '/guild/index',
     title: '工会管理',
     icon: 'icon-menu',
-    menu: false,
     redirect: '',
   },
   {
@@ -56,7 +51,6 @@ export default [
     path: '/anchor',
     title: '主播',
     icon: 'icon-menu',
-    menu: true,
     redirect: '/anchor/index',
   },
   {
@@ -66,7 +60,6 @@ export default [
     path: '/anchor/index',
     title: '主播管理',
     icon: 'icon-menu',
-    menu: false,
     redirect: '',
   },
   {
@@ -76,7 +69,6 @@ export default [
     path: '/anchor/detail',
     title: '编辑主播信息',
     icon: 'icon-menu',
-    menu: false,
     hide: true,
     redirect: '',
     activeMenu: '/anchor/list',
@@ -88,7 +80,6 @@ export default [
     path: '/anchor/statistics',
     title: '主播直播数据',
     icon: 'icon-menu',
-    menu: false,
     redirect: '',
   },
   {
@@ -98,7 +89,6 @@ export default [
     path: '/recweight',
     title: '推荐位配置',
     icon: 'icon-menu',
-    menu: true,
     redirect: '/recweight/index',
   },
   {
@@ -108,7 +98,6 @@ export default [
     path: '/recweight/index',
     title: '推荐位配置',
     icon: 'icon-menu',
-    menu: false,
     redirect: '',
   },
   {
@@ -118,7 +107,6 @@ export default [
     path: '/setting',
     title: '平台配置',
     icon: 'icon-menu',
-    menu: true,
     redirect: '/setting/level',
   },
   {
@@ -128,7 +116,6 @@ export default [
     path: '/setting/level',
     title: '等级配置',
     icon: 'icon-menu',
-    menu: false,
     redirect: '',
   },
   {
@@ -138,7 +125,6 @@ export default [
     path: '/setting/noble',
     title: '贵族配置',
     icon: 'icon-menu',
-    menu: false,
     redirect: '',
   },
   {
@@ -148,7 +134,6 @@ export default [
     path: '/setting/category',
     title: '直播分类配置',
     icon: 'icon-menu',
-    menu: false,
     redirect: '',
   },
   {
@@ -158,7 +143,6 @@ export default [
     path: '/setting/client',
     title: '版本配置',
     icon: 'icon-menu',
-    menu: false,
     redirect: '',
   },
   {
@@ -168,7 +152,6 @@ export default [
     path: '/setting/general',
     title: '综合配置',
     icon: 'icon-menu',
-    menu: false,
     redirect: '',
   },
   {
@@ -178,7 +161,6 @@ export default [
     path: '/setting/redirect',
     title: '跳转页面配置',
     icon: 'icon-menu',
-    menu: false,
     redirect: '',
   },
   {
@@ -188,7 +170,6 @@ export default [
     path: '/merchant',
     title: '商户管理',
     icon: 'icon-menu',
-    menu: true,
     redirect: '/merchant/index',
   },
   {
@@ -198,7 +179,6 @@ export default [
     path: '/merchant/index',
     title: '商户管理',
     icon: 'icon-menu',
-    menu: false,
     redirect: '',
   },
   {
@@ -208,7 +188,6 @@ export default [
     path: '/gift',
     title: '礼物管理',
     icon: 'icon-menu',
-    menu: true,
     redirect: '/gift/index',
   },
   {
@@ -218,7 +197,6 @@ export default [
     path: '/gift/index',
     title: '礼物管理',
     icon: 'icon-menu',
-    menu: false,
     redirect: '',
   },
   {
@@ -228,7 +206,6 @@ export default [
     path: '/message',
     title: '消息管理',
     icon: 'icon-menu',
-    menu: true,
     redirect: '/message/index',
   },
   {
@@ -238,7 +215,6 @@ export default [
     path: '/message/index',
     title: '消息管理',
     icon: 'icon-menu',
-    menu: false,
     redirect: '',
   },
   {
@@ -248,7 +224,6 @@ export default [
     path: '/notice',
     title: '公告',
     icon: 'icon-menu',
-    menu: true,
     redirect: '/notice/index',
   },
   {
@@ -258,7 +233,6 @@ export default [
     path: '/notice/index',
     title: '公告管理',
     icon: 'icon-menu',
-    menu: false,
     redirect: '',
   },
   {
@@ -268,7 +242,6 @@ export default [
     path: '/notice/marquee',
     title: '跑马灯配置',
     icon: 'icon-menu',
-    menu: false,
     redirect: '',
   },
   {
@@ -278,7 +251,6 @@ export default [
     path: '/permissions',
     title: '权限管理',
     icon: 'icon-menu',
-    menu: true,
     redirect: '/permissions/role',
   },
   {
@@ -288,7 +260,6 @@ export default [
     path: '/permissions/role',
     title: '角色管理',
     icon: 'icon-menu',
-    menu: false,
     redirect: '',
   },
   {
@@ -298,7 +269,6 @@ export default [
     path: '/permissions/department',
     title: '部门管理',
     icon: 'icon-menu',
-    menu: false,
     redirect: '',
   },
   {
@@ -308,7 +278,6 @@ export default [
     path: '/permissions/account',
     title: '账号管理',
     icon: 'icon-menu',
-    menu: false,
     redirect: '',
   },
 ]

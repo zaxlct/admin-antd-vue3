@@ -57,6 +57,7 @@ export default defineConfig(({ command, mode }: ConfigEnv) => {
         distUrl: './public/iconfont/iconfont.js',
         iconJson: './src/components/IconPicker/data.json',
         inject: false,
+        prefix: 'i-',
         dts: './types/iconfont.d.ts',
         iconifyFile: './.iconify.json'
       }),

@@ -19,8 +19,7 @@
 import { computed } from 'vue'
 
 interface IProps {
-  type: string
-  // type: Iconfont; // 如果不使用iconify，可以设置成此项，可以自动补全
+  type: Iconfont; // 如果不使用iconify，可以设置成此项，可以自动补全
   fontSize?: string
   size?: string
   color?: string
@@ -38,7 +37,7 @@ const computedStyle = computed(() => {
 })
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .icon-font {
   width: 1em;
   height: 1em;
@@ -46,5 +45,11 @@ const computedStyle = computed(() => {
   display: inline-block;
   color: inherit;
   vertical-align: -0.125em;
+
+  svg {
+    fill: currentColor;
+    overflow: hidden;
+    vertical-align: -0.15em;
+  }
 }
 </style>

@@ -105,7 +105,7 @@
               @confirm="handleDelete"
             >
               <IconFont
-                type="icon-delete"
+                type="i-setting"
                 style="color: red"
               ></IconFont>
             </DeleteButton>
@@ -119,6 +119,10 @@
         </template>
       </BasisTable>
       <h3>图标</h3>
+      <IconFont
+        type="i-anchor"
+        style="color: red"
+      ></IconFont>
       <p>组件位置：/src/components/IconFont</p>
       使用
       <a

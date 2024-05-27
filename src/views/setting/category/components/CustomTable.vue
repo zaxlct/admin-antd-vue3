@@ -29,15 +29,22 @@ const props = defineProps({
     type: Function,
     default: () => { },
   },
+  isParent: { // 是否为一级分类
+    type: Boolean,
+    default: true,
+  },
 })
-
+const emit = defineEmits(['changeTab'])
+const router = useRouter()
+const route = useRoute()
 const pagination = reactive({
   page: 1,
   limit: 10,
   total: 0,
 })
 const dataSource = ref([])
-const { loading, refresh } = useRequest(() => getLiveCategoryListReq(null, {
+const listReqUrl = computed(() => props.isParent ? null : route.query.parentId)
+const { loading, refresh } = useRequest(() => getLiveCategoryListReq(listReqUrl.value, {
   ...props.searchParams,
   page: pagination.page,
   limit: pagination.limit,
@@ -46,18 +53,32 @@ const { loading, refresh } = useRequest(() => getLiveCategoryListReq(null, {
   onSuccess(data) {
     dataSource.value = data.items
     pagination.total = data.total_data
+    const parentId = route.query.parentId
+    if (props.isParent && data.items.length && !parentId) {
+      router.replace({ query: { parentId: data.items[0].category_id } })
+    }
   },
 })
+
+function setParentId2Query(parentId) {
+  router.replace({ query: { parentId } })
+  emit('changeTab', 2)
+}
+
 const { createDialog } = useDialog()
 
-const columns = [
+const columns = ref([
   {
     title: '分类名称',
     dataIndex: 'name',
   },
   {
-    title: '二级分类数量',
-    dataIndex: 'child_count',
+    title: props.isParent ? '二级分类数量' : '所属一级分类',
+    dataIndex: props.isParent ? 'child_count' : 'parent_name',
+    customRender: ({ record }) => <div>
+      <a-button onClick={() => setParentId2Query(record.category_id)} type="link" size="small" v-if={props.isParent}>{ record.child_count }</a-button>
+      <span v-else>{record.parent_name }</span>
+    </div>
   },
   {
     title: '排序',
@@ -85,14 +106,12 @@ const columns = [
         </a-popconfirm>
       </div>
   }
-]
+])
 
 function delItem(item) {
   loading.value = true
   delLiveCategoryReq({
-    // TODO:
-    // parent_id: item.parent_id,
-    category_ids: item.notice_id,
+    category_ids: item.category_id,
   }).then(() => {
     loading.value = false
     pagination.page = 1
@@ -103,12 +122,12 @@ function delItem(item) {
   })
 }
 
-
 async function editItem(item = {}) {
   const formValue = ref({
     category_id: item.category_id,
     name: item.name,
     index: item.index,
+    parent_id: item.parent_id,
   })
 
   const isCreate = !item.category_id
@@ -116,8 +135,10 @@ async function editItem(item = {}) {
     request: data => liveCategoryAddOrEditReq(isCreate ? null : item.category_id, data),
     getData(data) {
       return {
-        ...data,
+        name: data.name.trim(),
+        index: data.index,
         category_id: isCreate ? data.category_id : undefined,
+        parent_id: props.isParent ? null : data.parent_id,
       }
     },
     option: {
@@ -153,6 +174,27 @@ async function editItem(item = {}) {
         }
       },
     ],
+  }
+
+  if (!props.isParent) {
+    loading.value = true
+    const [err, data = {}] = await to(getLiveCategoryListReq(null, { page: 1, limit: 99 }))
+    if (err) {
+      console.log(err)
+      loading.value = false
+      return
+    }
+    loading.value = false
+    formModalProps.rule.push({
+      type: 'select',
+      field: 'parent_id',
+      title: '所属一级分类',
+      value: '',
+      options: data.map(item => ({ label: item.name, value: item.category_id })),
+      effect: {
+        required: true,
+      }
+    })
   }
 
   createDialog({

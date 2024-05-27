@@ -107,7 +107,6 @@ import { getAnchorDetailReq, getAnchorGuildReq, anchorAddOrEditReq } from '@/api
 import useAnchorRule from '@/views/anchor/list/hooks/useAnchorRule'
 const route = useRoute()
 const anchor_id = route.query.anchor_id
-const anchorRule = useAnchorRule(true, false)
 
 // TODO: 重置主播账号的密码
 
@@ -126,6 +125,8 @@ const formValue = ref({
   merch_id: [],
 })
 const fApi = ref(null)
+const anchorRule = useAnchorRule(true, false, fApi)
+
 const rule = ref([
   ...anchorRule,
   {

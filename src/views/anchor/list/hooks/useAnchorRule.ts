@@ -72,11 +72,13 @@ export default function (ps_ratio_disabled = false, requiredPassword = true, fAp
         change(val) {
           const ps_ratio = guildList.find(item => item.value === val)?.ps_ratio
           if (ps_ratio) {
-            fApi.value.setValue({
-              ps_ratio,
-            })
-            fApi.value.mergeRules({
-              'ps_ratio': { props: { disabled: true } }
+            nextTick(() => {
+              fApi.value.setValue({
+                ps_ratio,
+              })
+              fApi.value.mergeRules({
+                'ps_ratio': { props: { disabled: true } }
+              })
             })
           } else {
             nextTick(() => {

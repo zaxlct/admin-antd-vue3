@@ -126,6 +126,7 @@ function delItem(item) {
 }
 
 async function editItem(item = {}) {
+  const fApi = ref()
   const formValue = ref({
     update_id: item.update_id,
     client_type: item.client_type,
@@ -154,11 +155,6 @@ async function editItem(item = {}) {
       effect: {
         required: true,
       },
-      update(val) {
-        if (val === 3) {
-          formValue.value.target_os = 3
-        }
-      },
       control: [
         {
           handle: val => val === 1,
@@ -179,6 +175,22 @@ async function editItem(item = {}) {
               ]
             }
           ]
+        },
+        {
+          handle: val => val !== 3,
+          append: 'force_update',
+          rule: [
+            {
+              type: 'radio',
+              field: 'target_os',
+              title: '版本端口',
+              options: clientOS.filter(item => item.value !== 3),
+              value: '',
+              effect: {
+                required: true,
+              }
+            },
+          ],
         }
       ]
     },
@@ -207,16 +219,6 @@ async function editItem(item = {}) {
       type: 'input',
       field: 'version',
       title: '版本号',
-      value: '',
-      effect: {
-        required: true,
-      }
-    },
-    {
-      type: 'radio',
-      field: 'target_os',
-      title: '版本端口',
-      options: [...clientOS],
       value: '',
       effect: {
         required: true,
@@ -282,6 +284,8 @@ async function editItem(item = {}) {
       return {
         ...data,
         update_id: isCreate ? data.update_id : undefined,
+        // 如果是PC助手，则 target_os 只能为 3（PC）
+        target_os: data.client_type === 3 ? 3 : data.target_os,
       }
     },
     option: {
@@ -301,6 +305,7 @@ async function editItem(item = {}) {
     component:
       <ModalForm
         v-model={formValue.value}
+        v-model:fApi={fApi.value}
         {...formModalProps}
         rule={rule.value}
       />

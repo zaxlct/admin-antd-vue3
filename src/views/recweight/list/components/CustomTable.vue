@@ -115,6 +115,7 @@ const columns = [
 
 // 推荐主播/修改推荐权重
 async function editItem(Item = {}) {
+  const fApi = ref()
   const formValue = ref({
     rec_weight: Item.rec_weight,
     anchor_id: Item.anchor_id?.toString(), // formCreate 不支持 number 类型，所以转为字符串。提交接口时需要转为 number 类型
@@ -122,9 +123,7 @@ async function editItem(Item = {}) {
     guild_name: Item.guild_rel?.guild_name,
     effect_time: Item.effect_time?.length ? [dayjs(Item.effect_time[0]).format('X'), dayjs(Item.effect_time[1]).format('X')] : [],
   })
-
   const eventBus = mitt()
-
   const isCreate = !Item.rec_id
   const currentInfo = ref({})
   const formModalProps = reactive({
@@ -168,23 +167,25 @@ async function editItem(Item = {}) {
           change: debounce(e => {
             const value = e.target.value.trim()
             eventBus.emit('switchLoading')
+            console.log('value', formLoading.value)
             getAnchorInfoReq({ anchor_id: value, rec_type: props.recType }).then(data => {
               if (data?.nickname) {
                 currentInfo.value = data // 保存查询的结果
-                formValue.value.nickname = data.nickname
-                formValue.value.rec_weight = data.rec_weight
-                if (data.effect_time?.length) {
-                  formValue.value.effect_time = [dayjs(data.effect_time[0]).format('X'), dayjs(data.effect_time[1]).format('X')]
-                }
-                if (data.guild_rel?.guild_id) {
-                  formValue.value.guild_name = data.guild_rel.guild_name
-                }
-                // 清除校验状态
-                eventBus.emit('fApiHandle', fApi => fApi.clearValidateState())
+                fApi.value.setValue({
+                  nickname: data.nickname,
+                  rec_weight: data.rec_weight,
+                  effect_time: data.effect_time?.length ? [dayjs(data.effect_time[0]).format('X'), dayjs(data.effect_time[1]).format('X')] : [],
+                  guild_name: data.guild_rel?.guild_id ? data.guild_rel.guild_name : '',
+                })
+                fApi.value.clearValidateState()
               } else {
                 $message.error(`ID ${value} 未查到对应主播，请重新输入`)
                 formValue.value.nickname = ''
                 formValue.value.guild_name = ''
+                fApi.value.setValue({
+                  nickname: '',
+                  guild_name: '',
+                })
                 currentInfo.value = {}
               }
             }).finally(() => {
@@ -254,6 +255,7 @@ async function editItem(Item = {}) {
     component:
       <ModalForm
         v-model={formValue.value}
+        v-model:fApi={fApi.value}
         {...formModalProps}
         eventBus={eventBus}
       >

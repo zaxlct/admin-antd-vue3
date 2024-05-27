@@ -167,7 +167,6 @@ async function editItem(Item = {}) {
           change: debounce(e => {
             const value = e.target.value.trim()
             eventBus.emit('switchLoading')
-            console.log('value', formLoading.value)
             getAnchorInfoReq({ anchor_id: value, rec_type: props.recType }).then(data => {
               if (data?.nickname) {
                 currentInfo.value = data // 保存查询的结果

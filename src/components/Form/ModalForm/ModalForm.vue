@@ -22,7 +22,7 @@ import { type Api } from '@form-create/ant-design-vue'
 import zhCN from 'ant-design-vue/es/locale/zh_CN'
 import type { DialogExpose } from '@/composables/useDialog'
 
-const value = ref({})
+const value = defineModel()
 const loading = ref(false)
 const props = defineProps({
   rule: {

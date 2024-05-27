@@ -27,3 +27,15 @@ export const clientAddOrEditReq = (id, data) => {
   }
 }
 export const delClientReq = data => del('/api/v1/setting/client/update', data)
+
+export const getLiveCategoryListReq = (parent_id, params?) => get(`/api/v1/setting/live/category${parent_id ? '/' + parent_id : ''}`, params)
+// 添加与编辑
+// id 为 null 时为添加
+export const liveCategoryAddOrEditReq = (id, data) => {
+  if (id) {
+    return post('/api/v1/setting/live/category/' + id, data)
+  } else {
+    return post('/api/v1/setting/live/category', data)
+  }
+}
+export const delLiveCategoryReq = data => del('/api/v1/setting/live/category', data)

@@ -8,7 +8,6 @@
         v-model="value"
         :option="formCreateOptions"
         :rule
-        @change="onChange"
       >
       </form-create>
     </a-config-provider>
@@ -22,6 +21,8 @@ import zhCN from 'ant-design-vue/es/locale/zh_CN'
 import type { DialogExpose } from '@/composables/useDialog'
 
 const value = defineModel()
+const fApi = defineModel('fApi')
+
 const loading = ref(false)
 const props = defineProps({
   rule: {
@@ -40,19 +41,7 @@ const props = defineProps({
   request: Function as PropType<(data: any) => Promise<void>>,
   eventBus: Object,
 })
-const emits = defineEmits(['cancel', 'confirm', 'loading', 'update:modelValue'])
-watch(() => props.modelValue, val => {
-  value.value = val
-}, {
-  immediate: true,
-  deep: true,
-})
-
-const fApi = ref({})
-
-function onChange() {
-  emits('update:modelValue', value.value)
-}
+const emits = defineEmits(['cancel', 'confirm', 'loading', 'update:modelValue', 'update:fApi'])
 
 const formCreateOptions = computed(() => {
   const propsFormCreateOptions = props?.option || {}

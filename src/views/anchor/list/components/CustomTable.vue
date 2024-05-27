@@ -228,6 +228,7 @@ async function editItem() {
     component:
       <ModalForm
         v-model={formValue.value}
+        v-model:fApi={fApi.value}
         {...formModalProps}
       >
       </ModalForm>
@@ -236,9 +237,6 @@ async function editItem() {
       pagination.page = 1
       pagination.total = 0
       props.resetSearch()
-    },
-    expose(exposed) {
-      fApi.value = exposed.fApi
     },
   })
 }

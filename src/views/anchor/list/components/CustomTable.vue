@@ -40,7 +40,6 @@ const pagination = reactive({
   limit: 10,
   total: 0,
 })
-const anchorRule = useAnchorRule()
 const dataSource = ref([])
 const { loading, refresh } = useRequest(() => getAnchorListReq({
   ...props.searchParams,
@@ -216,6 +215,8 @@ async function editItem() {
     merch_id: [],
   })
 
+  const fApi = ref(null)
+  const anchorRule = useAnchorRule(false, true, fApi)
   const formModalProps = reactive({
     request: data => anchorAddOrEditReq(null, data),
     rule: anchorRule,
@@ -235,6 +236,9 @@ async function editItem() {
       pagination.page = 1
       pagination.total = 0
       props.resetSearch()
+    },
+    expose(exposed) {
+      fApi.value = exposed.fApi
     },
   })
 }

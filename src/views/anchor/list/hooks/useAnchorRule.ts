@@ -1,14 +1,15 @@
 import { getGuildListReq } from '@/api/public'
+import { type Api } from '@form-create/ant-design-vue'
 
-export default function (ps_ratio_disabled = false, requiredPassword = true) {
+export default function (ps_ratio_disabled = false, requiredPassword = true, fApi: Ref<Api>) {
   const {
     merchRelRule
   } = useMultipleSelect('展示商户')
 
   let guildList = []
   getGuildListReq().then(res => {
-    guildList = res.items
-    formCreate.setData('labelOptions', res.items.map(item => ({ value: item.guild_id, label: item.guild_name })))
+    guildList = res.items.map(item => ({ value: item.guild_id, label: item.guild_name, ps_ratio: item.ps_ratio }))
+    formCreate.setData('labelOptions', guildList)
   })
 
   return [
@@ -67,16 +68,25 @@ export default function (ps_ratio_disabled = false, requiredPassword = true) {
           to: 'options'
         },
       },
-      update(val, rule, api) {
-        if (val) {
-          // 选择公会后，默认跟随公会分成比例
-          const ps_ratio = guildList.find(item => item.guild_id === val)?.ps_ratio
+      on: {
+        change(val) {
+          const ps_ratio = guildList.find(item => item.value === val)?.ps_ratio
           if (ps_ratio) {
-            api.getRule('ps_ratio').value = ps_ratio
-            api.getRule('ps_ratio').props.disabled = true
+            nextTick(() => {
+              fApi.value.setValue({
+                ps_ratio,
+              })
+              fApi.value.mergeRules({
+                'ps_ratio': { props: { disabled: true } }
+              })
+            })
+          } else {
+            nextTick(() => {
+              fApi.value.updateRule({
+                'ps_ratio': { props: { disabled: ps_ratio_disabled || false } }
+              })
+            })
           }
-        } else {
-          api.getRule('ps_ratio').props.disabled = ps_ratio_disabled || false
         }
       },
     },

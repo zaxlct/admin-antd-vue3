@@ -8,7 +8,7 @@
         v-model="value"
         :option="formCreateOptions"
         :rule
-        @change="onChange"
+        @mounted="onFormMounted"
       >
       </form-create>
     </a-config-provider>
@@ -18,6 +18,7 @@
 </template>
 
 <script lang="ts" setup>
+import { type Api } from '@form-create/ant-design-vue'
 import zhCN from 'ant-design-vue/es/locale/zh_CN'
 import type { DialogExpose } from '@/composables/useDialog'
 
@@ -40,18 +41,16 @@ const props = defineProps({
   request: Function as PropType<(data: any) => Promise<void>>,
   eventBus: Object,
 })
-const emits = defineEmits(['cancel', 'confirm', 'loading', 'update:modelValue'])
-watch(() => props.modelValue, val => {
-  value.value = val
-}, {
-  immediate: true,
-  deep: true,
-})
+const emits = defineEmits(['cancel', 'confirm', 'loading'])
 
 const fApi = ref({})
 
-function onChange() {
-  emits('update:modelValue', value.value)
+// 在组件挂载时通过 provide 将变量暴露出去
+const expose = inject<(variables: { fApi: Api | null }) => void>('expose', () => { })
+function onFormMounted(api) {
+  expose({
+    fApi: api
+  })
 }
 
 const formCreateOptions = computed(() => {

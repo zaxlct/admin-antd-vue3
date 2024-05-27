@@ -56,11 +56,7 @@ const recweightComponent = defineComponent({
           ref={el => customTableRef.value = el}
           recType={props.recType}
           searchParams={searchParams.value}
-          v-on={
-            {
-              resetSearch: () => formSearchRef.value.resetForm(),
-            }
-          }
+          resetSearch={() => formSearchRef.value.resetForm()}
         />
       </div>
     )

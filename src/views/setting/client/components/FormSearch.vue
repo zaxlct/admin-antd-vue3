@@ -37,6 +37,7 @@
 <script setup lang="jsx">
 const params = defineModel()
 const data = reactive({
+  title: '',
   create_time: [],
 })
 
@@ -58,6 +59,12 @@ const option = {
 }
 
 const rule = ref([
+  {
+    type: 'input',
+    field: 'title',
+    title: '标题',
+    value: '',
+  },
   {
     type: 'rangePicker',
     field: 'create_time',

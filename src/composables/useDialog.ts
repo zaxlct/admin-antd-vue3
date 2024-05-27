@@ -1,6 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import Dialog, { type IProps } from '@/components/Dialog/index.vue'
 import { type Component } from 'vue'
-import { type Api } from '@form-create/ant-design-vue'
 
 interface ICreateOptions<T> extends Omit<IProps, 'component'> {
   onConfirm?: (data: T) => void
@@ -8,19 +8,15 @@ interface ICreateOptions<T> extends Omit<IProps, 'component'> {
   onCancel?: () => void
   defaultOpen?: boolean
   component: Component
-  expose?: (exposed: { fApi: Api | null }) => void
 }
-
 export default () => {
   const currentInstance = getCurrentInstance()
   const appContext = currentInstance?.appContext
   // @ts-ignore
-
   function createDialog<T = Element, U = Awaited<ReturnType<InstanceType<T>['submit']>>>(options?: ICreateOptions<U>) {
     const container = document.createElement('div')
     document.body.appendChild(container)
     const openValue = ref(options?.defaultOpen ?? true)
-
     const instance = createApp(Dialog, {
       // footer: undefined,
       maskClosable: false,
@@ -40,7 +36,6 @@ export default () => {
         unmount()
       },
     })
-
     // 注入应用的上下文
     if (appContext) {
       instance.config.globalProperties = appContext.config.globalProperties
@@ -51,16 +46,6 @@ export default () => {
         provide: appContext.provides,
       })
     }
-
-    const exposed = {}
-
-    instance.provide('expose', (variables: any) => {
-      Object.assign(exposed, variables)
-      if (options?.expose) {
-        options.expose(exposed)
-      }
-    })
-
     function unmount() {
       openValue.value = false
       instance.unmount()

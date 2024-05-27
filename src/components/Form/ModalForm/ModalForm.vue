@@ -8,6 +8,7 @@
         v-model="value"
         :option="formCreateOptions"
         :rule
+        @mounted="onFormMounted"
       >
       </form-create>
     </a-config-provider>
@@ -22,6 +23,8 @@ import type { DialogExpose } from '@/composables/useDialog'
 
 const value = defineModel()
 const fApi = defineModel('fApi')
+// fApi 在 submit 时会变成 null，所以需要一个副本。暂时还不知道为什么会这样，所以先这样处理
+const fApiCopy = ref(null)
 
 const loading = ref(false)
 const props = defineProps({
@@ -52,16 +55,20 @@ const formCreateOptions = computed(() => {
   }
 })
 
+function onFormMounted(api: any) {
+  fApiCopy.value = api
+}
+
 defineExpose<DialogExpose>({
   submit() {
     return new Promise((resolve, reject) => {
-      fApi.value.submit(async formData => {
+      fApiCopy.value.submit(async formData => {
         console.log('formData', formData)
         const params = props.getData ? props.getData(formData) : formData
         emits('loading', true)
         try {
           props.request && await props.request(params)
-          fApi.value.resetFields()
+          fApiCopy.value.resetFields()
           resolve(true)
         } catch (error) {
           console.error('error', error)

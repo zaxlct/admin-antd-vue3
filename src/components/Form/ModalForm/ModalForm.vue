@@ -74,24 +74,18 @@ defineExpose<DialogExpose>({
   },
 })
 
-function fApiHandleCallBack(callback: any) {
-  callback(fApi.value)
-}
-
 function switchLoading() {
   loading.value = !loading.value
 }
 
 onMounted(() => {
   if (props.eventBus?.on) {
-    props.eventBus.on('fApiHandle', fApiHandleCallBack)
     props.eventBus.on('switchLoading', switchLoading)
   }
 })
 
 onUnmounted(() => {
   if (props.eventBus?.on) {
-    props.eventBus.off('fApiHandle', fApiHandleCallBack)
     props.eventBus.off('switchLoading', switchLoading)
   }
 })

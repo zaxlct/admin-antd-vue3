@@ -62,7 +62,7 @@ const { loading, refresh } = useRequest(() => getLiveCategoryListReq(listReqUrl.
 
 function setParentId2Query(parentId) {
   router.replace({ query: { parentId } })
-  emit('changeTab', 2)
+  emit('changeTab', 2) // 切换到二级分类
 }
 
 const { createDialog } = useDialog()
@@ -190,7 +190,7 @@ async function editItem(item = {}) {
       field: 'parent_id',
       title: '所属一级分类',
       value: '',
-      options: data.map(item => ({ label: item.name, value: item.category_id })),
+      options: data.items.map(item => ({ label: item.name, value: item.category_id })),
       effect: {
         required: true,
       }

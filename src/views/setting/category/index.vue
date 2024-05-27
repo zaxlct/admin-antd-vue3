@@ -57,9 +57,9 @@ const CategoryComponent = defineComponent({
           ref={el => customTableRef.value = el}
           isParent={props.type === 1}
           searchParams={searchParams.value}
+          resetSearch={() => formSearchRef.value.resetForm()}
           v-on={
             {
-              resetSearch: () => formSearchRef.value.resetForm(),
               changeTab: val => activeKey.value = val,
             }
           }

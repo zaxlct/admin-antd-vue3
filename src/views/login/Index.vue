@@ -1,72 +1,60 @@
 <template>
   <div class="login-page">
-    <a-card class="login-form">
-      <h3>{{ appTitle }}</h3>
-      <a-form
-        ref="formRef"
-        :model="state.loginInfo"
-        :rules="rules"
-        class="form"
-        :wrapper-col="{ span: 24 }"
-        @keydown.enter="handleLogin"
-      >
-        <a-form-item name="username">
-          <a-input
-            v-model:value="state.loginInfo.username"
-            placeholder="账号"
-            type="text"
-          >
-            <template #prefix>
-              <icon-font type="icon-user" />
-            </template>
-          </a-input>
-        </a-form-item>
-        <a-form-item name="word">
-          <a-input
-            v-model:value="state.loginInfo.word"
-            auto-complete="off"
-            placeholder="密码：任意"
-            type="password"
-          >
-            <template #prefix>
-              <icon-font type="icon-lock" />
-            </template>
-          </a-input>
-        </a-form-item>
-        <a-form-item name="code">
-          <div class="code">
+    <img
+      class="logo"
+      src="@/assets/images/logo.png"
+      alt="LOGO"
+    >
+    <section class="login-form">
+      <div class="form_container">
+        <h3 class="title tc">{{ appTitle }}</h3>
+        <a-form
+          ref="formRef"
+          :model="state.loginInfo"
+          :rules="rules"
+          class="form"
+          :wrapper-col="{ span: 24 }"
+          @keydown.enter="handleLogin"
+        >
+          <a-form-item name="username">
             <a-input
-              v-model:value="state.loginInfo.code"
-              style="width: 55%"
-              auto-complete="off"
-              placeholder="验证码"
+              v-model:value="state.loginInfo.username"
+              placeholder="请输入账号"
+              type="text"
             >
               <template #prefix>
-                <icon-font type="icon-mobile" />
+                <icon-font type="i-user" />
               </template>
             </a-input>
-            <img
-              @click="changeCode()"
-              alt="验证码"
-            />
-          </div>
-        </a-form-item>
-        <a-form-item style="width: 100%">
-          <a-button
-            class="login"
-            :loading="state.loading"
-            type="primary"
-            @click.prevent="handleLogin"
-          >
-            登 录
-          </a-button>
-        </a-form-item>
-      </a-form>
-    </a-card>
-    <div class="version">
-      版本号:
-      <span>V{{ version }}</span>
-    </div>
+          </a-form-item>
+          <a-form-item name="word">
+            <a-input
+              v-model:value="state.loginInfo.word"
+              auto-complete="off"
+              placeholder="请输入密码"
+              type="password"
+            >
+              <template #prefix>
+                <icon-font type="i-lock" />
+              </template>
+            </a-input>
+          </a-form-item>
+
+          <a-form-item style="width: 100%">
+            <a-button
+              block
+              class="login"
+              :loading="state.loading"
+              type="primary"
+              size="large"
+              @click.prevent="handleLogin"
+            >
+              登 录
+            </a-button>
+          </a-form-item>
+        </a-form>
+      </div>
+    </section>
   </div>
 </template>
 
@@ -90,7 +78,7 @@ const rules: FormProps['rules'] = {
       type: 'string',
       required: true,
       trigger: 'blur',
-      message: '请输入用户名',
+      message: '请输入账号',
     },
     // { validator: ruleUserName }
   ],
@@ -102,25 +90,15 @@ const rules: FormProps['rules'] = {
       message: '请输入密码',
     },
   ],
-  code: [
-    {
-      type: 'string',
-      required: true,
-      trigger: 'blur',
-      message: '请输入验证码',
-    },
-  ],
 }
 const appTitle = config.appTitle
-const version = config.appVersion
 const route = useRoute()
 const router = useRouter()
 const formRef = ref()
 const state = reactive({
   loginInfo: {
-    username: 'admin',
+    username: '',
     word: '',
-    code: '1234',
   },
   loading: false,
   isShowModal: false,
@@ -130,10 +108,7 @@ const redirect = computed(() => {
   const redirectUrl = (route.query.redirect as string) || '/'
   return noRedirect.includes(redirectUrl) ? '/' : redirectUrl
 })
-// 验证码
-function changeCode() {
-  const str = new Date().getTime()
-}
+
 function getOtherQuery(query: LocationQuery) {
   return Object.keys(query).reduce(
     (acc, cur) => {
@@ -152,11 +127,10 @@ function handleLogin() {
     .validate()
     .then(() => {
       state.loading = true
-      const { username, word, code } = state.loginInfo
+      const { username, word } = state.loginInfo
       loginRequest({
         username,
         password: cryptoPassword(word, config.cryptoKey),
-        code,
       })
         .then(async res => {
           message.success('登录成功！')
@@ -172,14 +146,12 @@ function handleLogin() {
         .catch(err => {
           console.log(err)
           state.loading = false
-          changeCode()
         })
     })
     .catch((err: Error) => {
       console.log(err)
       state.loading = false
       message.error('用户名或密码输入不正确！')
-      changeCode()
     })
 }
 </script>
@@ -192,31 +164,43 @@ function handleLogin() {
   height: 100vh;
   width: 100vw;
   position: relative;
-  background: #eee;
+  background: url('@/assets/images/login_bg.png') center center / cover no-repeat;
 }
 
-@media (prefers-color-scheme: dark) {
-  .login-page {
-    background: #141414;
-  }
+.logo {
+  position: fixed;
+  left: 20px;
+  top: 20px;
+  height: 26px;
 }
 
 .login-form {
-  width: 360px;
-  text-align: center;
-}
-
-.code {
+  padding-left: 400px;
   display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  justify-content: space-between;
   align-items: center;
-}
+  justify-content: center;
+  width: 916px;
+  height: 600px;
+  border-radius: 24px;
+  box-shadow: 0px 4px 50px 0px rgba(0, 0, 0, 0.25);
+  background: url('@/assets/images/login_box_bg.png') #fff left center no-repeat;
+  background-size: 400px 600px;
 
-.version {
-  position: absolute;
-  bottom: 10px;
-  z-index: 2;
+  @media screen and (max-width: 960px) {
+    padding-left: 0;
+    background: #fff;
+    width: 80%;
+    height: 80%;
+  }
+
+  .form_container {
+    width: 388px;
+
+    .title {
+      margin-bottom: 48px;
+      font-size: 24px;
+      font-weight: bold;
+    }
+  }
 }
 </style>

@@ -5,7 +5,7 @@ export default [
     component: '',
     path: '/user',
     title: '用户',
-    icon: 'icon-menu',
+    icon: 'i-user',
     redirect: '/user/index',
   },
   {
@@ -32,7 +32,7 @@ export default [
     component: '',
     path: '/guild',
     title: '工会管理',
-    icon: 'icon-menu',
+    icon: 'i-guild',
     redirect: '/guild/index',
   },
   {
@@ -41,7 +41,7 @@ export default [
     component: '/guild/list',
     path: '/guild/index',
     title: '工会管理',
-    icon: 'icon-menu',
+    icon: '',
     redirect: '',
   },
   {
@@ -50,7 +50,7 @@ export default [
     component: '',
     path: '/anchor',
     title: '主播',
-    icon: 'icon-menu',
+    icon: 'i-anchor',
     redirect: '/anchor/index',
   },
   {
@@ -59,7 +59,7 @@ export default [
     component: '/anchor/list',
     path: '/anchor/index',
     title: '主播管理',
-    icon: 'icon-menu',
+    icon: '',
     redirect: '',
   },
   {
@@ -68,7 +68,7 @@ export default [
     component: '/anchor/detail',
     path: '/anchor/detail',
     title: '编辑主播信息',
-    icon: 'icon-menu',
+    icon: '',
     hide: true,
     redirect: '',
     activeMenu: '/anchor/list',
@@ -79,7 +79,7 @@ export default [
     component: '/anchor/statistics',
     path: '/anchor/statistics',
     title: '主播直播数据',
-    icon: 'icon-menu',
+    icon: '',
     redirect: '',
   },
   {
@@ -97,7 +97,7 @@ export default [
     component: '/recweight/list',
     path: '/recweight/index',
     title: '推荐位配置',
-    icon: 'icon-menu',
+    icon: 'i-recweight',
     redirect: '',
   },
   {
@@ -106,7 +106,7 @@ export default [
     component: '',
     path: '/setting',
     title: '平台配置',
-    icon: 'icon-menu',
+    icon: 'i-setting',
     redirect: '/setting/level',
   },
   {
@@ -115,7 +115,7 @@ export default [
     component: '/setting/level',
     path: '/setting/level',
     title: '等级配置',
-    icon: 'icon-menu',
+    icon: '',
     redirect: '',
   },
   {
@@ -124,7 +124,7 @@ export default [
     component: '/setting/noble',
     path: '/setting/noble',
     title: '贵族配置',
-    icon: 'icon-menu',
+    icon: '',
     redirect: '',
   },
   {
@@ -133,7 +133,7 @@ export default [
     component: '/setting/category',
     path: '/setting/category',
     title: '直播分类配置',
-    icon: 'icon-menu',
+    icon: '',
     redirect: '',
   },
   {
@@ -142,7 +142,7 @@ export default [
     component: '/setting/client',
     path: '/setting/client',
     title: '版本配置',
-    icon: 'icon-menu',
+    icon: '',
     redirect: '',
   },
   {
@@ -151,7 +151,7 @@ export default [
     component: '/setting/general',
     path: '/setting/general',
     title: '综合配置',
-    icon: 'icon-menu',
+    icon: '',
     redirect: '',
   },
   {
@@ -160,7 +160,7 @@ export default [
     component: '/setting/redirect',
     path: '/setting/redirect',
     title: '跳转页面配置',
-    icon: 'icon-menu',
+    icon: '',
     redirect: '',
   },
   {
@@ -169,7 +169,7 @@ export default [
     component: '',
     path: '/merchant',
     title: '商户管理',
-    icon: 'icon-menu',
+    icon: 'i-merchant',
     redirect: '/merchant/index',
   },
   {
@@ -178,7 +178,7 @@ export default [
     component: '/merchant/list',
     path: '/merchant/index',
     title: '商户管理',
-    icon: 'icon-menu',
+    icon: '',
     redirect: '',
   },
   {
@@ -187,7 +187,7 @@ export default [
     component: '',
     path: '/gift',
     title: '礼物管理',
-    icon: 'icon-menu',
+    icon: 'i-gift',
     redirect: '/gift/index',
   },
   {
@@ -196,7 +196,7 @@ export default [
     component: '/gift/list',
     path: '/gift/index',
     title: '礼物管理',
-    icon: 'icon-menu',
+    icon: '',
     redirect: '',
   },
   {
@@ -205,7 +205,7 @@ export default [
     component: '',
     path: '/message',
     title: '消息管理',
-    icon: 'icon-menu',
+    icon: 'i-message',
     redirect: '/message/index',
   },
   {
@@ -214,7 +214,7 @@ export default [
     component: '/message/list',
     path: '/message/index',
     title: '消息管理',
-    icon: 'icon-menu',
+    icon: '',
     redirect: '',
   },
   {
@@ -223,7 +223,7 @@ export default [
     component: '',
     path: '/notice',
     title: '公告',
-    icon: 'icon-menu',
+    icon: 'i-notice',
     redirect: '/notice/index',
   },
   {
@@ -232,7 +232,7 @@ export default [
     component: '/notice/list',
     path: '/notice/index',
     title: '公告管理',
-    icon: 'icon-menu',
+    icon: '',
     redirect: '',
   },
   {
@@ -241,7 +241,7 @@ export default [
     component: '/notice/marquee',
     path: '/notice/marquee',
     title: '跑马灯配置',
-    icon: 'icon-menu',
+    icon: '',
     redirect: '',
   },
   {
@@ -250,7 +250,7 @@ export default [
     component: '',
     path: '/permissions',
     title: '权限管理',
-    icon: 'icon-menu',
+    icon: 'i-permissions',
     redirect: '/permissions/role',
   },
   {
@@ -259,7 +259,7 @@ export default [
     component: '/permissions/role',
     path: '/permissions/role',
     title: '角色管理',
-    icon: 'icon-menu',
+    icon: '',
     redirect: '',
   },
   {
@@ -268,7 +268,7 @@ export default [
     component: '/permissions/department',
     path: '/permissions/department',
     title: '部门管理',
-    icon: 'icon-menu',
+    icon: '',
     redirect: '',
   },
   {
@@ -277,7 +277,7 @@ export default [
     component: '/permissions/account',
     path: '/permissions/account',
     title: '账号管理',
-    icon: 'icon-menu',
+    icon: '',
     redirect: '',
   },
 ]

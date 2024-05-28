@@ -20,15 +20,15 @@
         <template #overlay>
           <a-menu @click="handleClick">
             <!-- <a-menu-item key="person">
-              <icon-font type="icon-user" />
+              <icon-font type="i-user" />
               修改密码
             </a-menu-item> -->
             <a-menu-item key="theme">
-              <icon-font type="icon-bg-colors" />
+              <icon-font type="i-colors" />
               主题设置
             </a-menu-item>
             <a-menu-item key="logout">
-              <icon-font type="icon-logout" />
+              <icon-font type="i-logout" />
               退出登录
             </a-menu-item>
           </a-menu>

@@ -6,6 +6,55 @@
   "description": "站酷直播",
   "glyphs": [
     {
+      "icon_id": "25466122",
+      "name": "浅色模式",
+      "font_class": "taiyangtianqi",
+      "unicode": "e602",
+      "unicode_decimal": 58882
+    },
+    {
+      "icon_id": "30243501",
+      "name": "跟随系统-followsystem-line",
+      "font_class": "system",
+      "unicode": "e621",
+      "unicode_decimal": 58913
+    },
+    {
+      "icon_id": "32858565",
+      "name": "深色模式",
+      "font_class": "moonyueliang",
+      "unicode": "e703",
+      "unicode_decimal": 59139
+    },
+    {
+      "icon_id": "4765888",
+      "name": "logout",
+      "font_class": "logout",
+      "unicode": "e78c",
+      "unicode_decimal": 59276
+    },
+    {
+      "icon_id": "37792672",
+      "name": "bg_colors",
+      "font_class": "colors",
+      "unicode": "e668",
+      "unicode_decimal": 58984
+    },
+    {
+      "icon_id": "20912243",
+      "name": "收起",
+      "font_class": "outdent",
+      "unicode": "e8b2",
+      "unicode_decimal": 59570
+    },
+    {
+      "icon_id": "20912262",
+      "name": "展开",
+      "font_class": "indent",
+      "unicode": "e8b5",
+      "unicode_decimal": 59573
+    },
+    {
       "icon_id": "8777495",
       "name": "star_filled",
       "font_class": "liked",

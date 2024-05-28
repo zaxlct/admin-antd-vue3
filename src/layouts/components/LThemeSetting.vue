@@ -67,17 +67,17 @@ const themes = ref([
   {
     name: 'auto',
     title: '跟随系统',
-    icon: 'icon-system',
+    icon: 'i-system',
   },
   {
     name: 'light',
     title: '浅色模式',
-    icon: 'icon-taiyangtianqi',
+    icon: 'i-taiyangtianqi',
   },
   {
     name: 'dark',
     title: '深色模式',
-    icon: 'icon-moonyueliang',
+    icon: 'i-moonyueliang',
   },
 ])
 const { setTheme, themeOptions } = useTheme()

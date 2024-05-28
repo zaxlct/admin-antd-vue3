@@ -4,7 +4,7 @@
       class="trigger"
       @click="handleCollapse"
     >
-      <icon-font :type="!collapse ? 'icon-outdent' : 'icon-indent'" />
+      <icon-font :type="!collapse ? 'i-outdent' : 'i-indent'" />
     </span>
     <a-breadcrumb class="breadcrumb">
       <a-breadcrumb-item

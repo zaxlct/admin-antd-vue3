@@ -30,7 +30,7 @@ const appTitle = config.appTitle
 <style scoped>
 .logo {
   line-height: 32px;
-  font-size: 24px;
+  font-size: 18px;
   padding: 16px 0;
   font-weight: bold;
   color: #fff;
@@ -46,6 +46,6 @@ const appTitle = config.appTitle
   margin-left: 10px;
 }
 .logo-pic {
-  width: 32px;
+  height: 26px;
 }
 </style>

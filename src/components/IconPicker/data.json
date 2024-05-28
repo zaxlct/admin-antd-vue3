@@ -6,6 +6,83 @@
   "description": "站酷直播",
   "glyphs": [
     {
+      "icon_id": "8777495",
+      "name": "star_filled",
+      "font_class": "liked",
+      "unicode": "e658",
+      "unicode_decimal": 58968
+    },
+    {
+      "icon_id": "8777509",
+      "name": "arrow_up",
+      "font_class": "up",
+      "unicode": "e659",
+      "unicode_decimal": 58969
+    },
+    {
+      "icon_id": "8777510",
+      "name": "arrow_left",
+      "font_class": "left",
+      "unicode": "e65a",
+      "unicode_decimal": 58970
+    },
+    {
+      "icon_id": "8777511",
+      "name": "arrow_down",
+      "font_class": "down",
+      "unicode": "e65b",
+      "unicode_decimal": 58971
+    },
+    {
+      "icon_id": "8777512",
+      "name": "arrow_right",
+      "font_class": "right",
+      "unicode": "e65c",
+      "unicode_decimal": 58972
+    },
+    {
+      "icon_id": "8918244",
+      "name": "go-to-link",
+      "font_class": "icon-test13",
+      "unicode": "e664",
+      "unicode_decimal": 58980
+    },
+    {
+      "icon_id": "8918512",
+      "name": "benefits",
+      "font_class": "icon-test14",
+      "unicode": "e666",
+      "unicode_decimal": 58982
+    },
+    {
+      "icon_id": "8776842",
+      "name": "search",
+      "font_class": "search",
+      "unicode": "e63c",
+      "unicode_decimal": 58940
+    },
+    {
+      "icon_id": "8777388",
+      "name": "check",
+      "font_class": "checked",
+      "unicode": "e651",
+      "unicode_decimal": 58961
+    },
+    {
+      "icon_id": "8777389",
+      "name": "close",
+      "font_class": "close",
+      "unicode": "e652",
+      "unicode_decimal": 58962
+    },
+    {
+      "icon_id": "8777494",
+      "name": "star",
+      "font_class": "like",
+      "unicode": "e657",
+      "unicode_decimal": 58967
+    },
+    {
       "icon_id": "1277254",
       "name": "password",
       "font_class": "lock",

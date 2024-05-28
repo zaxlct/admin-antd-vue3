@@ -23,7 +23,7 @@ component: {
 ```
 
 ```html
-// 使用组件 <icon-font type="icon-setting" />
+// 使用组件 <icon-font type="i-setting" />
 ```
 
 <br />

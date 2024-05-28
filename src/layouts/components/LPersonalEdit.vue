@@ -57,7 +57,7 @@
         type="primary"
         @click.prevent="updatePsd()"
       >
-        <template #icon><icon-font type="icon-setting" /></template>
+        <template #icon><icon-font type="i-setting" /></template>
         提 交
       </a-button>
     </template>

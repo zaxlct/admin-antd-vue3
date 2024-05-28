@@ -7,22 +7,22 @@
       <a-dropdown>
         <div style="margin-left: 10px; cursor: pointer">
           <a-avatar size="default">
-            <template #icon><icon-font type="icon-user" /></template>
+            <template #icon><icon-font type="i-user" /></template>
           </a-avatar>
           <span style="margin-left: 10px; vertical-align: middle; color: #fff">
             {{ userInfo.username }}
             <icon-font
-              type="icon-down"
+              type="i-down"
               style="margin-left: 5px; font-size: 10px"
             />
           </span>
         </div>
         <template #overlay>
           <a-menu @click="handleClick">
-            <a-menu-item key="person">
+            <!-- <a-menu-item key="person">
               <icon-font type="icon-user" />
               修改密码
-            </a-menu-item>
+            </a-menu-item> -->
             <a-menu-item key="theme">
               <icon-font type="icon-bg-colors" />
               主题设置

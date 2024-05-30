@@ -39,3 +39,6 @@ export const liveCategoryAddOrEditReq = (id, data) => {
   }
 }
 export const delLiveCategoryReq = data => del('/api/v1/setting/live/category', data)
+
+// 保存综合配置
+export const saveSettingGeneralReq = data => put('/api/v1/setting/general', data)

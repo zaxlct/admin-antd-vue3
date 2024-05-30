@@ -327,7 +327,7 @@
 
 <script setup>
 import { watchDebounced } from '@vueuse/core'
-import { saveSettingGeneralReq } from '@/api/setting'
+import { getSettingGeneralReq, saveSettingGeneralReq } from '@/api/setting'
 
 const live_room_payment_config = reactive({
   paid_barrage: 1,
@@ -383,11 +383,29 @@ const live_room_config = reactive({
   barrage_display_time: 0,
 })
 
+const spinning = ref(false)
+onMounted(async() => {
+  spinning.value = true
+  try {
+    const res = await getSettingGeneralReq()
+    Object.assign(live_room_payment_config, res.live_room_payment_config)
+    Object.assign(like_config, res.like_config)
+    Object.assign(charm_config, res.charm_config)
+    Object.assign(fanclub_config, res.fanclub_config)
+    Object.assign(register_config, res.register_config)
+    Object.assign(official_config, res.official_config)
+    Object.assign(live_room_config, res.live_room_config)
+  } catch (error) {
+    console.log(error)
+  } finally {
+    spinning.value = false
+  }
+})
+
 const fanclub_config_ref = ref(null)
 const official_website_ref = ref(null)
 const live_room_config_ref = ref(null)
 
-const spinning = ref(false)
 function updateConfig() {
   const data = {
     live_room_payment_config,

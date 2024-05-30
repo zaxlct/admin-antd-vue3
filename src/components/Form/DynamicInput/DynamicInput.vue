@@ -1,5 +1,6 @@
 <template>
   <a-form-item
+    class="mb15"
     v-for="(domain, index) in domains"
     :key="index"
     :label="label + ` ${index + 1}`"
@@ -10,15 +11,17 @@
       trigger: 'change',
     }"
   >
-    <a-input
-      v-model:value="domains[index]"
-      style="width: 60%; margin-right: 8px"
-    />
-    <MinusCircleOutlined
-      v-if="domains.length > 1"
-      class="dynamic-delete-button"
-      @click="removeDomain(index)"
-    />
+    <div class="flex_box">
+      <a-input
+        class="mr10"
+        v-model:value="domains[index]"
+      />
+      <MinusCircleOutlined
+        v-if="domains.length > 1"
+        class="dynamic-delete-button"
+        @click="removeDomain(index)"
+      />
+    </div>
   </a-form-item>
   <a-form-item>
     <a-button

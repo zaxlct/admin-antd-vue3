@@ -79,7 +79,7 @@
         钻石与魅力值比例配置
       </div>
       <a-form-item
-        name="diamond_to_charm_ratio.diamond_value"
+        :name="['diamond_to_charm_ratio', 'diamond_value']"
         extra="请输入钻石数"
       >
         <a-input-number
@@ -92,7 +92,7 @@
       </a-form-item>
       <span class="bold mr12">:</span>
       <a-form-item
-        name="diamond_to_charm_ratio.charm_value"
+        :name="['diamond_to_charm_ratio', 'charm_value']"
         extra="请输入魅力值"
       >
         <a-input-number
@@ -108,7 +108,7 @@
         点赞数与魅力值比例配置
       </div>
       <a-form-item
-        name="likes_to_charm_ratio.like_value"
+        :name="['likes_to_charm_ratio', 'like_value']"
         extra="请输入点赞数"
       >
         <a-input-number
@@ -121,7 +121,7 @@
       </a-form-item>
       <span class="bold mr12">:</span>
       <a-form-item
-        :model="like_config"
+        :name="['likes_to_charm_ratio', 'charm_value']"
         extra="请输入魅力值"
       >
         <a-input-number
@@ -140,15 +140,16 @@
     title="粉丝团配置"
   >
     <a-form
+      ref="fanclub_config_ref"
       style="width: 500px"
       class="form_container"
       layout="inline"
       :model="fanclub_config"
     >
       <a-form-item
-        name="begin.name"
+        :name="['begin', 'name']"
         label="初级粉丝团"
-        :rules="[{ required: true, message: '请输入粉丝团名称' }]"
+        :rules="[{ required: true, message: '请输入粉丝团名称', trigger: 'change' }]"
       >
         <a-input
           v-model:value="fanclub_config.begin.name"
@@ -170,9 +171,9 @@
       </a-form-item>
 
       <a-form-item
-        name="inter.name"
+        :name="['inter', 'name']"
         label="中级粉丝团"
-        :rules="[{ required: true, message: '请输入粉丝团名称' }]"
+        :rules="[{ required: true, message: '请输入粉丝团名称', trigger: 'change' }]"
       >
         <a-input
           v-model:value="fanclub_config.inter.name"
@@ -194,9 +195,9 @@
       </a-form-item>
 
       <a-form-item
-        name="adv.name"
+        :name="['adv', 'name']"
         label="高级粉丝团"
-        :rules="[{ required: true, message: '请输入粉丝团名称' }]"
+        :rules="[{ required: true, message: '请输入粉丝团名称', trigger: 'change'}]"
       >
         <a-input
           v-model:value="fanclub_config.adv.name"
@@ -270,6 +271,54 @@
       </a-form-item>
     </a-form>
   </a-card>
+
+  <a-card
+    class="mt20"
+    title="官网地址"
+  >
+    <a-form
+      class="form_container"
+      :model="official_website"
+      :labelCol="{ style: { width: '100px' } }"
+    >
+      <DynamicInput
+        v-model="official_website.official_website_url"
+        name="official_website_url"
+        label="地址配置"
+      />
+    </a-form>
+  </a-card>
+
+  <a-card
+    class="mt20"
+    title="直播间配置"
+  >
+    <a-form
+      class="form_container"
+      :model="live_room_config"
+      :labelCol="{ style: { width: '100px' } }"
+    >
+      <DynamicInput
+        v-model="live_room_config.links"
+        name="links"
+        label="地址配置"
+      />
+      <a-form-item
+        name="barrage_display_time"
+        label="弹幕展示"
+        extra="用户进入直播间后，展示设定时间内的历史弹幕"
+      >
+        <a-input-number
+          :min="0"
+          :max="999999"
+          :step="1"
+          :precision="0"
+          v-model:value="live_room_config.barrage_display_time"
+          :formatter="value => `${value} 分钟`"
+        />
+      </a-form-item>
+    </a-form>
+  </a-card>
 </template>
 
 <script setup>
@@ -320,7 +369,18 @@ const register_config = reactive({
   allow_same_device: false
 })
 
+const official_website = reactive({
+  official_website_url: [''],
+})
+
+const live_room_config = reactive({
+  links: [''],
+  barrage_display_time: 0,
+})
+
+const fanclub_config_ref = ref(null)
 watchDebounced(fanclub_config, () => {
+  fanclub_config_ref.value.validateFields()
 }, { debounce: 1000 })
 </script>
 <style lang="sass" scoped>

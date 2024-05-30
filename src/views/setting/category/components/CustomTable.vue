@@ -35,6 +35,8 @@ const props = defineProps({
   },
 })
 const emit = defineEmits(['changeTab'])
+const router = useRouter()
+
 const pagination = reactive({
   page: 1,
   limit: 10,
@@ -42,12 +44,12 @@ const pagination = reactive({
 })
 const dataSource = ref([])
 const { loading, refresh } = useRequest(() => {
-  // 一级分类 parentId 为 null
+  // 一级分类 parentId 传递 null
   const {
-    parentId = null,
+    parentId,
     ...params
   } = props.searchParams
-  return getLiveCategoryListReq(parentId, {
+  return getLiveCategoryListReq(props.isParent ? null : parentId, {
     ...params,
     page: pagination.page,
     limit: pagination.limit,
@@ -62,7 +64,14 @@ const { loading, refresh } = useRequest(() => {
 })
 
 function change2SecondLevel(parentId) {
-  emit('changeTab', parentId) // 切换到二级分类
+  router.replace({
+    query: {
+      parentId,
+    },
+  }).then(() => {
+    // 切换到二级分类，并且要等待路由切换完成，否则parentId参数无法再 fApi 中生效
+    emit('changeTab')
+  })
 }
 
 const { createDialog } = useDialog()

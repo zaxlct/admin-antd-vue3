@@ -40,28 +40,27 @@ const props = defineProps({
     type: Boolean,
     default: true,
   },
-  parentId: {
-    type: Number,
-    default: null,
-  },
 })
 const params = defineModel()
+const route = useRoute()
+const parentId = route.query.parentId || null
+
 const data = reactive({
   name: '',
   create_time: [],
-  parentId: null,
+  parentId,
 })
 const fApi = ref({})
 
-const emit = defineEmits(['addItem', 'search'])
-
-watch(() => props.parentId, val => {
+watch(() => route.query.parentId, (val) => {
   if (val) {
-    data.parentId = val
+    fApi.value.setValue({
+      parentId: val,
+    })
   }
-}, {
-  immediate: true,
 })
+
+const emit = defineEmits(['addItem', 'search'])
 
 const option = {
   resetBtn: false,
@@ -80,30 +79,11 @@ const option = {
 
 const rule = ref([
   {
-    type: 'input',
-    field: 'name',
-    title: '分类名称',
-    value: '',
-  },
-  {
-    type: 'rangePicker',
-    field: 'create_time',
-    title: '创建时间',
-    value: '',
-    props: {
-      format: 'YYYY-MM-DD',
-      valueFormat: 'X',
-    },
-  },
-  { type: 'btns' },
-])
-
-if (!props.isParent) {
-  rule.value.unshift({
     type: 'select',
     field: 'parentId',
     title: '一级分类',
     value: '',
+    hidden: props.isParent, // 只有二级分类才展示分类筛选
     props: {
       allowClear: true,
     },
@@ -121,8 +101,25 @@ if (!props.isParent) {
         parse: res => res.items.map(item => ({ value: item.category_id, label: item.name })),
       },
     },
-  })
-}
+  },
+  {
+    type: 'input',
+    field: 'name',
+    title: '分类名称',
+    value: '',
+  },
+  {
+    type: 'rangePicker',
+    field: 'create_time',
+    title: '创建时间',
+    value: '',
+    props: {
+      format: 'YYYY-MM-DD',
+      valueFormat: 'X',
+    },
+  },
+  { type: 'btns' },
+])
 
 function resetForm() {
   fApi.value.resetFields()

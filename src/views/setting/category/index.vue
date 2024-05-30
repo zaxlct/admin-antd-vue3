@@ -40,8 +40,7 @@ const CategoryComponent = defineComponent({
     const searchParams = ref({})
     const parentId = ref(null)
 
-    function changeTab(val) {
-      parentId.value = val
+    function changeTab() {
       activeKey.value = 2
     }
 

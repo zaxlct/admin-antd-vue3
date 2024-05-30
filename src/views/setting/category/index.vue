@@ -6,7 +6,6 @@
       v-for="item in tabs"
       :key="item.key"
       :tab="item.title"
-      :disabled="item.key === 2 && !parentId"
     >
       <CategoryComponent :type="item.key" />
     </a-tab-pane>
@@ -16,8 +15,6 @@
 <script setup lang="jsx">
 import CustomTable from './components/CustomTable.vue'
 import FormSearch from './components/FormSearch.vue'
-const route = useRoute()
-const parentId = computed(() => route.query.parentId)
 const activeKey = ref(1)
 const tabs = ref([
   {
@@ -41,11 +38,19 @@ const CategoryComponent = defineComponent({
     const customTableRef = ref(null)
     const formSearchRef = ref(null)
     const searchParams = ref({})
+    const parentId = ref(null)
+
+    function changeTab(val) {
+      parentId.value = val
+      activeKey.value = 2
+    }
 
     return () => (
       <div class="page_container">
         <FormSearch
           ref={el => formSearchRef.value = el}
+          parentId={parentId.value}
+          isParent={props.type === 1}
           v-model={searchParams.value}
           v-on={
             {
@@ -60,7 +65,7 @@ const CategoryComponent = defineComponent({
           resetSearch={() => formSearchRef.value.resetForm()}
           v-on={
             {
-              changeTab: val => activeKey.value = val,
+              changeTab,
             }
           }
         />

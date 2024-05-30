@@ -35,34 +35,34 @@ const props = defineProps({
   },
 })
 const emit = defineEmits(['changeTab'])
-const router = useRouter()
-const route = useRoute()
 const pagination = reactive({
   page: 1,
   limit: 10,
   total: 0,
 })
 const dataSource = ref([])
-const listReqUrl = computed(() => props.isParent ? null : route.query.parentId)
-const { loading, refresh } = useRequest(() => getLiveCategoryListReq(listReqUrl.value, {
-  ...props.searchParams,
-  page: pagination.page,
-  limit: pagination.limit,
-}), {
+const { loading, refresh } = useRequest(() => {
+  // 一级分类 parentId 为 null
+  const {
+    parentId = null,
+    ...params
+  } = props.searchParams
+  return getLiveCategoryListReq(parentId, {
+    ...params,
+    page: pagination.page,
+    limit: pagination.limit,
+    level: props.isParent ? 1 : 2,
+  })
+}, {
   refreshDeps: true,
   onSuccess(data) {
     dataSource.value = data.items
     pagination.total = data.total_data
-    const parentId = route.query.parentId
-    if (props.isParent && data.items.length && !parentId) {
-      router.replace({ query: { parentId: data.items[0].category_id } })
-    }
   },
 })
 
-function setParentId2Query(parentId) {
-  router.replace({ query: { parentId } })
-  emit('changeTab', 2) // 切换到二级分类
+function change2SecondLevel(parentId) {
+  emit('changeTab', parentId) // 切换到二级分类
 }
 
 const { createDialog } = useDialog()
@@ -76,7 +76,7 @@ const columns = ref([
     title: props.isParent ? '二级分类数量' : '所属一级分类',
     dataIndex: props.isParent ? 'child_count' : 'parent_name',
     customRender: ({ record }) => <div>
-      <a-button onClick={() => setParentId2Query(record.category_id)} type="link" size="small" v-if={props.isParent}>{ record.child_count }</a-button>
+      <a-button onClick={() => change2SecondLevel(record.category_id)} type="link" size="small" v-if={props.isParent}>{ record.child_count }</a-button>
       <span v-else>{record.parent_name }</span>
     </div>
   },

@@ -35,14 +35,34 @@
 </template>
 
 <script setup>
+const props = defineProps({
+  isParent: { // 是否为一级分类
+    type: Boolean,
+    default: true,
+  },
+  parentId: {
+    type: Number,
+    default: null,
+  },
+})
 const params = defineModel()
 const data = reactive({
   name: '',
   create_time: [],
+  parentId: null,
 })
+const fApi = ref({})
 
 const emit = defineEmits(['addItem', 'search'])
-const fApi = ref({})
+
+watch(() => props.parentId, val => {
+  if (val) {
+    data.parentId = val
+  }
+}, {
+  immediate: true,
+})
+
 const option = {
   resetBtn: false,
   submitBtn: false,
@@ -77,6 +97,32 @@ const rule = ref([
   },
   { type: 'btns' },
 ])
+
+if (!props.isParent) {
+  rule.value.unshift({
+    type: 'select',
+    field: 'parentId',
+    title: '一级分类',
+    value: '',
+    props: {
+      allowClear: true,
+    },
+    options: [],
+    effect: {
+      fetch: {
+        action: '/api/v1/setting/live/category',
+        data: {
+          page: 1,
+          limit: 99,
+          level: 1,
+        },
+        to: 'options',
+        method: 'get',
+        parse: res => res.items.map(item => ({ value: item.category_id, label: item.name })),
+      },
+    },
+  })
+}
 
 function resetForm() {
   fApi.value.resetFields()

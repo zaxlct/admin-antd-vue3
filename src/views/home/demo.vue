@@ -7,7 +7,8 @@
       v-bind="formItemLayoutWithOutLabel"
     >
       <DynamicInput
-        v-model="dynamicValidateForm.domains"
+        v-model="dynamicValidateForm.official_website_url"
+        name="official_website_url"
         label="地址配置"
       />
       <a-form-item v-bind="formItemLayoutWithOutLabel">
@@ -28,18 +29,13 @@
 <script setup>
 const formRef = ref()
 const dynamicValidateForm = reactive({
-  domains: [
-    {
-      value: '',
-      key: Date.now(),
-    },
-  ],
+  official_website_url: [''],
 })
 const submitForm = () => {
   formRef.value
     .validate()
     .then(() => {
-      console.log('values', dynamicValidateForm.domains)
+      console.log('values', dynamicValidateForm.official_website_url)
     })
     .catch(error => {
       console.log('error', error)

@@ -1,9 +1,9 @@
 <template>
   <a-form-item
     v-for="(domain, index) in domains"
-    :key="domain.key"
+    :key="index"
     :label="label + ` ${index + 1}`"
-    :name="[name, index, 'value']"
+    :name="[name, index]"
     :rules="{
       required: true,
       message: `请输入${label} ${index + 1}`,
@@ -11,13 +11,13 @@
     }"
   >
     <a-input
-      v-model:value="domain.value"
+      v-model:value="domains[index]"
       style="width: 60%; margin-right: 8px"
     />
     <MinusCircleOutlined
       v-if="domains.length > 1"
       class="dynamic-delete-button"
-      @click="removeDomain(domain)"
+      @click="removeDomain(index)"
     />
   </a-form-item>
   <a-form-item>
@@ -35,27 +35,21 @@ import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons-vue'
 defineProps({
   label: {
     type: String,
-    default: 'Domains',
+    default: 'domains',
   },
   name: {
     type: String,
-    default: 'Domains',
+    default: 'domains',
   },
 })
 const domains = defineModel({
   default: () => [],
 })
-const removeDomain = item => {
-  const index = domains.value.indexOf(item)
-  if (index !== -1) {
-    domains.value.splice(index, 1)
-  }
+const removeDomain = index => {
+  domains.value.splice(index, 1)
 }
 const addDomain = () => {
-  domains.value.push({
-    value: '',
-    key: Date.now(),
-  })
+  domains.value.push('')
 }
 </script>
 <style scoped>

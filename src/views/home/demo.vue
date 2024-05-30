@@ -1,57 +1,51 @@
 <template>
   <div>
-    <p>formData: {{ value }}</p>
-    <form-create
-      :rule="rule"
-      v-model:api="fApi"
-      :option="options"
-      v-model="value"
+    <a-form
+      ref="formRef"
+      name="dynamic_form_item"
+      :model="dynamicValidateForm"
+      v-bind="formItemLayoutWithOutLabel"
     >
-      <template #type-btns>
-        <ACol
-          :push="3"
-          style="margin-bottom: 20px"
-        >
-          <AButton @click="changeValue">修改 field1</AButton>
-          <AButton
-            @click="changeForm"
-            style="margin-left: 20px"
-          >
-            修改表单
-          </AButton>
-        </ACol>
-      </template>
-    </form-create>
+      <DynamicInput
+        v-model="dynamicValidateForm.domains"
+        label="地址配置"
+      />
+      <a-form-item v-bind="formItemLayoutWithOutLabel">
+        <a-button
+          type="primary"
+          html-type="submit"
+          @click="submitForm"
+        >Submit</a-button>
+        <a-button
+          style="margin-left: 10px"
+          @click="resetForm"
+        >Reset</a-button>
+      </a-form-item>
+    </a-form>
   </div>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      fApi: {},
-      value: { field1: '111', field2: '222', date: '2023-10-23' },
-      options: {
-        onSubmit: formData => {
-          alert(JSON.stringify(formData))
-        },
-        resetBtn: true,
-      },
-      rule: [
-        { type: 'input', field: 'field1', title: 'field1', value: '' },
-        { type: 'input', field: 'field2', title: 'field2', value: '' },
-        { type: 'datePicker', field: 'date', title: 'date', value: '' },
-        { type: 'btns' },
-      ],
-    }
-  },
-  methods: {
-    changeValue() {
-      this.value.field1 += '-a'
+<script setup>
+const formRef = ref()
+const dynamicValidateForm = reactive({
+  domains: [
+    {
+      value: '',
+      key: Date.now(),
     },
-    changeForm() {
-      this.value = { field1: '666', field2: '666', date: '2023-09-23' }
-    },
-  },
+  ],
+})
+const submitForm = () => {
+  formRef.value
+    .validate()
+    .then(() => {
+      console.log('values', dynamicValidateForm.domains)
+    })
+    .catch(error => {
+      console.log('error', error)
+    })
+}
+const resetForm = () => {
+  formRef.value.resetFields()
 }
 </script>

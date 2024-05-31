@@ -44,3 +44,9 @@ export const delLiveCategoryReq = data => del('/api/v1/setting/live/category', d
 export const getSettingGeneralReq = () => get('/api/v1/setting/general')
 // 保存综合配置
 export const saveSettingGeneralReq = data => put('/api/v1/setting/general', data)
+
+
+// get综合配置
+export const getSettingRedirectReq = () => get('/api/v1/setting/redirect')
+// 保存综合配置
+export const saveSettingRedirectReq = data => put('/api/v1/setting/redirect', data)

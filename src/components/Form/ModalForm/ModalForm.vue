@@ -63,8 +63,8 @@ defineExpose<DialogExpose>({
   submit() {
     return new Promise((resolve, reject) => {
       fApiCopy.value.submit(async formData => {
-        console.log('formData', formData)
         const params = props.getData ? props.getData(formData) : formData
+        console.log('formData', formData, params)
         emits('loading', true)
         try {
           props.request && await props.request(params)

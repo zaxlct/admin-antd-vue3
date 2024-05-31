@@ -110,8 +110,10 @@ async function openLevelConfig() {
     speech_level: data.speech_level,
     effect_level: data.effect_level,
     sub: {
-      recharge_amount: data.recharge_amount,
-      experience_points: data.experience_points,
+      recharge_amount: data.xp_conf.recharge.amount,
+      recharge_points: data.xp_conf.recharge.points,
+      diamonds_amount: data.xp_conf.diamonds.amount,
+      diamonds_points: data.xp_conf.diamonds.points,
     },
   })
 
@@ -121,7 +123,16 @@ async function openLevelConfig() {
       return {
         effect_level: data.effect_level,
         speech_level: data.speech_level,
-        ...data.sub,
+        xp_conf: {
+          recharge: {
+            amount: data.sub.recharge_amount,
+            points: data.sub.recharge_points
+          },
+          diamonds: {
+            amount: data.sub.diamonds_amount,
+            points: data.sub.diamonds_points
+          }
+        },
       }
     },
     option: {
@@ -153,13 +164,39 @@ async function openLevelConfig() {
         type: 'subForm',
         field: 'sub',
         title: '经验值机制',
-        value: { recharge_amount: '', experience_points: '' },
+        value: { recharge_amount: '', recharge_points: '', diamonds_amount: '', diamonds_points: '', },
         props: {
           rule: [
             {
               type: 'input-number',
               field: 'recharge_amount',
-              title: '充值金额',
+              class: 'label_colon',
+              wrap: {
+                extra: '充值金额',
+              },
+              value: '',
+              props: {
+                max: 100000,
+                min: 0,
+                step: 1,
+                precision: 0,
+              },
+              effect: {
+                required: true,
+              },
+              col: {
+                span: 12
+              }
+            },
+            {
+              type: 'input-number',
+              field: 'recharge_points',
+              wrap: {
+                extra: '经验值',
+              },
+              col: {
+                span: 12
+              },
               value: '',
               props: {
                 max: 100000,
@@ -173,8 +210,33 @@ async function openLevelConfig() {
             },
             {
               type: 'input-number',
-              field: 'experience_points',
-              title: '经验值',
+              field: 'diamonds_amount',
+              wrap: {
+                extra: '消费钻石',
+              },
+              value: '',
+              props: {
+                max: 100000,
+                min: 0,
+                step: 1,
+                precision: 0,
+              },
+              effect: {
+                required: true,
+              },
+              col: {
+                span: 12
+              }
+            },
+            {
+              type: 'input-number',
+              field: 'diamonds_points',
+              wrap: {
+                extra: '经验值',
+              },
+              col: {
+                span: 12
+              },
               value: '',
               props: {
                 max: 100000,

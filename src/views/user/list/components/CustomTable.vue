@@ -261,7 +261,7 @@ async function editItem(userItem = {}) {
         field: 'nickname',
         title: '用户昵称',
         value: '',
-        validate: [{ type: 'string', max: 10, message: '用户昵称最多10个字'}],
+        validate: [{ type: 'string', max: 10, message: '昵称为2-6个中文汉字', pattern: '^[\u4e00-\u9fa5]{2,6}$' }],
       },
       {
         type: 'input',

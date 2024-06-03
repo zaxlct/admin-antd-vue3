@@ -18,6 +18,7 @@ import buildInfo from 'vite-plugin-build-info'
 import iconfont from 'vite-plugin-iconfont'
 import { themeToken } from './src/config/theme'
 import { resolve } from 'node:path'
+import pluginPurgeCss from '@mojojoejo/vite-plugin-purgecss'
 
 // 完整配置，请查阅https://vitejs.dev/config/
 export default defineConfig(({ command, mode }: ConfigEnv) => {
@@ -76,6 +77,8 @@ export default defineConfig(({ command, mode }: ConfigEnv) => {
           vueJsx: vueJsx(),
         },
       }),
+
+      pluginPurgeCss(),
       createHtmlPlugin({
         minify: true,
         entry: '/src/main.ts',

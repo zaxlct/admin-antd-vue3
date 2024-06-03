@@ -6,6 +6,34 @@
   "description": "站酷直播",
   "glyphs": [
     {
+      "icon_id": "2075246",
+      "name": "安卓",
+      "font_class": "android",
+      "unicode": "e603",
+      "unicode_decimal": 58883
+    },
+    {
+      "icon_id": "4936981",
+      "name": "apple-fill",
+      "font_class": "apple-fill",
+      "unicode": "e881",
+      "unicode_decimal": 59521
+    },
+    {
+      "icon_id": "792209",
+      "name": "up-b-向上",
+      "font_class": "up-o",
+      "unicode": "e61b",
+      "unicode_decimal": 58907
+    },
+    {
+      "icon_id": "40579870",
+      "name": "up-b-向上-copy",
+      "font_class": "down-o",
+      "unicode": "e8b6",
+      "unicode_decimal": 59574
+    },
+    {
       "icon_id": "25466122",
       "name": "浅色模式",
       "font_class": "taiyangtianqi",

@@ -1,406 +1,550 @@
 <template>
-  <div class="page-wrap">
-    <DemoPage></DemoPage>
-    <ACard title="首页">
-      <h3>运行时配置：</h3>
-      <div>可在打包后修改，位置：/public/config.js</div>
-      <div>{{ appConfig }}</div>
-      <h3>权限测试</h3>
-      <div class="my-2 block">
-        选择权限：
-        <ASelect
-          v-model:value="selectAuthKeys"
-          mode="multiple"
-          class="w-50"
-        >
-          <ASelectOption
-            v-for="item in authKeys"
-            :key="item"
-            :value="item"
-          >
-            {{ item }}
-          </ASelectOption>
-        </ASelect>
-      </div>
-      <div>{{ selectAuthKeys }}</div>
-      <ASpace>
-        <div>指令：</div>
-        <AButton v-auth="'home'">指令：home</AButton>
-        <AButton v-auth="selectAuthKeys">指令：every模式</AButton>
-        <AButton v-auth:some="selectAuthKeys">指令：some模式</AButton>
-        <div>组件：</div>
-        <Auth value="home">
-          <a-button>组件：home</a-button>
-        </Auth>
-        <Auth :value="selectAuthKeys">
-          <a-button>组件：every模式</a-button>
-        </Auth>
-        <Auth
-          :value="selectAuthKeys"
-          model="some"
-        >
-          <a-button>组件：some模式</a-button>
-        </Auth>
-      </ASpace>
-      <h3>请求取消</h3>
-      <div>
-        <ASpace>
-          <AButton @click="handleRun">自动取消重复请求（快速点击测试）</AButton>
-          <AButton @click="handleCancelAllRequest">取消全部请求</AButton>
-        </ASpace>
-      </div>
-      <h3>文件下载</h3>
-      <div>
-        <AButton @click="handleDownloadFile">文件下载</AButton>
-        <p>文件大小：{{ bytesToSize(progress.total) }}</p>
-        <p>已下载：{{ bytesToSize(progress.loaded) }}</p>
-        <p>
-          进度：
-          <AProgress
-            style="width: 400px"
-            :percent="progress.progress"
-          />
-        </p>
-      </div>
-      <h3>vueRequest</h3>
-      <p>
-        <a
-          href="https://inhiblabcore.github.io/docs/hooks/useRequest/"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          VueHooksPlus - vueRequest
-        </a>
-        测试
-      </p>
-      <AButton
-        :loading="loading"
-        @click="handleRun"
-      >
-        请求
-      </AButton>
-      <p>测试结果</p>
-      <p>data:{{ data }}</p>
-      <p>err:{{ error }}</p>
-      <h3>表格</h3>
-      <p>组件位置：/src/components/BasisTable</p>
-      <a-button @click="handleTestPagination">修改当前页为2</a-button>
-      <BasisTable
-        show-index
-        :columns="columns"
-        :loading="loading"
-        :data-source="data"
-        :pagination="pagination"
-      >
-        <template #bodyCell="{ column, record }">
-          <ASpace
-            v-if="column.dataIndex === 'action'"
-            class="table-action"
-          >
-            <span class="text-primary">
-              <IconFont type="icon-edit-square" />
-            </span>
-            <DeleteButton
-              :title="record.title"
-              @confirm="handleDelete"
-            >
-              <IconFont
-                type="i-setting"
-                style="color: red"
-              ></IconFont>
-            </DeleteButton>
-          </ASpace>
-          <ASpace v-if="column.dataIndex === 'icon'">
-            <IconFont :type="record.icon"></IconFont>
-          </ASpace>
-          <ASpace v-if="column.dataIndex === 'type'">
-            {{ record.type === 0 ? '菜单' : '操作' }}
-          </ASpace>
-        </template>
-      </BasisTable>
-      <h3>图标</h3>
-      <IconFont
-        type="i-anchor"
-        style="color: red"
-      ></IconFont>
-      <p>组件位置：/src/components/IconFont</p>
-      使用
-      <a
-        href="https://www.iconfont.cn/"
-        class="text-link"
-        target="_blank"
-      >
-        iconfont
-      </a>
-      图标，
-      <strong>
-        请将
-        <span class="text-primary">ENV</span>
-        文件中的
-        <span class="text-primary">VITE_ICONFONT_URL</span>
-        变量设置为自己iconfont项目对应的地址
-      </strong>
-      。当然，如果你不喜欢这种使用方式，可以试试
-      <a
-        href="https://unocss.dev/presets/icons"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        unocss Icons
-      </a>
-      或者其他方式
-      <p class="text-6 text-primary">
-        <IconFont
-          type="icon-pic-right"
-          :style="{ color: 'blue' }"
-        />
-        <IconFont type="icon-CodeSandbox" />
-      </p>
-      <h3>图标选择器</h3>
-      <p>组件位置：/src/components/IconPicker</p>
-      <a-input
-        v-model:value="iconSelect"
-        readonly
-        style="width: 200px"
-      >
-        <template #addonAfter>
-          <a-popover
-            placement="right"
-            :auto-adjust-overflow="false"
-            title="选择图标"
-          >
-            <template #content>
-              <div class="icon-picker-wrap">
-                <IconPicker v-model:value="iconSelect" />
-              </div>
-            </template>
-            <icon-font
-              v-if="iconSelect"
-              :type="iconSelect"
+  <div class="flex">
+    <a-card
+      class="w575 mr25"
+      title="充值数据"
+    >
+      <div class="card_container flex_box">
+        <section>
+          <div class="flex_center">
+            充值金额
+            <span class="c333 ml10">3%&nbsp;</span>
+            <IconFont
+              class="primary_color"
+              type="i-up-o"
             />
-            <span v-else>选择</span>
-          </a-popover>
-        </template>
-      </a-input>
-      <h3>操作确认按钮</h3>
-      <p>组件位置：/src/components/ConfirmButton</p>
-      <ConfirmButton @confirm="handleDelete"></ConfirmButton>
-      <h3>删除按钮</h3>
-      <p>组件位置：/src/components/ConfirmButton/DeleteButton</p>
-      <ASpace>
-        <DeleteButton @confirm="handleDelete"></DeleteButton>
-        <DeleteButton
-          @confirm="handleDelete"
-          action-title="删除项一"
-        ></DeleteButton>
-      </ASpace>
-      <h3>模态框函数式调用</h3>
-      <p>组件位置：/src/composables/useDialog</p>
-      <ASpace>
-        <AButton @click="handleOpenModal">打开（默认）</AButton>
-        <AButton @click="handleOpenModal1">打开（手动）</AButton>
-        <AButton @click="handleOpenModal2">打开（带插槽）</AButton>
-      </ASpace>
-      <h3>UnoCss</h3>
-      <p>
-        默认可以使用
-        <a
-          href="https://tailwindcss.com/"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          tailwindcss
-        </a>
-        语法,建议安装对应编辑器插件
-        <a
-          href="https://marketplace.visualstudio.com/items?itemName=antfu.unocss"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          unocss
-        </a>
-        以获得更好的体验。
-      </p>
-      <p>
-        默认所有单位使用rem，如果需要使用px，可以安装
-        <a href="https://unocss.dev/presets/rem-to-px">rem-to-px插件</a>
-      </p>
-      <div
-        class="m-1 inline-block h-30 max-w-lg bg-primary p-5 text-center text-white duration-1000 hover:(rounded-10 bg-green text-red)"
-      >
-        这是使用unocss默认预设写出的样式，class如下：
-        <div>
-          m-1 inline-block h-30 max-w-lg bg-primary p-5 text-center text-white duration-1000 hover:(rounded-10 bg-green
-          text-red)
-        </div>
+          </div>
+          <div class="fz24 bold c333">¥232232</div>
+        </section>
+
+        <section>
+          <div class="flex_center">
+            首充金额
+            <span class="c333 ml10">3%&nbsp;</span>
+            <IconFont
+              class="primary_color"
+              type="i-up-o"
+            />
+          </div>
+          <div class="fz24 bold c333">¥232232</div>
+        </section>
+
+        <section class="item_list">
+          <section class="c333 flex">
+            <div class="w120 tl">
+              <span class="c999">充值人数：</span>
+              <span>23232</span>
+            </div>
+            3%&nbsp;
+            <IconFont
+              class="primary_color"
+              type="i-up-o"
+            />
+          </section>
+          <section class="c333 flex mt10">
+            <div class="w120 tl">
+              <span class="c999">充值人数：</span>
+              <span>23232</span>
+            </div>
+            3%&nbsp;
+            <IconFont
+              class="primary_color"
+              type="i-up-o"
+            />
+          </section>
+          <section class="c333 flex mt10">
+            <div class="w120 tl">
+              <span class="c999">充值人数：</span>
+              <span>23232</span>
+            </div>
+            3%&nbsp;
+            <IconFont
+              class="primary_color"
+              type="i-up-o"
+            />
+          </section>
+        </section>
       </div>
-      <h3>主题设置</h3>
-      <a-popover trigger="hover">
-        <template #content>
-          <span
-            v-for="item in colorList"
-            :key="item"
-            class="m-1 inline-block h-4 w-4 cursor-pointer"
-            :style="{ backgroundColor: item as string }"
-            @click="handleSetTheme(item)"
-          ></span>
-        </template>
-        <IconFont
-          type="icon-bg-colors"
-          font-size="20px"
-          class="text-primary"
-        ></IconFont>
-      </a-popover>
-      <h3>颜色</h3>
-      <p class="text-primary">主色</p>
-      <p class="text-success">成功</p>
-      <p class="text-warning">警告</p>
-      <p class="text-error">错误</p>
-      <p class="text-link">链接</p>
-      <h3>字体</h3>
-      <p class="text-mini">辅助文本 12px</p>
-      <p class="text-default">内容文本 14px</p>
-      <p class="text-medium">标题文本 16px</p>
-      <p class="text-large">大标题文本 18px</p>
-      <p class="text-xlarge">大标题文本 20px</p>
-    </ACard>
+    </a-card>
+
+    <a-card
+      class="w575"
+      title="用户数据"
+    >
+      <div class="card_container flex_center">
+        <section class="mr70">
+          <div class="flex_center">
+            全部用户
+            <span class="c333 ml10">3%&nbsp;</span>
+            <IconFont
+              class="primary_color"
+              type="i-up-o"
+            />
+          </div>
+          <div class="fz24 bold c333">232232</div>
+        </section>
+
+        <section class="item_list">
+          <section class="c333 flex">
+            <div class="w120 tl">
+              <span class="c999">新增用户：</span>
+              <span>223232</span>
+            </div>
+            3%&nbsp;
+            <IconFont
+              class="primary_color"
+              type="i-up-o"
+            />
+          </section>
+          <section class="c333 flex mt10">
+            <div class="w120 tl">
+              <span class="c999">活跃用户：</span>
+              <span>232</span>
+            </div>
+            3%&nbsp;
+            <IconFont
+              class="primary_color"
+              type="i-up-o"
+            />
+          </section>
+          <section class="c333 flex mt10">
+            <div class="w120 tl">
+              <span class="c999">在线用户：</span>
+              <span>2332</span>
+            </div>
+            3%&nbsp;
+            <IconFont
+              class="primary_color"
+              type="i-up-o"
+            />
+          </section>
+
+          <section class="c333 flex mt10">
+            <div class="w120 tl">
+              <span class="c999">绑定用户：</span>
+              <span>12332</span>
+            </div>
+            3%&nbsp;
+            <IconFont
+              class="primary_color"
+              type="i-up-o"
+            />
+          </section>
+        </section>
+      </div>
+    </a-card>
   </div>
+
+  <div class="flex mt25">
+    <a-card
+      class="w575 mr25"
+      title="消费数据"
+    >
+      <div
+        class="card_container flex_box h102"
+        style="background: #FFF7F0;"
+      >
+        <section class="flex1">
+          <div class="flex_center">
+            消费钻石
+            <span class="c333 ml10">3%&nbsp;</span>
+            <IconFont
+              class="primary_color"
+              type="i-up-o"
+            />
+          </div>
+          <div class="fz24 bold c333">¥232232</div>
+        </section>
+
+        <div class="split_line"></div>
+
+        <section class="flex1">
+          <div class="flex_center">
+            消费人数
+            <span class="c333 ml10">3%&nbsp;</span>
+            <IconFont
+              class="primary_color"
+              type="i-up-o"
+            />
+          </div>
+          <div class="fz24 bold c333">232232</div>
+        </section>
+      </div>
+    </a-card>
+
+    <a-card
+      class="w575"
+      title="兑换数据"
+    >
+      <div
+        class="card_container flex_box h102"
+        style="background: #FFFBE9;"
+      >
+        <section class="flex1">
+          <div class="flex_center">
+            兑换钻石
+            <span class="c333 ml10">3%&nbsp;</span>
+            <IconFont
+              class="primary_color"
+              type="i-up-o"
+            />
+          </div>
+          <div class="fz24 bold c333">¥232232</div>
+        </section>
+
+        <div class="split_line"></div>
+
+        <section class="flex1">
+          <div class="flex_center">
+            消耗金额
+            <span class="c333 ml10">3%&nbsp;</span>
+            <IconFont
+              class="primary_color"
+              type="i-up-o"
+            />
+          </div>
+          <div class="fz24 bold c333">¥232232</div>
+        </section>
+
+        <div class="split_line"></div>
+
+        <section class="flex1">
+          <div class="flex_center">
+            兑换人数
+            <span class="c333 ml10">3%&nbsp;</span>
+            <IconFont
+              class="primary_color"
+              type="i-up-o"
+            />
+          </div>
+          <div class="fz24 bold c333">232232</div>
+        </section>
+      </div>
+    </a-card>
+  </div>
+
+  <a-card
+    class="w1174 mt25"
+    title="提现数据"
+  >
+    <div
+      class="card_container flex_box h102"
+      style="background: #F2FCF8;"
+    >
+      <section class="flex1">
+        <div class="flex_center">
+          提现金额
+          <span class="c333 ml10">3%&nbsp;</span>
+          <IconFont
+            class="primary_color"
+            type="i-up-o"
+          />
+        </div>
+        <div class="fz24 bold c333">¥232232</div>
+      </section>
+
+      <div class="split_line"></div>
+
+      <section class="flex1">
+        <div class="flex_center">
+          提现人数
+          <span class="c333 ml10">3%&nbsp;</span>
+          <IconFont
+            class="primary_color"
+            type="i-up-o"
+          />
+        </div>
+        <div class="fz24 bold c333">232232</div>
+      </section>
+
+      <div class="split_line"></div>
+
+      <section class="flex1">
+        <div class="flex_center">
+          提现笔数
+          <span class="c333 ml10">3%&nbsp;</span>
+          <IconFont
+            class="primary_color"
+            type="i-up-o"
+          />
+        </div>
+        <div class="fz24 bold c333">232232</div>
+      </section>
+    </div>
+  </a-card>
+
+  <a-card
+    class="w1174 mt25"
+    title="余额数据"
+  >
+    <div
+      class="card_container flex_box h102"
+      style="background: #F1F8FF;"
+    >
+      <section class="flex1">
+        <div class="flex_center">
+          用户余额
+          <span class="c333 ml10">3%&nbsp;</span>
+          <IconFont
+            class="primary_color"
+            type="i-up-o"
+          />
+        </div>
+        <div class="fz24 bold c333">¥232232</div>
+      </section>
+
+      <div class="split_line"></div>
+
+      <section class="flex1">
+        <div class="flex_center">
+          用户余额人数
+          <span class="c333 ml10">3%&nbsp;</span>
+          <IconFont
+            class="primary_color"
+            type="i-up-o"
+          />
+        </div>
+        <div class="fz24 bold c333">232232</div>
+      </section>
+
+      <div class="split_line"></div>
+
+      <section class="flex1">
+        <div class="flex_center">
+          用户钻石余额
+          <span class="c333 ml10">3%&nbsp;</span>
+          <IconFont
+            class="primary_color"
+            type="i-up-o"
+          />
+        </div>
+        <div class="fz24 bold c333">232232</div>
+      </section>
+
+      <div class="split_line"></div>
+
+      <section class="flex1">
+        <div class="flex_center">
+          钻石余额人数
+          <span class="c333 ml10">3%&nbsp;</span>
+          <IconFont
+            class="primary_color"
+            type="i-up-o"
+          />
+        </div>
+        <div class="fz24 bold c333">232232</div>
+      </section>
+    </div>
+  </a-card>
+
+  <a-card class="w1174 mt25">
+    <p class="flex fz16">
+      <IconFont
+        class="mr8"
+        type="i-apple-fill"
+      />
+      <span>iOS总用户数&nbsp;</span>
+      <span class="ml10 mr10 c999">|</span>
+      232323232
+    </p>
+
+    <p class="flex fz16 mt10">
+      <IconFont
+        class="mr8"
+        type="i-android"
+      />
+      <span>安卓总用户数</span>
+      <span class="ml10 mr10 c999">|</span>
+      232323232
+    </p>
+
+    <div class="flex_box mt10">
+      <section class="flex1 box mr16">
+        <p class="fz16 mt10 title pb10">注册用户</p>
+        <p class="flex_box">
+          <span class="flex">
+            <IconFont
+              class="mr8 fz22"
+              type="i-apple-fill"
+            />
+            <span class="fz24">
+              232323
+            </span>
+          </span>
+          <span class="flex">3%&nbsp;
+            <IconFont
+              class="primary_color"
+              type="i-up-o"
+            />
+          </span>
+        </p>
+
+        <p class="flex_box">
+          <span class="flex">
+            <IconFont
+              class="mr8 fz22"
+              type="i-android"
+            />
+            <span class="fz24">
+              232323
+            </span>
+          </span>
+          <span class="flex">3%&nbsp;
+            <IconFont
+              class="primary_color"
+              type="i-up-o"
+            />
+          </span>
+        </p>
+      </section>
+
+      <section class="flex1 box mr16">
+        <p class="fz16 mt10 title pb10">登录用户</p>
+        <p class="flex_box">
+          <span class="flex">
+            <IconFont
+              class="mr8 fz22"
+              type="i-apple-fill"
+            />
+            <span class="fz24">
+              232323
+            </span>
+          </span>
+          <span class="flex">3%&nbsp;
+            <IconFont
+              class="primary_color"
+              type="i-up-o"
+            />
+          </span>
+        </p>
+
+        <p class="flex_box">
+          <span class="flex">
+            <IconFont
+              class="mr8 fz22"
+              type="i-android"
+            />
+            <span class="fz24">
+              232323
+            </span>
+          </span>
+          <span class="flex">3%&nbsp;
+            <IconFont
+              class="primary_color"
+              type="i-up-o"
+            />
+          </span>
+        </p>
+      </section>
+
+      <section class="flex1 box mr16">
+        <p class="fz16 mt10 title pb10">绑定用户</p>
+        <p class="flex_box">
+          <span class="flex">
+            <IconFont
+              class="mr8 fz22"
+              type="i-apple-fill"
+            />
+            <span class="fz24">
+              232323
+            </span>
+          </span>
+          <span class="flex">3%&nbsp;
+            <IconFont
+              class="primary_color"
+              type="i-up-o"
+            />
+          </span>
+        </p>
+
+        <p class="flex_box">
+          <span class="flex">
+            <IconFont
+              class="mr8 fz22"
+              type="i-android"
+            />
+            <span class="fz24">
+              232323
+            </span>
+          </span>
+          <span class="flex">3%&nbsp;
+            <IconFont
+              class="primary_color"
+              type="i-up-o"
+            />
+          </span>
+        </p>
+      </section>
+
+      <section class="flex1 box">
+        <p class="fz16 mt10 title pb10">游客用户</p>
+        <p class="flex_box">
+          <span class="flex">
+            <IconFont
+              class="mr8 fz22"
+              type="i-apple-fill"
+            />
+            <span class="fz24">
+              232323
+            </span>
+          </span>
+          <span class="flex">3%&nbsp;
+            <IconFont
+              class="primary_color"
+              type="i-up-o"
+            />
+          </span>
+        </p>
+
+        <p class="flex_box">
+          <span class="flex">
+            <IconFont
+              class="mr8 fz22"
+              type="i-android"
+            />
+            <span class="fz24">
+              232323
+            </span>
+          </span>
+          <span class="flex">3%&nbsp;
+            <IconFont
+              class="primary_color"
+              type="i-up-o"
+            />
+          </span>
+        </p>
+      </section>
+    </div>
+  </a-card>
 </template>
-<script lang="tsx" setup>
-import { reactive } from 'vue'
-import type { ColumnProps } from 'ant-design-vue/es/table'
-import type { AxiosProgressEvent } from 'axios'
-import { downloadRequest } from '@/api/file'
-import { getMenusRequest } from '@/api/auth'
-import { bytesToSize } from '@/utils'
-import request from '@/utils/request'
-import { message } from 'ant-design-vue'
-import TestModalForm from './TestModalForm.vue'
-import { paginationConfig } from '@/config/pagination'
 
-import DemoPage from './demo.vue'
-
-const authKeys = ['home', 'system', 'system/menu', 'other']
-const selectAuthKeys = ref(['home', 'system'])
-const appConfig = window.__APP_CONFIG__
-const columns: ColumnProps[] = [
-  {
-    title: '名称',
-    dataIndex: 'title',
-  },
-  {
-    title: '图标',
-    dataIndex: 'icon',
-  },
-  {
-    title: '权限码',
-    dataIndex: 'permission',
-  },
-  {
-    title: '地址',
-    dataIndex: 'url',
-  },
-  {
-    title: '类型',
-    dataIndex: 'type',
-  },
-  {
-    title: '操作',
-    align: 'center',
-    dataIndex: 'action',
-  },
-]
-const { loading, data, error, run, current, pagination, params } = usePagination(getMenusRequest, {
-  paginationExtConfig: paginationConfig,
-  defaultParams: [
-    {
-      pageSize: 1,
-    },
-  ],
-})
-
-function handleRun() {
-  run(params.value[0])
-}
-function handleTestPagination() {
-  current.value = 2
-}
-function handleCancelAllRequest() {
-  request.cancelAllRequest()
-}
-const progress = reactive<Partial<AxiosProgressEvent>>({
-  total: 0,
-  loaded: 0,
-  progress: 0,
-})
-function handleDownloadFile() {
-  downloadRequest('文件下载测试', {}, progress)
-}
-function handleDelete() {
-  message.success('删除成功')
-}
-const { createDialog } = useDialog()
-function handleOpenModal() {
-  // 这里需要手动添加一下泛型，就可推断onConfirm中参数的类型
-  createDialog<typeof TestModalForm>({
-    title: '测试弹窗1',
-    width: '500px',
-    component: <TestModalForm title="测试模态窗" />, // 通过attribute传递参数，自带类型推断
-    // ...支持AModal的所有配置
-    onConfirm(data) {
-      // 可以拿到内部数据，在表单类弹窗中很有用
-      console.log('拿到组件内部数据：', data)
-    },
-  })
-}
-function handleOpenModal1() {
-  // 默认不显示
-  const { open, close } = createDialog<typeof TestModalForm>({
-    title: '测试弹窗2',
-    width: '500px',
-    component: <TestModalForm title="测试模态窗" />,
-    defaultOpen: false,
-    onConfirm(data) {
-      console.log('拿到组件内部数据：', data)
-    },
-  })
-  open()
-  setTimeout(() => {
-    close()
-  }, 3000)
-}
-function handleOpenModal2() {
-  // 带插槽
-  createDialog<typeof TestModalForm>({
-    title: '测试弹窗3',
-    width: '500px',
-    component: (
-      <TestModalForm title="测试模态窗">
-        {{
-          default: () => <div>默认插槽</div>,
-          test: () => <div>test插槽</div>,
-        }}
-      </TestModalForm>
-    ),
-    onConfirm(data) {
-      console.log('拿到组件内部数据：', data)
-    },
-  })
-}
-const iconSelect = ref<Iconfont | undefined>()
-const colorList = ['#7129F8', '#1890ff', '#52c41a', '#faad14', '#ff4d4f']
-const { setTheme, themeOptions } = useTheme()
-function handleSetTheme(color) {
-  setTheme({
-    themeToken: {
-      ...themeOptions.themeToken,
-      colorPrimary: color,
-    },
-  })
-}
+<script setup>
 </script>
-<style scoped>
-h3 {
-  margin: 20px 0;
-}
+
+<style lang="sass" scoped>
+.card_container
+  padding: 0 24px
+  height: 140px
+  font-size: 12px
+  background: #FFF4F5
+  border-radius: 8px 8px 8px 8px
+  text-align: center
+  color: #999
+
+  .split_line
+    width: 1px
+    height: 60px
+    background: #E8E8E8
+
+.box
+  padding: 24px
+  border-radius: 8px
+  background: #F8F4FF
+  font-size: 12px
+
+  .title
+    margin-bottom: 10px
+    text-align: center
+    border-bottom: 1px solid #ddd
+    font-size: 16px
 </style>

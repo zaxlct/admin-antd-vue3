@@ -35,6 +35,12 @@
 .tr
   text-align: right !important
 
+.primary_color
+  color: #7129F8 !important
+
+.c333
+  color: #333 !important
+
 .c666
   color: #666 !important
 
@@ -66,12 +72,16 @@
 .mt-20
   margin-top: -20px !important
 
-@for $i from 0 through 40
+//----- line-height
+@for $i from 0 through 1200
   .lh#{10 + $i}
     line-height: 10px + $i !important
 
   .fz#{10 + $i}
     font-size: 10px + $i !important
+
+  .m#{$i}
+    margin: $i + px !important
 
   .ml#{$i}
     margin-left: $i + px !important
@@ -84,6 +94,9 @@
 
   .mb#{$i}
     margin-bottom: $i + px !important
+
+  .p#{$i}
+    padding: $i + px !important
 
   .pl#{$i}
     padding-left: $i + px !important

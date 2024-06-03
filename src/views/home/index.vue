@@ -1,4 +1,12 @@
+<script setup>
+import FormSearch from './components/FormSearch.vue'
+const searchParams = ref({})
+
+</script>
+
 <template>
+  <FormSearch v-model="searchParams" />
+
   <div class="flex">
     <a-card
       class="w575 mr25"

@@ -8,7 +8,7 @@ const searchParams = ref({
   time_range: [],
   data_type: 0,
 })
-
+// TODO: 当 data_type 为 1时，隐藏前一日的百分比
 const data = ref({
   rchg_data: null,
   user_data: null,

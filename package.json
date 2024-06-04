@@ -20,7 +20,7 @@
     "@ant-design/icons-vue": "^7.0.1",
     "@bwrong/request": "^1.0.1",
     "@bwrong/storage": "^1.1.0",
-    "@form-create/ant-design-vue": "^3.1.28",
+    "@form-create/ant-design-vue": "^3.1.29",
     "@vueup/vue-quill": "^1.2.0",
     "@vueuse/components": "^10.9.0",
     "@vueuse/core": "^10.9.0",

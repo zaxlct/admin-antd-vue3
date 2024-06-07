@@ -6,6 +6,20 @@
   "description": "站酷直播",
   "glyphs": [
     {
+      "icon_id": "657478",
+      "name": "短信",
+      "font_class": "sms",
+      "unicode": "e647",
+      "unicode_decimal": 58951
+    },
+    {
+      "icon_id": "14915072",
+      "name": "数据统计",
+      "font_class": "statistics",
+      "unicode": "e634",
+      "unicode_decimal": 58932
+    },
+    {
       "icon_id": "2075246",
       "name": "安卓",
       "font_class": "android",

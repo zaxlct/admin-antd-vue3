@@ -32,9 +32,7 @@ const { loading } = useRequest(() => getStatSummaryReq({
 </script>
 
 <template>
-  <FormSearch
-    v-model="searchParams"
-  />
+  <FormSearch v-model="searchParams" />
 
   <a-spin :spinning="loading">
 
@@ -50,11 +48,13 @@ const { loading } = useRequest(() => getStatSummaryReq({
           <section>
             <div class="flex_center">
               充值金额
-              <span class="c333 ml10">{{ data.rchg_data.rchg_amount.pct_chg_yest }}%&nbsp;</span>
-              <IconFont
-                class="primary_color"
-                type="i-up-o"
-              />
+              <template v-if="!searchParams.data_type">
+                <span class="c333 ml10">{{ data.rchg_data.rchg_amount.pct_chg_yest }}%&nbsp;</span>
+                <IconFont
+                  class="primary_color"
+                  type="i-up-o"
+                />
+              </template>
             </div>
             <div class="fz24 bold c333">¥{{ data.rchg_data.rchg_amount.count }}</div>
           </section>
@@ -62,11 +62,13 @@ const { loading } = useRequest(() => getStatSummaryReq({
           <section>
             <div class="flex_center">
               首充金额
-              <span class="c333 ml10">{{ data.rchg_data.first_rchg_amount.pct_chg_yest }}%&nbsp;</span>
-              <IconFont
-                class="primary_color"
-                type="i-up-o"
-              />
+              <template v-if="!searchParams.data_type">
+                <span class="c333 ml10">{{ data.rchg_data.first_rchg_amount.pct_chg_yest }}%&nbsp;</span>
+                <IconFont
+                  class="primary_color"
+                  type="i-up-o"
+                />
+              </template>
             </div>
             <div class="fz24 bold c333">¥{{ data.rchg_data.first_rchg_amount.pct_chg_yest }}</div>
           </section>
@@ -77,33 +79,39 @@ const { loading } = useRequest(() => getStatSummaryReq({
                 <span class="c999">充值人数：</span>
                 <span>{{ data.rchg_data.rchg_count.pct_chg_yest }}</span>
               </div>
-              {{ data.rchg_data.rchg_count.count }}%&nbsp;
-              <IconFont
-                class="primary_color"
-                type="i-up-o"
-              />
+              <template v-if="!searchParams.data_type">
+                {{ data.rchg_data.rchg_count.count }}%&nbsp;
+                <IconFont
+                  class="primary_color"
+                  type="i-up-o"
+                />
+              </template>
             </section>
             <section class="c333 flex mt10">
               <div class="w120 tl">
                 <span class="c999">首冲人数：</span>
                 <span>{{ data.rchg_data.first_rchg_count.pct_chg_yest }}</span>
               </div>
-              {{ data.rchg_data.first_rchg_count.count }}%&nbsp;
-              <IconFont
-                class="primary_color"
-                type="i-up-o"
-              />
+              <template v-if="!searchParams.data_type">
+                {{ data.rchg_data.first_rchg_count.count }}%&nbsp;
+                <IconFont
+                  class="primary_color"
+                  type="i-up-o"
+                />
+              </template>
             </section>
             <section class="c333 flex mt10">
               <div class="w120 tl">
                 <span class="c999">二充人数：</span>
                 <span>{{ data.rchg_data.second_rchg_count.pct_chg_yest }}</span>
               </div>
-              {{ data.rchg_data.second_rchg_count.count }}%&nbsp;
-              <IconFont
-                class="primary_color"
-                type="i-up-o"
-              />
+              <template v-if="!searchParams.data_type">
+                {{ data.rchg_data.second_rchg_count.count }}%&nbsp;
+                <IconFont
+                  class="primary_color"
+                  type="i-up-o"
+                />
+              </template>
             </section>
           </section>
         </div>
@@ -130,33 +138,39 @@ const { loading } = useRequest(() => getStatSummaryReq({
                 <span class="c999">新增用户：</span>
                 <span>{{ data.user_data.new.count }}</span>
               </div>
-              {{ data.user_data.new.pct_chg_yest }}%&nbsp;
-              <IconFont
-                class="primary_color"
-                type="i-up-o"
-              />
+              <template v-if="!searchParams.data_type">
+                {{ data.user_data.new.pct_chg_yest }}%&nbsp;
+                <IconFont
+                  class="primary_color"
+                  type="i-up-o"
+                />
+              </template>
             </section>
             <section class="c333 flex mt10">
               <div class="w120 tl">
                 <span class="c999">活跃用户：</span>
                 <span>{{ data.user_data.active.count }}</span>
               </div>
-              {{ data.user_data.active.pct_chg_yest }}%&nbsp;
-              <IconFont
-                class="primary_color"
-                type="i-up-o"
-              />
+              <template v-if="!searchParams.data_type">
+                {{ data.user_data.active.pct_chg_yest }}%&nbsp;
+                <IconFont
+                  class="primary_color"
+                  type="i-up-o"
+                />
+              </template>
             </section>
             <section class="c333 flex mt10">
               <div class="w120 tl">
                 <span class="c999">在线用户：</span>
                 <span>{{ data.user_data.online.count }}</span>
               </div>
-              {{ data.user_data.online.pct_chg_yest }}%&nbsp;
-              <IconFont
-                class="primary_color"
-                type="i-up-o"
-              />
+              <template v-if="!searchParams.data_type">
+                {{ data.user_data.online.pct_chg_yest }}%&nbsp;
+                <IconFont
+                  class="primary_color"
+                  type="i-up-o"
+                />
+              </template>
             </section>
 
             <section class="c333 flex mt10">
@@ -164,11 +178,13 @@ const { loading } = useRequest(() => getStatSummaryReq({
                 <span class="c999">绑定用户：</span>
                 <span>{{ data.user_data.bind.count }}</span>
               </div>
-              {{ data.user_data.bind.pct_chg_yest }}%&nbsp;
-              <IconFont
-                class="primary_color"
-                type="i-up-o"
-              />
+              <template v-if="!searchParams.data_type">
+                {{ data.user_data.bind.pct_chg_yest }}%&nbsp;
+                <IconFont
+                  class="primary_color"
+                  type="i-up-o"
+                />
+              </template>
             </section>
           </section>
         </div>
@@ -188,11 +204,13 @@ const { loading } = useRequest(() => getStatSummaryReq({
           <section class="flex1">
             <div class="flex_center">
               消费钻石
-              <span class="c333 ml10">{{ data.cons_data.cons_diamonds.pct_chg_yest }}%&nbsp;</span>
-              <IconFont
-                class="primary_color"
-                type="i-up-o"
-              />
+              <template v-if="!searchParams.data_type">
+                <span class="c333 ml10">{{ data.cons_data.cons_diamonds.pct_chg_yest }}%&nbsp;</span>
+                <IconFont
+                  class="primary_color"
+                  type="i-up-o"
+                />
+              </template>
             </div>
             <div class="fz24 bold c333">{{ data.cons_data.cons_diamonds.count }}</div>
           </section>
@@ -202,11 +220,13 @@ const { loading } = useRequest(() => getStatSummaryReq({
           <section class="flex1">
             <div class="flex_center">
               消费人数
-              <span class="c333 ml10">{{ data.cons_data.cons_count.pct_chg_yest }}%&nbsp;</span>
-              <IconFont
-                class="primary_color"
-                type="i-up-o"
-              />
+              <template v-if="!searchParams.data_type">
+                <span class="c333 ml10">{{ data.cons_data.cons_count.pct_chg_yest }}%&nbsp;</span>
+                <IconFont
+                  class="primary_color"
+                  type="i-up-o"
+                />
+              </template>
             </div>
             <div class="fz24 bold c333">{{ data.cons_data.cons_count.count }}</div>
           </section>
@@ -225,11 +245,13 @@ const { loading } = useRequest(() => getStatSummaryReq({
           <section class="flex1">
             <div class="flex_center">
               兑换钻石
-              <span class="c333 ml10">{{ data.exch_data.exch_diamonds.pct_chg_yest }}%&nbsp;</span>
-              <IconFont
-                class="primary_color"
-                type="i-up-o"
-              />
+              <template v-if="!searchParams.data_type">
+                <span class="c333 ml10">{{ data.exch_data.exch_diamonds.pct_chg_yest }}%&nbsp;</span>
+                <IconFont
+                  class="primary_color"
+                  type="i-up-o"
+                />
+              </template>
             </div>
             <div class="fz24 bold c333">{{ data.exch_data.exch_diamonds.count }}</div>
           </section>
@@ -239,11 +261,13 @@ const { loading } = useRequest(() => getStatSummaryReq({
           <section class="flex1">
             <div class="flex_center">
               消耗金额
-              <span class="c333 ml10">{{ data.exch_data.cons_amount.pct_chg_yest }}%&nbsp;</span>
-              <IconFont
-                class="primary_color"
-                type="i-up-o"
-              />
+              <template v-if="!searchParams.data_type">
+                <span class="c333 ml10">{{ data.exch_data.cons_amount.pct_chg_yest }}%&nbsp;</span>
+                <IconFont
+                  class="primary_color"
+                  type="i-up-o"
+                />
+              </template>
             </div>
             <div class="fz24 bold c333">¥{{ data.exch_data.cons_amount.count }}</div>
           </section>
@@ -253,11 +277,13 @@ const { loading } = useRequest(() => getStatSummaryReq({
           <section class="flex1">
             <div class="flex_center">
               兑换人数
-              <span class="c333 ml10">{{ data.exch_data.exch_count.pct_chg_yest }}%&nbsp;</span>
-              <IconFont
-                class="primary_color"
-                type="i-up-o"
-              />
+              <template v-if="!searchParams.data_type">
+                <span class="c333 ml10">{{ data.exch_data.exch_count.pct_chg_yest }}%&nbsp;</span>
+                <IconFont
+                  class="primary_color"
+                  type="i-up-o"
+                />
+              </template>
             </div>
             <div class="fz24 bold c333">{{ data.exch_data.exch_count.count }}</div>
           </section>
@@ -278,11 +304,13 @@ const { loading } = useRequest(() => getStatSummaryReq({
         <section class="flex1">
           <div class="flex_center">
             提现金额
-            <span class="c333 ml10">{{ data.wd_data.wd_amount.pct_chg_yest }}%&nbsp;</span>
-            <IconFont
-              class="primary_color"
-              type="i-up-o"
-            />
+            <template v-if="!searchParams.data_type">
+              <span class="c333 ml10">{{ data.wd_data.wd_amount.pct_chg_yest }}%&nbsp;</span>
+              <IconFont
+                class="primary_color"
+                type="i-up-o"
+              />
+            </template>
           </div>
           <div class="fz24 bold c333">¥{{ data.wd_data.wd_amount.count }}</div>
         </section>
@@ -292,11 +320,13 @@ const { loading } = useRequest(() => getStatSummaryReq({
         <section class="flex1">
           <div class="flex_center">
             提现人数
-            <span class="c333 ml10">{{ data.wd_data.wd_trans.pct_chg_yest }}%&nbsp;</span>
-            <IconFont
-              class="primary_color"
-              type="i-up-o"
-            />
+            <template v-if="!searchParams.data_type">
+              <span class="c333 ml10">{{ data.wd_data.wd_trans.pct_chg_yest }}%&nbsp;</span>
+              <IconFont
+                class="primary_color"
+                type="i-up-o"
+              />
+            </template>
           </div>
           <div class="fz24 bold c333">{{ data.wd_data.wd_trans.count }}</div>
         </section>
@@ -306,11 +336,13 @@ const { loading } = useRequest(() => getStatSummaryReq({
         <section class="flex1">
           <div class="flex_center">
             提现笔数
-            <span class="c333 ml10">{{ data.wd_data.wd_trans.pct_chg_yest }}%&nbsp;</span>
-            <IconFont
-              class="primary_color"
-              type="i-up-o"
-            />
+            <template v-if="!searchParams.data_type">
+              <span class="c333 ml10">{{ data.wd_data.wd_trans.pct_chg_yest }}%&nbsp;</span>
+              <IconFont
+                class="primary_color"
+                type="i-up-o"
+              />
+            </template>
           </div>
           <div class="fz24 bold c333">{{ data.wd_data.wd_trans.count }}</div>
         </section>
@@ -329,11 +361,13 @@ const { loading } = useRequest(() => getStatSummaryReq({
         <section class="flex1">
           <div class="flex_center">
             用户余额
-            <span class="c333 ml10">{{ data.bal_data.user_bal.pct_chg_yest }}%&nbsp;</span>
-            <IconFont
-              class="primary_color"
-              type="i-up-o"
-            />
+            <template v-if="!searchParams.data_type">
+              <span class="c333 ml10">{{ data.bal_data.user_bal.pct_chg_yest }}%&nbsp;</span>
+              <IconFont
+                class="primary_color"
+                type="i-up-o"
+              />
+            </template>
           </div>
           <div class="fz24 bold c333">{{ data.bal_data.user_bal.count }}</div>
         </section>
@@ -343,11 +377,13 @@ const { loading } = useRequest(() => getStatSummaryReq({
         <section class="flex1">
           <div class="flex_center">
             用户余额人数
-            <span class="c333 ml10">{{ data.bal_data.user_bal_count.pct_chg_yest }}%&nbsp;</span>
-            <IconFont
-              class="primary_color"
-              type="i-up-o"
-            />
+            <template v-if="!searchParams.data_type">
+              <span class="c333 ml10">{{ data.bal_data.user_bal_count.pct_chg_yest }}%&nbsp;</span>
+              <IconFont
+                class="primary_color"
+                type="i-up-o"
+              />
+            </template>
           </div>
           <div class="fz24 bold c333">{{ data.bal_data.user_bal_count.count }}</div>
         </section>
@@ -357,11 +393,13 @@ const { loading } = useRequest(() => getStatSummaryReq({
         <section class="flex1">
           <div class="flex_center">
             用户钻石余额
-            <span class="c333 ml10">{{ data.bal_data.user_diamond_bal.pct_chg_yest }}%&nbsp;</span>
-            <IconFont
-              class="primary_color"
-              type="i-up-o"
-            />
+            <template v-if="!searchParams.data_type">
+              <span class="c333 ml10">{{ data.bal_data.user_diamond_bal.pct_chg_yest }}%&nbsp;</span>
+              <IconFont
+                class="primary_color"
+                type="i-up-o"
+              />
+            </template>
           </div>
           <div class="fz24 bold c333">{{ data.bal_data.user_diamond_bal.count }}</div>
         </section>
@@ -371,11 +409,13 @@ const { loading } = useRequest(() => getStatSummaryReq({
         <section class="flex1">
           <div class="flex_center">
             钻石余额人数
-            <span class="c333 ml10">{{ data.bal_data.diamond_bal_count.pct_chg_yest }}%&nbsp;</span>
-            <IconFont
-              class="primary_color"
-              type="i-up-o"
-            />
+            <template v-if="!searchParams.data_type">
+              <span class="c333 ml10">{{ data.bal_data.diamond_bal_count.pct_chg_yest }}%&nbsp;</span>
+              <IconFont
+                class="primary_color"
+                type="i-up-o"
+              />
+            </template>
           </div>
           <div class="fz24 bold c333">{{ data.bal_data.diamond_bal_count.count }}</div>
         </section>
@@ -419,7 +459,10 @@ const { loading } = useRequest(() => getStatSummaryReq({
                 {{ data.client_data.reg_user.ios.count }}
               </span>
             </span>
-            <span class="flex">{{ data.client_data.reg_user.ios.pct_chg_yest }}%&nbsp;
+            <span
+              class="flex"
+              v-if="!searchParams.data_type"
+            >{{ data.client_data.reg_user.ios.pct_chg_yest }}%&nbsp;
               <IconFont
                 class="primary_color"
                 type="i-up-o"
@@ -437,7 +480,10 @@ const { loading } = useRequest(() => getStatSummaryReq({
                 {{ data.client_data.reg_user.android.count }}
               </span>
             </span>
-            <span class="flex">{{ data.client_data.reg_user.android.pct_chg_yest }}%&nbsp;
+            <span
+              class="flex"
+              v-if="!searchParams.data_type"
+            >{{ data.client_data.reg_user.android.pct_chg_yest }}%&nbsp;
               <IconFont
                 class="primary_color"
                 type="i-up-o"
@@ -458,7 +504,10 @@ const { loading } = useRequest(() => getStatSummaryReq({
                 {{ data.client_data.login_user.ios.count }}
               </span>
             </span>
-            <span class="flex">{{ data.client_data.login_user.ios.pct_chg_yest }}%&nbsp;
+            <span
+              class="flex"
+              v-if="!searchParams.data_type"
+            >{{ data.client_data.login_user.ios.pct_chg_yest }}%&nbsp;
               <IconFont
                 class="primary_color"
                 type="i-up-o"
@@ -476,7 +525,10 @@ const { loading } = useRequest(() => getStatSummaryReq({
                 {{ data.client_data.login_user.android.count }}
               </span>
             </span>
-            <span class="flex">{{ data.client_data.login_user.android.pct_chg_yest }}%&nbsp;
+            <span
+              class="flex"
+              v-if="!searchParams.data_type"
+            >{{ data.client_data.login_user.android.pct_chg_yest }}%&nbsp;
               <IconFont
                 class="primary_color"
                 type="i-up-o"
@@ -497,7 +549,10 @@ const { loading } = useRequest(() => getStatSummaryReq({
                 {{ data.client_data.bind_user.ios.count }}
               </span>
             </span>
-            <span class="flex">{{ data.client_data.bind_user.ios.pct_chg_yest }}%&nbsp;
+            <span
+              class="flex"
+              v-if="!searchParams.data_type"
+            >{{ data.client_data.bind_user.ios.pct_chg_yest }}%&nbsp;
               <IconFont
                 class="primary_color"
                 type="i-up-o"
@@ -515,7 +570,10 @@ const { loading } = useRequest(() => getStatSummaryReq({
                 {{ data.client_data.bind_user.android.count }}
               </span>
             </span>
-            <span class="flex">{{ data.client_data.bind_user.android.pct_chg_yest }}%&nbsp;
+            <span
+              class="flex"
+              v-if="!searchParams.data_type"
+            >{{ data.client_data.bind_user.android.pct_chg_yest }}%&nbsp;
               <IconFont
                 class="primary_color"
                 type="i-up-o"
@@ -536,7 +594,10 @@ const { loading } = useRequest(() => getStatSummaryReq({
                 {{ data.client_data.guest_user.ios.count }}
               </span>
             </span>
-            <span class="flex">{{ data.client_data.guest_user.ios.pct_chg_yest }}%&nbsp;
+            <span
+              class="flex"
+              v-if="!searchParams.data_type"
+            >{{ data.client_data.guest_user.ios.pct_chg_yest }}%&nbsp;
               <IconFont
                 class="primary_color"
                 type="i-up-o"
@@ -554,7 +615,10 @@ const { loading } = useRequest(() => getStatSummaryReq({
                 {{ data.client_data.guest_user.android.count }}
               </span>
             </span>
-            <span class="flex">{{ data.client_data.guest_user.android.pct_chg_yest }}%&nbsp;
+            <span
+              class="flex"
+              v-if="!searchParams.data_type"
+            >{{ data.client_data.guest_user.android.pct_chg_yest }}%&nbsp;
               <IconFont
                 class="primary_color"
                 type="i-up-o"

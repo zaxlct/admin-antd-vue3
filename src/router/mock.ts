@@ -9,6 +9,15 @@ export default [
     redirect: '/statistics/index',
   },
   {
+    id: 889,
+    parentId: 888,
+    component: '/statistics/index',
+    path: '/statistics/index',
+    title: '数据总览',
+    icon: '',
+    redirect: '',
+  },
+  {
     id: 1,
     parentId: 0,
     component: '',

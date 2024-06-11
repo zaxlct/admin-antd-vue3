@@ -25,7 +25,7 @@
               <AButton
                 type="primary"
                 @click="emit('addItem')"
-              >添加公告</AButton>
+              >添加渠道</AButton>
             </div>
           </section>
         </template>
@@ -37,9 +37,7 @@
 <script setup>
 const params = defineModel()
 const data = reactive({
-  title: '',
-  status: 0,
-  marquee_status: 0,
+  chan_name: '',
   create_time: [],
 })
 
@@ -63,34 +61,9 @@ const option = {
 const rule = ref([
   {
     type: 'input',
-    field: 'title',
-    title: '公告标题',
+    field: 'chan_name',
+    title: '渠道名称',
     value: '',
-  },
-  {
-    type: 'select',
-    field: 'status',
-    title: '公告状态',
-    value: '',
-    options: [
-      { label: '全部', value: 0 },
-      { label: '已发送', value: 1 },
-      { label: '待发送', value: 2 },
-    ],
-  },
-  {
-    type: 'select',
-    field: 'marquee_status',
-    title: '绑定跑马灯',
-    value: '',
-    options: [
-      { label: '全部', value: 0 },
-      { label: '已绑定', value: 1 },
-      { label: '未绑定', value: 2 },
-    ],
-    wrap: {
-      labelCol: { span: 10 },
-    },
   },
   {
     type: 'rangePicker',

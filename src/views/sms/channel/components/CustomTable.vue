@@ -1,6 +1,6 @@
 <template>
   <a-table
-    rowKey="notice_id"
+    rowKey="chan_id"
     :pagination="false"
     :scroll="{ x: 1200, y: 800 }"
     :dataSource
@@ -18,8 +18,7 @@
 </template>
 
 <script setup lang="jsx">
-import dayjs from 'dayjs'
-import { getNoticeListReq, noticeAddOrEditReq, delNoticeReq, getNoticeUserListReq } from '@/api/notice'
+import { getSmsChannelConfigListReq, smsChannelAddOrEditReq, delSmsChannelReq } from '@/api/sms'
 
 const props = defineProps({
   searchParams: {
@@ -38,7 +37,7 @@ const pagination = reactive({
   total: 0,
 })
 const dataSource = ref([])
-const { loading, refresh } = useRequest(() => getNoticeListReq({
+const { loading, refresh } = useRequest(() => getSmsChannelConfigListReq({
   ...props.searchParams,
   page: pagination.page,
   limit: pagination.limit,
@@ -52,55 +51,36 @@ const { loading, refresh } = useRequest(() => getNoticeListReq({
 const { createDialog } = useDialog()
 const columns = [
   {
-    title: '公告标题',
-    dataIndex: 'title',
+    title: '渠道ID',
+    dataIndex: 'chan_id',
   },
   {
-    title: '公告内容',
-    dataIndex: 'content',
+    title: '渠道名称',
+    dataIndex: 'chan_name',
   },
   {
-    title: '推送系统',
+    title: '支持区域',
+    dataIndex: 'supp_area',
+    customRender: ({ record }) => <div>{record.supp_area.map(item => ENUM.sms_supp_area[item]).join('、')}</div>
+  },
+  {
+    title: '短信渠道',
     dataIndex: 'target_os_type',
-    customRender: ({ record }) => <div>{ENUM.os_type[record.target_os_type]}</div>
-  },
-  {
-    title: '推送用户',
-    dataIndex: 'target_user',
-    customRender: ({ record }) => <div v-if={record.target_user}>
-      <span v-if={record.target_user.type !== 4}>{ENUM.push_user_type[record.target_user.type]}</span>
-      <span v-if={record.target_user.type === 4}>{record.target_user.count || 0}位</span>
-    </div>
-  },
-  {
-    title: '绑定跑马灯',
-    dataIndex: 'is_bind_marquee',
-    customRender: ({ record }) => <div>{record.is_bind_marquee ? '是' : '否'}</div>
-  },
-  {
-    title: '生效时间',
-    dataIndex: 'effect_time',
-    customRender: ({ record }) => <div v-if={record.effect_time}>{record.effect_time[0]}-{record.effect_time[1]}</div>
+    customRender: ({ record }) => <div>{ENUM.sms_chan_type[record.sms_chan_type]}</div>
   },
   {
     title: '创建时间',
     dataIndex: 'create_time',
   },
   {
-    title: '状态',
-    dataIndex: 'status',
-    customRender: ({ record }) => <a-tag color={record.status === 1 ? 'green' : null}>{record.status === 1 ? '已发送' : '待发送'}</a-tag>
-  },
-  {
     title: '操作账号',
     dataIndex: 'oper_info',
     customRender: ({ record }) => <div>{record.oper_info?.name}</div>
   },
-
   {
-    title: '数据',
-    dataIndex: 'stat_data',
-    customRender: ({ record }) => <div>{record.stat_data?.pushes_count || 0}/{record.stat_data?.clicks_count || 0 }/{record.stat_data?.click_through_rate || 0}%</div>
+    title: '状态',
+    dataIndex: 'status',
+    customRender: ({ record }) => <a-tag color={record.status === 1 ? 'green' : 'red'}>{record.status === 1 ? '启用中' : '已停用'}</a-tag>
   },
   {
     title: '操作',
@@ -109,8 +89,8 @@ const columns = [
     dataIndex: 'action',
     customRender: ({ record }) =>
       <div>
-        <a-button disabled={record.status === 1} type="link" size="small" onClick={() => editItem(record)}>编辑</a-button>
-        <a-popconfirm title='确定删除当前公告吗？' onConfirm={() => delItem(record)}>
+        <a-button  type="link" size="small" onClick={() => editItem(record)}>编辑</a-button>
+        <a-popconfirm title='确定删除当前渠道吗？' onConfirm={() => delItem(record)}>
           <a-button type="link" danger size="small">删除</a-button>
         </a-popconfirm>
       </div>
@@ -119,9 +99,7 @@ const columns = [
 
 function delItem(item) {
   loading.value = true
-  delNoticeReq({
-    notice_ids: item.notice_id,
-  }).then(() => {
+  delSmsChannelReq(item.conf_id).then(() => {
     loading.value = false
     pagination.page = 1
     pagination.total = 0
@@ -131,41 +109,25 @@ function delItem(item) {
   })
 }
 
-const { richEditorRule } = useRichEditor('公告内容')
-const { userRelRule } = useUserSelect()
 async function editItem(item = {}) {
   const formValue = ref({
-    notice_id: item.notice_id,
-    title: item.title,
-    content: item.content,
-    target_os_type: item.target_os_type,
-    target_user_type: item.target_user?.type,
-    target_user_list: [],
-    is_bind_marquee: item.is_bind_marquee,
-    effect_time: item.effect_time ? [dayjs(item.effect_time[0]).format('X'), dayjs(item.effect_time[1]).format('X')] : [],
+    chan_id: item.chan_id,
+    chan_name: item.chan_name,
+    supp_area: item.supp_area || [],
+    sms_chan_type: item.sms_chan_type || [],
+    acc_key: item.acc_key,
+    acc_secret: item.acc_secret,
+    status: item.status,
   })
 
-  const isCreate = !item.notice_id
-  if (item.target_user?.type === 4) {
-    loading.value = true
-
-    const [err, data] = await to(getNoticeUserListReq(item.notice_id))
-    if (err) {
-      console.log(err)
-      loading.value = false
-      return
-    }
-    formValue.value.target_user_list = data.items.map(item => ({ label: item.nickname, value: item.user_id }))
-    loading.value = false
-  }
+  const isCreate = !item.chan_id
 
   const formModalProps = {
-    request: data => noticeAddOrEditReq(isCreate ? null : item.notice_id, data),
+    request: data => smsChannelAddOrEditReq(isCreate ? null : item.chan_id, data),
     getData(data) {
       return {
         ...data,
-        notice_id: isCreate ? data.notice_id : undefined,
-        target_user_list: data.target_user_type === 4 ? data.target_user_list.map(item => item.value) : undefined,
+        chan_id: isCreate ? data.chan_id : undefined,
       }
     },
     option: {
@@ -180,79 +142,69 @@ async function editItem(item = {}) {
     rule: [
       {
         type: 'input',
-        field: 'title',
-        title: '公告标题',
+        field: 'chan_name',
+        title: '渠道名称',
         value: '',
         effect: {
           required: true,
         },
       },
-      richEditorRule,
+      {
+        type: 'checkbox',
+        field: 'supp_area',
+        title: '支持区域',
+        value: [],
+        options: Object.keys(ENUM.sms_supp_area).filter(key => parseInt(key) !== 0).map(key => ({ value: parseInt(key), label: ENUM.sms_supp_area[key] })),
+        effect: {
+          required: true,
+        },
+      },
       {
         type: 'radio',
-        field: 'target_os_type',
-        title: '推送系统',
+        field: 'sms_chan_type',
+        title: '短信渠道',
+        options: Object.keys(ENUM.sms_chan_type).filter(key => parseInt(key) !== 0).map(key => ({ value: parseInt(key), label: ENUM.sms_chan_type[key] })),
         value: '',
+        effect: {
+          required: true,
+        },
+      },
+      {
+        type: 'input',
+        field: 'acc_key',
+        title: 'AccessKey ID',
+        value: '',
+        effect: {
+          required: true,
+        },
+      },
+      {
+        type: 'input',
+        field: 'acc_secret',
+        title: 'AccessKey Secret',
+        value: '',
+        effect: {
+          required: true,
+        },
+      },
+      {
+        type: 'radio',
+        field: 'status',
+        title: '状态',
         options: [
-          { label: '全部', value: 0 },
-          { label: 'iOS', value: 1 },
-          { label: '安卓', value: 2 },
+          { value: 1, label: '启用' },
+          { value: 2, label: '停用' },
         ],
+        value: '',
         effect: {
           required: true,
         },
       },
-      {
-        type: 'radio',
-        field: 'target_user_type',
-        title: '推送用户',
-        value: '',
-        options: Object.keys(ENUM.push_user_type).map(key => ({ value: parseInt(key), label: ENUM.push_user_type[key] })),
-        effect: {
-          required: true,
-        },
-        control: [
-          {
-            handle: val => val === 4,
-            append: 'target_user_type',
-            rule: [ userRelRule ]
-          }
-        ]
-      },
-      {
-        type: 'radio',
-        field: 'is_bind_marquee',
-        title: '绑定跑马灯',
-        value: '',
-        options: [
-          { label: '是', value: true },
-          { label: '否', value: false },
-        ],
-        effect: {
-          required: true,
-        },
-      },
-      {
-        type: 'rangePicker',
-        field: 'effect_time',
-        title: '生效时间',
-        value: '',
-        effect: {
-          required: true
-        },
-        props: {
-          format: 'YYYY-MM-DD',
-          valueFormat: 'X',
-          disabledDate: (current) => {
-            return current && current < dayjs().endOf('day')
-          },
-        }
-      }
     ],
   }
 
   createDialog({
-    title: isCreate ? '添加公告' : '编辑公告',
+    title: isCreate ? '添加渠道' : '编辑渠道',
     width: 700,
     component:
       <ModalForm

@@ -1,6 +1,6 @@
 <template>
   <a-table
-    rowKey="marquee_id"
+    rowKey="conf_id"
     :pagination="false"
     :scroll="{ x: 1200, y: 800 }"
     :dataSource

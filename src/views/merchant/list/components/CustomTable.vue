@@ -52,16 +52,12 @@ const { createDialog } = useDialog()
 
 const columns = [
   {
+    title: '商户ID',
+    dataIndex: 'id',
+  },
+  {
     title: '商户名称',
     dataIndex: 'merch_name',
-  },
-  {
-    title: '商户负责人',
-    dataIndex: 'supv_name',
-  },
-  {
-    title: '手机号',
-    dataIndex: 'phone',
   },
   {
     title: '创建时间',
@@ -110,19 +106,16 @@ function setStatus(item) {
   })
 }
 
-// 推荐主播/修改推荐权重
-async function editItem(userItem = {}) {
+async function editItem(item = {}) {
+  const merch_id = item.id || item.merch_id || null // 兼容 id 和 merch_id
   const formValue = ref({
-    merch_id: userItem.merch_id,
-    merch_name: userItem.merch_name,
-    supv_name: userItem.supv_name,
-    phone: userItem.phone,
-    password: userItem.password,
+    merch_id,
+    merch_name: item.merch_name,
   })
 
-  const isCreate = !userItem.merch_id
+  const isCreate = !merch_id
   const formModalProps = {
-    request: data => merchantAddOrEditReq(isCreate ? null : userItem.merch_id, data),
+    request: data => merchantAddOrEditReq(isCreate ? null : merch_id, data),
     getData(data) {
       return {
         ...data,
@@ -146,34 +139,6 @@ async function editItem(userItem = {}) {
         title: '商户名称',
         value: '',
         validate: [{ type: 'string', max: 10, required: true, message: '商户名称最多10个字'}],
-      },
-      {
-        type: 'input',
-        field: 'supv_name',
-        title: '商户负责人',
-        value: '',
-        validate: [{ type: 'string', max: 10, required: true, message: '商户负责人姓名最多10个字' }],
-      },
-      {
-        type: 'input',
-        field: 'phone',
-        title: '手机号',
-        value: '',
-        validate: [{ type: 'string', message: '请输入正确的手机号' }],
-        props: {
-          type: 'tel'
-        },
-      },
-      {
-        type: 'input',
-        field: 'password',
-        title: '密码',
-        value: '',
-        validate: [{ type: 'pattern', required: true, pattern: '^(?=.*[0-9])(?=.*[a-zA-Z])[a-zA-Z0-9]{8,16}$', message: '请输入 8~16位数字和字母组合密码' }],
-        props: {
-          type: 'password',
-          placeholder: '请输入 8~16 位数字和字母组合密码',
-        },
       },
     ],
   }

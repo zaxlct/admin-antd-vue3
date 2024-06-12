@@ -40,7 +40,7 @@ const pagination = reactive({
 const dataSource = ref([])
 const {
   merchRelRule
-} = useMultipleSelect()
+} = useMerchantMultipleSelect()
 const { loading, refresh } = useRequest(() => getGuildListReq({
   ...props.searchParams,
   page: pagination.page,

@@ -4,7 +4,7 @@ import { type Api } from '@form-create/ant-design-vue'
 export default function (ps_ratio_disabled = false, requiredPassword = true, fApi: Ref<Api>) {
   const {
     merchRelRule
-  } = useMultipleSelect('展示商户')
+  } = useMerchantMultipleSelect('展示商户')
 
   let guildList = []
   getGuildListReq().then(res => {

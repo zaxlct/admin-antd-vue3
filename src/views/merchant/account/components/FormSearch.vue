@@ -25,7 +25,7 @@
               <AButton
                 type="primary"
                 @click="emit('addItem')"
-              >添加商户</AButton>
+              >添加商户后台账号</AButton>
             </div>
           </section>
         </template>
@@ -38,6 +38,7 @@
 const params = defineModel()
 const data = reactive({
   merch_name: '',
+  account: '',
   create_time: [],
 })
 
@@ -63,6 +64,12 @@ const rule = ref([
     type: 'input',
     field: 'merch_name',
     title: '商户名称',
+    value: '',
+  },
+  {
+    type: 'input',
+    field: 'account',
+    title: '账号名称',
     value: '',
   },
   {

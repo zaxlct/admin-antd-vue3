@@ -6,6 +6,27 @@
   "description": "站酷直播",
   "glyphs": [
     {
+      "icon_id": "2076281",
+      "name": "订单 待付款",
+      "font_class": "order",
+      "unicode": "e896",
+      "unicode_decimal": 59542
+    },
+    {
+      "icon_id": "11647232",
+      "name": "支付方式",
+      "font_class": "payment",
+      "unicode": "eb53",
+      "unicode_decimal": 60243
+    },
+    {
+      "icon_id": "17814534",
+      "name": "充值",
+      "font_class": "recharge",
+      "unicode": "e604",
+      "unicode_decimal": 58884
+    },
+    {
       "icon_id": "657478",
       "name": "短信",
       "font_class": "sms",

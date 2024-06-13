@@ -69,8 +69,8 @@ dependencies:
     specifier: ^3.4.21
     version: 3.4.21(typescript@5.4.5)
   vue-hooks-plus:
-    specifier: ^1.8.9
-    version: 1.8.9(vue@3.4.21)
+    specifier: ^2.2.0
+    version: 2.2.0(vue@3.4.21)
   vue-router:
     specifier: ^4.3.0
     version: 4.3.0(vue@3.4.21)
@@ -116,8 +116,8 @@ devDependencies:
     specifier: ^1.6.5
     version: 1.6.5
   '@vue-hooks-plus/resolvers':
-    specifier: ^1.2.4
-    version: 1.2.4(vue-hooks-plus@1.8.9)
+    specifier: ^1.2.5
+    version: 1.2.5(vue-hooks-plus@2.2.0)
   '@vue/eslint-config-prettier':
     specifier: ^9.0.0
     version: 9.0.0(eslint@8.57.0)(prettier@3.2.5)
@@ -2441,14 +2441,14 @@ packages:
     resolution: {integrity: sha512-KYSIHVmslkaCDyw013pphY+d7x1qV8IZupYfeIfzNA+nsaWHbn5uPuQRvdRFsa9zFzGeudPuoGoZ1Op4jrJXIQ==}
     dev: true
 
-  /@vue-hooks-plus/resolvers@1.2.4(vue-hooks-plus@1.8.9):
-    resolution: {integrity: sha512-RNvBDq2YDEVT3uDjPsWRpFZ4YJR/qfMGXNoMIDvBFWy/s2tvRWBaYmJILWXIqgY3gYeKoxy6TxGsh1mjsEhiRw==}
+  /@vue-hooks-plus/resolvers@1.2.5(vue-hooks-plus@2.2.0):
+    resolution: {integrity: sha512-pJJ4UTRTIbqtKCiti5rHOV1G/ZmJLwZSpQc5LmUWCbjnYuSVeYzWJfG5zGrZ3IcX6mCBxOSrsmnG/yuYZkXcRQ==}
     engines: {node: '>=14'}
     peerDependencies:
-      vue-hooks-plus: ^1.5.2
+      vue-hooks-plus: '>=1.5.2'
     dependencies:
       local-pkg: 0.4.3
-      vue-hooks-plus: 1.8.9(vue@3.4.21)
+      vue-hooks-plus: 2.2.0(vue@3.4.21)
     dev: true
 
   /@vue-macros/api@0.9.6(vue@3.4.21):
@@ -6599,8 +6599,8 @@ packages:
       - supports-color
     dev: true
 
-  /vue-hooks-plus@1.8.9(vue@3.4.21):
-    resolution: {integrity: sha512-XscyVXQOqe3V5YTQa7E7w1WXOBZMp85dJ9js2H0RJ9ktatmeABQYxqBqsDSCpETBz+OoNXQxamFggTccwsK+jg==}
+  /vue-hooks-plus@2.2.0(vue@3.4.21):
+    resolution: {integrity: sha512-Zad8X7hsddVGtNizYVeAFp35N8Y82IOrwWfy1GgkOZwg/hhYs/oEjPBtTU6FV4fOGEpJ7trP2MffRO5J1iohHw==}
     peerDependencies:
       vue: ^3.2.25
     dependencies:

@@ -38,7 +38,7 @@
     "quill-image-drop-and-paste": "^1.3.0",
     "quill-image-uploader": "^1.3.0",
     "vue": "^3.4.21",
-    "vue-hooks-plus": "^1.8.9",
+    "vue-hooks-plus": "^2.2.0",
     "vue-router": "^4.3.0"
   },
   "devDependencies": {
@@ -55,7 +55,7 @@
     "@vitejs/plugin-vue": "^5.0.4",
     "@vitejs/plugin-vue-jsx": "^3.1.0",
     "@volar/vue-language-plugin-pug": "^1.6.5",
-    "@vue-hooks-plus/resolvers": "^1.2.4",
+    "@vue-hooks-plus/resolvers": "^1.2.5",
     "@vue/eslint-config-prettier": "^9.0.0",
     "@vue/eslint-config-typescript": "^13.0.0",
     "@vue/language-plugin-pug": "^2.0.14",

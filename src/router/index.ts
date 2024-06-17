@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHashHistory } from 'vue-router'
 import { getMenusRequest } from '@/api/auth'
 import generateRoutes from './generateRoutes'
 import routes, { noMatchRoute } from './staticRoutes'
@@ -12,7 +12,7 @@ let routerLoaded = false // 动态路由是否已加载
 let removeRouters: Array<() => void> = []
 // 创建路由
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: createWebHashHistory(import.meta.env.BASE_URL),
   scrollBehavior: () => ({
     top: 0,
     left: 0,
